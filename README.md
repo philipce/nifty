@@ -22,17 +22,22 @@ Instead, user code is compiled together with Nifty and should be placed in
 `src`, alongside `nifty`. This will eventually change when Nifty is made into 
 a module.
 
-Explain build
+The `build` directory contains compiled Swift code, organized into 
+subdirectories by platform. Currently, this just contains the exectuable built
+from Nifty and user code, though eventually this will contain the built 
+static library, module, and documention files.
 
-Explain doc
+TODO: doc
 
-Explain include
+TODO: include
 
-Explain lib
+TODO: lib
 
-Explain test
+TODO: test
 
 ## Installation
+
+TODO: supported platforms
 
 TODO: insert steps for installing nifty...
 
