@@ -18,7 +18,7 @@ functions finished.
 
 ## Repository Overview
 
-Source code for nifty is found in '''src/nifty'''. The directory is flat with every 
+Source code for nifty is found in `src/nifty`. The directory is flat with every 
 Nifty function/data structure in its own, appropriately named source file for
 easy perusal of the code.
 
