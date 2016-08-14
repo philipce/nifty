@@ -1,5 +1,7 @@
 # Nifty
 
+[![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
+
 Nifty is a Swift numerical computing library designed to provide common 
 mathematical functions in a performant and easy-to-use way, similar to 
 what MATLAB provides, for example.
@@ -11,30 +13,19 @@ contributing!
 
 ## Current Status
 
-Fleshing stuff out...
+Currently working on getting the core set of general math and linear algebra
+functions finished.
 
-## Toolbox Overview
+## Repository Overview
 
-Source code for nifty is found in /src.
+Source code for nifty is found in '''src/nifty'''. The directory is flat with every 
+Nifty function/data structure in its own, appropriately named source file for
+easy perusal of the code.
 
-The core toolbox contains general functions and definitions useful throughout
-nifty. Basic math functions that depend on glibc/math.h however are located in
-the nifty/math directory.
-
-The linalg directory contains a basic library of linear algebra functions. Most
-importantly, it defines the 'Matrix' struct which is used throughout linalg and 
-the rest of nifty. Additionally, it implements many common matrix operations.
-Notably, linalg is implemented entirely in Swift, with no dependencies on other
-linear algebra packages, suck as LAPACK.
-
-The math directory simply wraps functions from 'math.h' in easier to use Swift
-functions that match the MATLAB style and convention. No functionality other
-than that directly related to Glibc/math functions is provided here; other 
-general math functions likely belong in /nifty/core.
-
-The stats directory contains functions related to statistics and probability.
-Basic math functions that depend on glibc/math.h however are located in
-the nifty/math directory.
+Currently we don't build Nifty as its own module for import by the user.
+Instead, user code is compiled together with Nifty and should be placed in 
+'''src''', alongside '''nifty'''. This will eventually change when Nifty is
+made into a module.
 
 ## Installation
 
