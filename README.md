@@ -1,30 +1,13 @@
 # Nifty
 
-<!--- [![Build Status]()]() -->
-[![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
-
 Nifty is a Swift numerical computing library designed to provide common 
-mathematical functions in a performant and easy-to-use way. 
-
-In addition to providing a basic tool box, Nifty aims to implement more 
-advanced algorithms primarily related to artificial intelligence and machine 
-learning, though pretty much any nifty numerical algorithms are in scope.
-
-One of the goals of Nifty is to be as pure Swift as possible, implementing as
-much as we can from scratch and only relying on outside libraries where 
-to do otherwise would be a showstopper or out of scope. What few dependencies
-on outside libraries there are will be clearly marked in the documentation.
-
-We also intend Nifty to be really easy to pick up for those familiar with 
-Numpy or MATLAB. We like both, but prefer the MATLAB naming and style 
-conventions so that's what we're sticking with, as far as is reasonable.
+mathematical functions in a performant and easy-to-use way, similar to 
+what MATLAB provides, for example.
 
 Nifty is really new and (obviously) super incomplete. The content here is
-the beginnings of the framework but not yet ready for consumption. We've
-started our implementation in Swift 2.2 but will update to Swift 3 when that 
-drops, by which time Nifty will likely be much more fleshed out.
-
-Come back and check Nifty out later when it's a little farther along! 
+the beginnings of the framework but not yet ready for consumption. Come back 
+and check Nifty out later when it's a little farther along. Or, consider
+contributing! 
 
 ## Current Status
 
