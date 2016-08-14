@@ -47,17 +47,24 @@ instead of the Swift Package Manager.
 ##### GNU C Library
 
 Nifty uses glibc for some basic math functions; fortunately Swift has this
-built in.
+built in so nothing extra needs to be done.
 
 ##### LAPACK
 
-
+Nifty relies on [LAPACK](http://www.netlib.org/lapack/) for much of its linear 
+algebra functionality. Follow the steps below to get it set up.
+- Download LAPACK (version 3.6.1)
+- Gunzip and tar the file
+- Copy and edit the file LAPACK/make.inc.example to LAPACK/make.inc
+- Edit the file LAPACK/Makefile and type make
 
 ##### BLAS
 
+LAPACK comes with a reference BLAS library...
+
 ##### Fortran
 
-LAPACK needs Fortran. On Ubuntu, install with `sudo apt-get install gfortran`
+LAPACK needs Fortran. On Ubuntu, you can install it with `sudo apt-get install gfortran`.
 
 ### Usage
 
