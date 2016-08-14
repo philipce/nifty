@@ -11,6 +11,27 @@ the beginnings of the framework but not yet ready for consumption. Come back
 and check Nifty out later when it's a little farther along. Or, consider
 contributing! 
 
+## Getting Started
+### Installation
+
+TODO: supported platforms
+
+TODO: insert steps for installing nifty...
+
+### Dependencies
+
+- Glibc module for some basic math functions from math.h. Not on random
+- Fortran
+- Libm
+- LAPACK
+- BLAS
+
+### Usage
+
+TODO: insert examples of stuff
+
+TODO: importing nifty
+
 ## Repository Overview
 
 Source code for nifty is found in `src/nifty`. The directory is flat with every 
@@ -35,25 +56,7 @@ TODO: lib
 
 TODO: test
 
-## Installation
 
-TODO: supported platforms
-
-TODO: insert steps for installing nifty...
-
-## Dependencies
-
-- Glibc module for some basic math functions from math.h. Not on random
-- Fortran
-- Libm
-- LAPACK
-- BLAS
-
-## Usage
-
-TODO: insert examples of stuff
-
-TODO: importing nifty
 
 ```
 let m = zeros([5,6])
