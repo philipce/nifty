@@ -26,14 +26,21 @@ to get Nifty up and running.
 - Clone this repository
 - Make sure you've met the required [dependencies](#dependencies)
 - Write your Swift code and drop it in the `src` directory, right alongside 
-	the `nifty` directory
-- Run `make` in the repository root, which will build your code and Nifty
-	together
-- Run the executable found in `/build/Platform/`
-
-TODO: insert steps for installing nifty...
+	`nifty`
+- Make sure your code includes a new `main.swift` file if you want it to run
+- Run `make` in the repository root, which will compile your code and Nifty into 
+	the `run` executable
+- Execute your program from the repository root with `./build/$(uname)/run`
 
 ### Dependencies
+
+Nifty requires a few things to work. Eventually, these will all be taken care of
+by a fancy installer, but for now it has to be done manually. Fortunately it's 
+all pretty simple.
+
+#### Make
+
+##### Fortran
 
 - Make
 - Glibc module for some basic math functions from math.h. Not on random
