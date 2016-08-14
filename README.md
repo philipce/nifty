@@ -34,20 +34,30 @@ to get Nifty up and running.
 
 ### Dependencies
 
-Nifty requires a few things to work. Eventually, these will all be taken care of
-by a fancy installer, but for now it has to be done manually. Fortunately it's 
-all pretty simple.
+All of Nifty's external dependencies are listed in this section. 
 
-#### Make
+Eventually, any missing dependencies will be resolved by a fancy installer, but
+for now it has to be done manually. Fortunately it's all pretty simple.
+
+##### Make
+
+For the time being, Nifty uses [make](https://www.gnu.org/software/make/) 
+instead of the Swift Package Manager.
+
+##### GNU C Library
+
+Nifty uses glibc for some basic math functions; fortunately Swift has this
+built in.
+
+##### LAPACK
+
+
+
+##### BLAS
 
 ##### Fortran
 
-- Make
-- Glibc module for some basic math functions from math.h. Not on random
-- Fortran
-- Libm
-- LAPACK
-- BLAS
+LAPACK needs Fortran. On Ubuntu, install with `sudo apt-get install gfortran`
 
 ### Usage
 
