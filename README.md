@@ -11,21 +11,26 @@ the beginnings of the framework but not yet ready for consumption. Come back
 and check Nifty out later when it's a little farther along. Or, consider
 contributing! 
 
-## Current Status
-
-Currently working on getting the core set of general math and linear algebra
-functions finished.
-
 ## Repository Overview
 
 Source code for nifty is found in `src/nifty`. The directory is flat with every 
-Nifty function/data structure in its own, appropriately named source file for
+Nifty function or data structure in its own, appropriately named source file for
 easy perusal of the code.
 
 Currently we don't build Nifty as its own module for import by the user.
 Instead, user code is compiled together with Nifty and should be placed in 
-'''src''', alongside '''nifty'''. This will eventually change when Nifty is
-made into a module.
+`src`, alongside `nifty`. This will eventually change when Nifty is made into 
+a module.
+
+Explain build
+
+Explain doc
+
+Explain include
+
+Explain lib
+
+Explain test
 
 ## Installation
 
@@ -33,9 +38,11 @@ TODO: insert steps for installing nifty...
 
 ## Dependencies
 
-- core toolbox: time depends on Foundation for NSDate
-- math toolbox: all files depend on import Glibc for math.h
-- stat toolbox: rand and randi depend on Glibc for math.h
+- Glibc module for some basic math functions from math.h. Not on random
+- Fortran
+- Libm
+- LAPACK
+- BLAS
 
 ## Usage
 
@@ -65,50 +72,15 @@ have, let us know.
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## Documentation
+## Current Status
 
-Documentation for nifty can be found in /docs.
-
-Complete documentation can be found: TODO...
-
-The list below shows what functionality is currently being worked on and what
-state it's in.
-
-Current stuff, TBD for first release
-- core: general functions and definitions used throughout nifty
-- linalg: matrix definition and linear algebra functionality
-- math: wrappers on glibc/math.h (this is the only dependency on glibc)
-- stats: functions related to statistics and probability
-
-Future work: 
-- comb through matlab to find relevant functions:
-    http://www.mathworks.com/help/matlab/functionlist-alpha.html	
-- complex functionality from glibc/math:
-  (http://www.gnu.org/software/libc/manual/html_node/Mathematics.html)
-- special functions from glibc/math:
-  (http://www.gnu.org/software/libc/manual/html_node/Special-Functions.html)
-- bayes net
-- decision tree
-- distance metrics: manhattan, euclidean, mahalanobis, etc
-- fft
-- filter2 etc
-- fminsearch... optimization toolbox
-- gaussian process
-- halton sequence
-- image
-- kalman filter
-- kd tree
-- kmeans
-- mdp/pomdp/hmm
-- mean square error
-- neural net
-- particle filter
-- setdiff
-- svm
-- unique
-- viterbi
-
-### Functions
+Currently working on getting the core set of general math and linear algebra
+functions finished.
+- general functions and definitions used throughout Nifty
+- matrix definition and linear algebra functionality
+- vector and tensor data structures
+- wrappers on glibc/math.h
+- basic functions related to statistics and probability
 
 Here's an alphabetical list of all Nifty functions so far, for the most part
 they are named and function similarly to MATLAB... 
@@ -156,7 +128,7 @@ This is the set of functions we require to be ready, meaning at least in the
 - gt:			Awaiting Test
 - ind2sub:		Awaiting Test
 - inf:			Awaiting Test
-- inv (^-1):		In Progress	(need to overload ^-1 operator)
+- inv (^-1):	In Progress	(need to overload ^-1 operator)
 - isequal:		In Progress
 - isinf: 		Awaiting Test
 - isnan: 		Awaiting Test
@@ -228,6 +200,36 @@ This is the set of functions we require to be ready, meaning at least in the
 - transpose (~):	Awaiting Test
 - var:
 - zeros:		Awaiting Test
+
+## Future Work
+
+This is just a stream of conciousness type list of things to do in the future:
+- comb through matlab to find relevant functions:
+    http://www.mathworks.com/help/matlab/functionlist-alpha.html	
+- complex functionality from glibc/math:
+  (http://www.gnu.org/software/libc/manual/html_node/Mathematics.html)
+- special functions from glibc/math:
+  (http://www.gnu.org/software/libc/manual/html_node/Special-Functions.html)
+- bayes net
+- decision tree
+- distance metrics: manhattan, euclidean, mahalanobis, etc
+- fft
+- filter2 etc
+- fminsearch... optimization toolbox
+- gaussian process
+- halton sequence
+- image
+- kalman filter
+- kd tree
+- kmeans
+- mdp/pomdp/hmm
+- mean square error
+- neural net
+- particle filter
+- setdiff
+- svm
+- unique
+- viterbi
 
 ## License
 
