@@ -14,14 +14,28 @@ contributing!
 ## Getting Started
 ### System Requirements
 
+Make sure you can [install Swift](https://swift.org/getting-started/). 
+
+Currently, Nifty is only being developed on Ubuntu, but there's no reason
+it shouldn't work anywhere Swift does.
+
 ### Installation
 
-TODO: supported platforms
+Eventually Nifty will have a fancy installer. For now, follow the steps below
+to get Nifty up and running.
+	- Clone this repository
+	- Make sure you've met the required [dependencies](#dependencies)
+	- Write your Swift code and drop it in the `src` directory, right alongside 
+		the `nifty` directory
+	- Run `make` in the repository root, which will build your code and Nifty
+		together
+	- Run the executable found in `/build/Platform/`
 
 TODO: insert steps for installing nifty...
 
 ### Dependencies
 
+- Make
 - Glibc module for some basic math functions from math.h. Not on random
 - Fortran
 - Libm
