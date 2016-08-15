@@ -37,7 +37,7 @@ to get Nifty up and running.
 All of Nifty's external dependencies are listed in this section. 
 
 Eventually, any missing dependencies will be resolved by a fancy installer, but
-for now you'll have to take some simple manual steps.
+for now you may have to take some simple manual steps.
 
 ##### Make
 
@@ -111,20 +111,24 @@ LAPACK needs Fortran. On Ubuntu, you can install it with `sudo apt-get install g
 
 ### Usage
 
-TODO: insert examples of stuff
-
-TODO: importing nifty
+Here's a simple example of Nifty in action!
 
 ```
-let m = zeros([5,6])
-m[1,3...4] = ones([1,2])
-print(m)
+let n = 5000
+print("\nCreating \(n)-by-\(n) random integer matrix...")
+tic()
+let R2 = randi([n,n], imax: 99999)
+let _ = toc(units: "ms")
+
+print("\nInverting \(n)-by-\(n) random integer matrix...")
+tic()
+let R2inv = inv(R2)
+let _ = toc(units: "ms")
 ```
 
 ## Tests and Benchmarks
 
-Test cases and benchmark comparisons are provided in /test, where MATLAB and 
-Python (numpy) were used for verification of nifty results.
+
 
 ## Contributing
 
