@@ -131,7 +131,7 @@ OpenBLAS, Nifty performs the inversion about as fast as MATLAB does.
 
 The goal is for Nifty to provide correctness and performance similar to other 
 numerical computing standards. We'll be testing and benchmarking against
-MATLAB and Numpy.
+MATLAB and NumPy.
 
 ## Contributing
 
@@ -163,15 +163,22 @@ subdirectories by platform. Currently, this just contains the exectuable built
 from Nifty and user code, though eventually this will contain the built 
 static library, module, and documention files.
 
-TODO: doc
+The `doc` folder includes documentation (other than what is generated during 
+compiliation—all .swiftdoc files go in `build`).
 
-TODO: include
+Headers for any C libraries used go in `include`.
 
-TODO: lib
+The `lib` directory contains third-party libraries, subdivided by platform.
 
-TODO: test
+All test code (verifying Nifty correctness) and all benchmarks (measuring 
+Nifty's performance) are located in the `test` directory. We will be 
+experimenting with using the 
+[XCTest](https://github.com/apple/swift-corelibs-xctest) framework as it 
+progresses.
 
 ## Current Status
+
+TODO: organize this better
 
 Currently working on getting the core set of general math and linear algebra
 functions finished.
@@ -302,7 +309,8 @@ This is the set of functions we require to be ready, meaning at least in the
 
 ## Future Work
 
-This is just a stream of conciousness type list of things to do in the future:
+TODO: flesh out this stream of conciousness type list of things to do in the 
+future:
 - comb through matlab to find relevant functions:
     http://www.mathworks.com/help/matlab/functionlist-alpha.html	
 - complex functionality from glibc/math:
