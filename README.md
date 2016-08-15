@@ -32,6 +32,24 @@ to get Nifty up and running.
 	the `run` executable
 - Execute your program from the repository root with `./build/$(uname)/run`
 
+### Usage
+
+Here's a simple example of Nifty in action!
+
+```
+let n = 5000
+
+print("\nCreating \(n)-by-\(n) random integer matrix...")
+tic()
+let M = randi([n,n], imax: 99999)
+toc()
+
+print("\nInverting \(n)-by-\(n) random integer matrix...")
+tic()
+let Minv = inv(M)
+toc()
+```
+
 ### Dependencies
 
 All of Nifty's external dependencies are listed in this section. 
@@ -48,6 +66,11 @@ instead of the Swift Package Manager.
 
 Nifty uses glibc for some basic math functions; fortunately Swift has this
 built in so nothing extra needs to be done.
+
+##### Fortran
+
+Nifty uses Fortran (it needs to link against libgfortran for LAPACK). On Ubuntu, you 
+can install it with `sudo apt-get install gfortran`.
 
 ##### LAPACK
 
@@ -104,31 +127,11 @@ FYI: using the BLAS reference implementation, Nifty inverts a large matrix in
 just under 3 minutes whereas MATLAB inverts it in 6.5 seconds. Switching to 
 OpenBLAS, Nifty performs the inversion about as fast as MATLAB does.
 
-
-##### Fortran
-
-LAPACK needs Fortran. On Ubuntu, you can install it with `sudo apt-get install gfortran`.
-
-### Usage
-
-Here's a simple example of Nifty in action!
-
-```
-let n = 5000
-print("\nCreating \(n)-by-\(n) random integer matrix...")
-tic()
-let R2 = randi([n,n], imax: 99999)
-let _ = toc(units: "ms")
-
-print("\nInverting \(n)-by-\(n) random integer matrix...")
-tic()
-let R2inv = inv(R2)
-let _ = toc(units: "ms")
-```
-
 ## Tests and Benchmarks
 
-
+The goal is for Nifty to provide correctness and performance similar to other 
+numerical computing standards. We'll be testing and benchmarking against
+MATLAB and Numpy.
 
 ## Contributing
 
@@ -137,11 +140,14 @@ have, let us know.
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+3. Check out the documentation for the Nifty style guide
+4. Commit your changes: `git commit -am 'Add some feature'`
+5. Push to the branch: `git push origin my-new-feature`
+6. Submit a pull request :D
 
 ## Repository Overview
+
+This section gives an overview of how Nifty is organized.
 
 Source code for nifty is found in `src/nifty`. The directory is flat with every 
 Nifty function or data structure in its own, appropriately named source file for
