@@ -69,7 +69,7 @@ built in so nothing extra needs to be done.
 
 ##### Fortran
 
-Nifty uses Fortran (it needs to link against libgfortran for LAPACK). On Ubuntu, you 
+Nifty uses Fortran (needs to link against libgfortran for LAPACK). On Ubuntu, you 
 can install it with `sudo apt-get install gfortran`.
 
 ##### LAPACK
@@ -79,11 +79,11 @@ algebra functionality. Follow the steps below to get it set up.
 
 - Download LAPACK (version 3.6.1)
 
-- Extract the file and navigate into it
+- Extract the file and navigate into the directory
 
 	```
 	tar -xvf lapack-3.6.1.tgz
-	cd lapack-3.6.1.tgz
+	cd lapack-3.6.1
 	```
 
 - Copy the file LAPACK/make.inc.example to LAPACK/make.inc and make any edits 
