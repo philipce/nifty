@@ -37,7 +37,7 @@ to get Nifty up and running.
 All of Nifty's external dependencies are listed in this section. 
 
 Eventually, any missing dependencies will be resolved by a fancy installer, but
-for now it has to be done manually. Fortunately it's all pretty simple.
+for now you'll have to take some simple manual steps.
 
 ##### Make
 
