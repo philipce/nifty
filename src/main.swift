@@ -25,7 +25,7 @@ print("\nCreating random integer matrix...")
 let R = randi([5,5], imax: 345)
 print("R = \(R)")
 
-let n = 5000
+let n = 500
 print("\nCreating \(n)-by-\(n) random integer matrix...")
 tic()
 let R2 = randi([n,n], imax: 99999)
