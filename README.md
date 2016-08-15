@@ -80,6 +80,7 @@ algebra functionality. Follow the steps below to get it set up.
 	make lapackelib
 	make cblaslib
 	```
+
 - Now build and test LAPACK by simply running `make`
 	- In case of a failure like "recipe for target 'znep.out' failed" during 
 		testing--increase your stack size with `ulimit -s 100000` and try again
