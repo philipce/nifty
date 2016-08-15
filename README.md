@@ -60,6 +60,7 @@ algebra functionality. Follow the steps below to get it set up.
 	tar -xvf lapack-3.6.1.tgz
 	cd lapack-3.6.1.tgz
 	```
+
 - Copy the file LAPACK/make.inc.example to LAPACK/make.inc and make any edits 
 	if desired (the unmodified example ran just fine for us)
 
