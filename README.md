@@ -55,12 +55,14 @@ Nifty relies on [LAPACK](http://www.netlib.org/lapack/) for much of its linear
 algebra functionality. Follow the steps below to get it set up.
 - Download LAPACK (version 3.6.1)
 - Extract the file and navigate into it
+
 	```
 	tar -xvf lapack-3.6.1.tgz
 	cd lapack-3.6.1.tgz
 	```
 - Copy the file LAPACK/make.inc.example to LAPACK/make.inc and make any edits 
 	if desired (the unmodified example ran just fine for us)
+
 	```
 	cp make.inc.example make.inc
 	```
