@@ -109,7 +109,7 @@ algebra functionality. Follow the steps below to get it set up.
 
 - Now build and test LAPACK by simply running `make`
 	- In case of a failure like "recipe for target 'znep.out' failed" during 
-		testing, increase your stack size with and try again, e.g. `ulimit -s 100000`
+		testing, increase your stack size before trying again, e.g. `ulimit -s 100000`
 	- You may see a few test cases fail, don't worry
 
 - This should produce a number of .a files in the root LAPACK directory—copy 
