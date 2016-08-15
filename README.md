@@ -69,13 +69,16 @@ algebra functionality. Follow the steps below to get it set up.
 	```
 	cp make.inc.example make.inc
 	```
+
 - Make the reference [BLAS](http://www.netlib.org/blas/) library
+
 	```
 	make blaslib
 	```
 - Make the LAPACK and BLAS C wrappers 
 	([LAPACKE](http://www.netlib.org/lapack/lapacke.html) and 
 	[CBLAS](http://www.netlib.org/blas/#_cblas))
+
 	```
 	make lapackelib
 	make cblaslib
@@ -83,12 +86,24 @@ algebra functionality. Follow the steps below to get it set up.
 
 - Now build and test LAPACK by simply running `make`
 	- In case of a failure like "recipe for target 'znep.out' failed" during 
-		testing—increase your stack size with `ulimit -s 100000` and try again
-	- You may see a few test cases fail due to known numerical issues
+		testing, increase your stack size with `ulimit -s 100000` and try again
+	- You may see a few test cases fail, don't worry
+
+- This should produce a number of .a files in the root LAPACK directory—copy 
+	them into the `nifty/lib/$(uname)` directory
 
 ##### BLAS
 
-LAPACK comes with a reference BLAS library...
+The reference implementation of BLAS that comes with LAPACK will work just fine 
+but it is not very fast. You can improve performance by using an optimized 
+implementation instead (e.g. [OpenBLAS](http://www.openblas.net/)). Simply 
+download or build the static library for your preferred implementation, drop it 
+in `nifty/lib/$(uname)`, and modify the Makefile to link against it instead.
+
+FYI: using the BLAS reference implementation, Nifty inverts a large matrix in 
+just under 3 minutes whereas MATLAB inverts it in 6.5 seconds. Switching to 
+OpenBLAS, Nifty performs the inversion about as fast as MATLAB does.
+
 
 ##### Fortran
 
