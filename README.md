@@ -26,8 +26,8 @@ to get Nifty up and running.
 - Clone this repository
 - Make sure you've met the required [dependencies](#dependencies)
 - Write your Swift code and drop it in the `src` directory, right alongside 
-	`nifty`
-- Make sure your code includes a new `main.swift` file if you want it to run
+	`nifty` (make sure your code includes a new `main.swift` file if you want 
+	it to run)
 - Run `make` in the repository root, which will compile your code and Nifty into 
 	the `run` executable
 - Execute your program from the repository root with `./build/$(uname)/run`
@@ -54,9 +54,31 @@ built in so nothing extra needs to be done.
 Nifty relies on [LAPACK](http://www.netlib.org/lapack/) for much of its linear 
 algebra functionality. Follow the steps below to get it set up.
 - Download LAPACK (version 3.6.1)
-- Gunzip and tar the file
-- Copy and edit the file LAPACK/make.inc.example to LAPACK/make.inc
-- Edit the file LAPACK/Makefile and type make
+- Extract the file and navigate into it
+	```
+	tar -xvf lapack-3.6.1.tgz
+	cd lapack-3.6.1.tgz
+	```
+- Copy the file LAPACK/make.inc.example to LAPACK/make.inc and make any edits 
+	if desired (the unmodified example ran just fine for us)
+	```
+	cp make.inc.example make.inc
+	```
+- Make the reference [BLAS](http://www.netlib.org/blas/) library
+	```
+	make blaslib
+	```
+- Make the LAPACK and BLAS C wrappers 
+	([LAPACKE](http://www.netlib.org/lapack/lapacke.html) and 
+	[CBLAS](http://www.netlib.org/blas/#_cblas))
+	```
+	make lapackelib
+	make cblaslib
+	```
+- Now build and test LAPACK by simply running `make`
+	- In case of a failure like "recipe for target 'znep.out' failed" during 
+		testing--increase your stack size with `ulimit -s 100000` and try again
+	- You may see a few test cases fail due to known numerical issues
 
 ##### BLAS
 
