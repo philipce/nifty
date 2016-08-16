@@ -1,7 +1,7 @@
 /*******************************************************************************
- *  time.swift
+ *  tic.swift
  *
- *  This file provides functions for measuring ellapsed time.
+ *  This file provides functions for starting an ellapsed time stopwatch.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -24,12 +24,17 @@
 
 import Foundation
 
-// TODO: revisit this impl for efficiency and use of Foundation
-// TODO: make this thread safe... e.g. have tic return a key, pass that key
-// to toc to retrieve the appropriate time
+// TODO: revisit this impl for efficiency and use of Foundation... perhaps 
+// instead of NSDate there is a better way to get ellapsed time.
 
-/// Start of ellapsed time interval used by tic/toc
-private var _stopwatch = NSDate()
+// TODO: Also, switch to Date() once it's implemented in Swift 3
+
+// TODO: make this thread safe, allow for multiple stopwatches, etc... e.g. 
+// have tic return a key, pass that key to toc to retrieve the 
+// appropriate time
+
+// Start of ellapsed time interval used by tic/toc
+internal var _stopwatch = NSDate()
 
 /// Restart a stopwatch timer for measuring performance. Ellapsed time since
 /// starting the stopwatch is measured using the toc() function. 
@@ -40,50 +45,4 @@ private var _stopwatch = NSDate()
 public func tic()
 {
     _stopwatch = NSDate()
-}
-
-/// Measure the ellapsed time since the stopwatch was started with
-/// sub-millisecond precision.
-///
-/// - Parameters:
-///     - units: (optional) units of time (nanoseconds, microseconds, 
-///         milliseconds, seconds, minutes, hours) to display result in; result 
-///         not displayed if nil
-/// - Returns: the number of seconds on the stopwatch
-public func toc(units: String? = nil) -> Double
-{
-    let stop = NSDate()
-    var ellapsed: Double = stop.timeIntervalSince(_stopwatch) 
-
-    if units != nil
-    {
-        var descrip: String
-        switch units!.lowercased()
-        {
-            case "ns", "nano", "nanosecond", "nanoseconds":
-                descrip = "nanoseconds"
-                ellapsed *= 1e9     
-            case "us", "micro", "microsecond", "microseconds":
-                descrip = "microseconds"
-                ellapsed *= 1e6
-            case "ms", "milli", "millis", "millisecond", "milliseconds":
-                descrip = "milliseconds"
-                ellapsed *= 1e3
-            case "s", "sec", "secs", "second", "seconds":
-                descrip = "seconds"
-            case "m", "min", "minute", "minutes":
-                descrip = "minutes"
-                ellapsed /= 60
-            case "h", "hr", "hour", "hours":
-                descrip = "hours"
-                ellapsed /= 3600
-            default:
-                descrip = "units"
-        }
-
-        let disp = "\(round(ellapsed*1000)/1000.0)" // TODO: string format not yet impl on linux
-        print("Ellapsed time: \(disp) \(descrip)")
-    }
-
-    return ellapsed
 }

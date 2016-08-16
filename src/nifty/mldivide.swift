@@ -22,7 +22,7 @@
  *  Copyright 2016 Philip Erickson
  ******************************************************************************/
 
-// TODO: complete doc
+// TODO: complete doc, check use cases against matlab
 
 /// Solve the system of linear equations A*x = B for x.
 public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
@@ -44,16 +44,14 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 		precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
 		precondition(info == 0, "Cannot solve due to singular factor U")
 
-		return Matrix(size: Int(n), Int(nrhs), data: b)
+		return Matrix(size: [Int(n), Int(nrhs)], data: b)
 	}
 
 	// otherwise return least-squares solution
 	else
 	{
 		// FIXME: implement least squares solution
-		return Matrix(size: 2, 2, data: [0, 0, 0, 0])
+		return Matrix(size: 2, data: [0, 0, 0, 0])
 	}
-	
-
 }
 

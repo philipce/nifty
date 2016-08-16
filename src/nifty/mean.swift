@@ -1,10 +1,10 @@
 /*******************************************************************************
- *  sub2ind.swift
+ *  mean.swift
  *
- *  This file provides functionality for converting subscripts to indices.
+ *  This file provides functionality for computing the mean of some numbers.
  *
  *  Author: Philip Erickson
- *  Creation Date: 1 May 2016
+ *  Creation Date: 15 Aug 2016
  *  Contributors: 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,26 +22,9 @@
  *  Copyright 2016 Philip Erickson
  ******************************************************************************/
 
-/// Convert multidimensional subscripts into monodimensional index.
-///
-/// - Parameters: 
-///     - size: size of data structure
-///     - subscripts: list of subscripts
-/// - Returns: index into flattened data structure
-public func sub2ind(size: [Int], subscripts: [Int]) -> Int
+// TODO: add doc and extend functionality to match MATLAB
+public func mean(_ x: [Double]) -> Double
 {
-    precondition(size.count == subscripts.count, 
-        "Size and subscripts must match in dimension")
-    
-    var index = 0
-
-    for (dim, sub) in subscripts.enumerated()
-    {
-        precondition(sub >= 0 && sub < size[dim], "Subscript out of bounds")
-    
-        let dimSize = size[0..<dim].reduce(1, combine: *)
-        index += dimSize * sub
-    }
-
-    return index
+	let total = x.reduce(0, combine: +)
+	return total/Double(x.count)
 }

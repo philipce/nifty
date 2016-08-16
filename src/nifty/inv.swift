@@ -22,7 +22,7 @@
  *  Copyright 2016 Philip Erickson
  ******************************************************************************/
 
-// TODO: complete doc
+// TODO: complete doc, check use cases against matlab
 
 /// Compute the inverse of a given matrix.
 ///
@@ -48,5 +48,5 @@ public func inv(_ A: Matrix) -> Matrix
 	precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
 	precondition(info == 0, "Cannot invert singular matrix")
 	
-	return Matrix(size: Int(n), Int(n), data: a)
+	return Matrix(size: Int(n), data: a)
 }

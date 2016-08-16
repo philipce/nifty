@@ -1,4 +1,3 @@
-
 // currently, nifty and user code are built together, so there's no module
 #if MODULAR
 import Nifty
@@ -6,10 +5,11 @@ import Nifty
 
 print("NIFTY")
 
+
 // mldivide
 print("\nSolving Ax=B for x...")
-let A = Matrix(size: 2, 2, data: [1, 2, 3, 4])
-let B = Matrix(size: 2, 2, data: [19, 22, 43, 50])
+let A = Matrix(size: 2, data: [1, 2, 3, 4])
+let B = Matrix(size: 2, data: [19, 22, 43, 50])
 let x = mldivide(A, B)
 print("Matrix A = \(A)")
 print("Matrix B = \(B)")
@@ -25,14 +25,23 @@ print("\nCreating random integer matrix...")
 let R = randi([5,5], imax: 345)
 print("R = \(R)")
 
-let n = 500
-print("\nCreating \(n)-by-\(n) random integer matrix...")
-tic()
-let R2 = randi([n,n], imax: 99999)
-let _ = toc(units: "ms")
+// average inv of large matrix
+let numTrials = 3
+let n = 5000
+var createTimes: [Double] = []
+var invertTimes: [Double] = []
 
-print("\nInverting \(n)-by-\(n) random integer matrix...")
-tic()
-let R2inv = inv(R2)
-let _ = toc(units: "ms")
+print("\nCreating then inverting \(n)-by-\(n) random integer matrix \(numTrials) times...")
+for i in 0..<numTrials
+{
+	tic()
+	let M = randi([n,n], imax: 99999)
+	createTimes.append(toc())
 
+	tic()
+	let Minv = inv(M)
+	invertTimes.append(toc())
+}
+
+print("Create: mean=\(mean(createTimes))s, std=\(std(createTimes))s")
+print("Invert: mean=\(mean(invertTimes))s, std=\(std(invertTimes))s")

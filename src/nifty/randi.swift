@@ -82,7 +82,7 @@ func randi(_ size: [Int], imax: Int, seed: Int? = nil) -> Matrix
                 randomData.append(Double(rbits))
                 if randomData.count == totalSize
                 {
-                    return Matrix(size: size[0], size[1], data: randomData)
+                    return Matrix(size: [size[0], size[1]], data: randomData)
                 }
             }
         }
