@@ -1,8 +1,7 @@
-/*******************************************************************************
- *  msb.swift
+/***************************************************************************************************
+ *  acosh.swift
  *
- *  This file contains code for determining the position of the left-most set
- *  bit in an unsigned integer.
+ *  This file provides inverse hyperbolic cosine functionality.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -20,23 +19,8 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Return the position of the left-most (most significant) 1 bit in a number.
-///
-/// Note: negative two's complement numbers all have the left-most bit set to 
-/// 1, hence this function is only defined on unsigned numbers.
-///
-/// - Parameters:
-///     - x: number to find msb in
-/// - Returns: 1-indexed bit position (1 indicates the lsb)
-public func msb(_ x: UInt) -> Int
-{
-    var v = x
-    var msb = 0
-    while v != 0
-    {
-        msb += 1
-        v >>= 1
-    }
+import Glibc
 
-    return msb
-}
+/// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
+/// is x. If x is less than 1, acosh signals a domain error.
+let acosh: (Double) -> Double = Glibc.acosh

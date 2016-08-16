@@ -1,11 +1,10 @@
-/*******************************************************************************
- *  msb.swift
+/***************************************************************************************************
+ *  mean.swift
  *
- *  This file contains code for determining the position of the left-most set
- *  bit in an unsigned integer.
+ *  This file provides functionality for computing the mean of some numbers.
  *
  *  Author: Philip Erickson
- *  Creation Date: 1 May 2016
+ *  Creation Date: 15 Aug 2016
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -20,23 +19,13 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Return the position of the left-most (most significant) 1 bit in a number.
-///
-/// Note: negative two's complement numbers all have the left-most bit set to 
-/// 1, hence this function is only defined on unsigned numbers.
-///
-/// - Parameters:
-///     - x: number to find msb in
-/// - Returns: 1-indexed bit position (1 indicates the lsb)
-public func msb(_ x: UInt) -> Int
-{
-    var v = x
-    var msb = 0
-    while v != 0
-    {
-        msb += 1
-        v >>= 1
-    }
+// TODO: add doc and extend functionality to match MATLAB
 
-    return msb
+// TODO: should this only accept vector, matrix, tensor? Force people to use Nifty types... seems ok
+
+// TODO: should use sum() instead of rolling my own here so improvements made to sum get reflected
+public func mean(_ x: [Double]) -> Double
+{
+	let total = x.reduce(0, combine: +)
+	return total/Double(x.count)
 }

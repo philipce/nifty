@@ -1,8 +1,7 @@
-/*******************************************************************************
- *  msb.swift
+/***************************************************************************************************
+ *  atan2.swift
  *
- *  This file contains code for determining the position of the left-most set
- *  bit in an unsigned integer.
+ *  This file provides 4-quadrant inverse tangent functionality.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -20,23 +19,15 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Return the position of the left-most (most significant) 1 bit in a number.
-///
-/// Note: negative two's complement numbers all have the left-most bit set to 
-/// 1, hence this function is only defined on unsigned numbers.
-///
-/// - Parameters:
-///     - x: number to find msb in
-/// - Returns: 1-indexed bit position (1 indicates the lsb)
-public func msb(_ x: UInt) -> Int
-{
-    var v = x
-    var msb = 0
-    while v != 0
-    {
-        msb += 1
-        v >>= 1
-    }
+import Glibc
 
-    return msb
-}
+/// This function computes the arc tangent of y/x, but the signs of both 
+/// arguments are used to determine the quadrant of the result, and x is 
+/// permitted to be zero. The return value is given in radians and is in the 
+/// range -pi to pi, inclusive.
+/// 
+/// If x and y are coordinates of a point in the plane, atan2 returns the 
+/// signed angle between the line from the origin to that point and the x-axis. 
+/// Thus, atan2 is useful for converting Cartesian coordinates to polar 
+/// coordinates.
+let atan2: (Double, Double) -> Double = Glibc.atan2

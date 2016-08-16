@@ -1,10 +1,10 @@
 /***************************************************************************************************
- *  sqrt.swift
+ *  Slice.swift
  *
- *  This file exposes square root functionality.
+ *  This file defines the Slice protocol, allowing for slicing data structures. 
  *
- *  Author: Philip Erickson
- *  Creation Date: 1 May 2016
+ *  Author: Phil Erickson
+ *  Creation Date: 14 Aug 2016
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -19,9 +19,10 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-import Glibc
+// FIXME: This probably conflicts with Swift definition... rename this MatrixSlice or something
 
-/// Return the nonnegative square root of x.
-/// 
-/// If x is negative, sqrt signals a domain error. Mathematically it should return a complex number.
-let sqrt: (Double) -> Double = Glibc.sqrt
+// This protocol allows subscripting with a mixture of Ints and Ranges.
+public protocol Slice {}
+extension Int: Slice {}
+extension CountableRange: Slice {}
+extension CountableClosedRange: Slice {}

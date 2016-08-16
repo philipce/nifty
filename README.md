@@ -18,6 +18,9 @@ Make sure you can [install Swift](https://swift.org/getting-started/).
 Currently, Nifty is only being developed on Ubuntu, but there's no reason
 it shouldn't work anywhere Swift does.
 
+Currently, we're working with Swift 3 Preview 1. Other versions or previews
+may not work.
+
 ### Installation
 
 Eventually Nifty will have a fancy installer. For now, follow the steps below

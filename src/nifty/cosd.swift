@@ -1,8 +1,7 @@
-/*******************************************************************************
- *  msb.swift
+/***************************************************************************************************
+ *  cosd.swift
  *
- *  This file contains code for determining the position of the left-most set
- *  bit in an unsigned integer.
+ *  This file provides cosine functionality in degrees.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -20,23 +19,12 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Return the position of the left-most (most significant) 1 bit in a number.
-///
-/// Note: negative two's complement numbers all have the left-most bit set to 
-/// 1, hence this function is only defined on unsigned numbers.
+/// Compute the cosine of x in degrees.
 ///
 /// - Parameters:
-///     - x: number to find msb in
-/// - Returns: 1-indexed bit position (1 indicates the lsb)
-public func msb(_ x: UInt) -> Int
+///     - x: value to cosine of
+/// - Returns: cosine of x
+func cosd(_ x: Double) -> Double 
 {
-    var v = x
-    var msb = 0
-    while v != 0
-    {
-        msb += 1
-        v >>= 1
-    }
-
-    return msb
+    return cos(x * Pi/180)
 }

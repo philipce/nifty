@@ -1,8 +1,7 @@
-/*******************************************************************************
- *  msb.swift
+/***************************************************************************************************
+ *  expm1.swift
  *
- *  This file contains code for determining the position of the left-most set
- *  bit in an unsigned integer.
+ *  This file provides exponentiation minus 1 functionality.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -20,23 +19,9 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Return the position of the left-most (most significant) 1 bit in a number.
-///
-/// Note: negative two's complement numbers all have the left-most bit set to 
-/// 1, hence this function is only defined on unsigned numbers.
-///
-/// - Parameters:
-///     - x: number to find msb in
-/// - Returns: 1-indexed bit position (1 indicates the lsb)
-public func msb(_ x: UInt) -> Int
-{
-    var v = x
-    var msb = 0
-    while v != 0
-    {
-        msb += 1
-        v >>= 1
-    }
+import Glibc
 
-    return msb
-}
+/// Return a value equivalent to exp (x) - 1. Computed in a way that is 
+/// accurate even if x is near zero—a case where exp (x) - 1 would be 
+/// inaccurate owing to subtraction of two numbers that are nearly equal.
+let expm1: (Double) -> Double = Glibc.expm1
