@@ -3,8 +3,7 @@
 [![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
 
 Nifty is a Swift numerical computing library designed to provide common 
-mathematical functions in a performant and easy-to-use way, similar to 
-what MATLAB provides, for example.
+mathematical functions in a performant and easy-to-use way.
 
 Nifty is really new and (obviously) super incomplete. The content here is
 the beginnings of the framework but not yet ready for consumption. Come back 
