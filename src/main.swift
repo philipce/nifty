@@ -21,17 +21,23 @@ let Ainv = inv(A)
 print("A' = \(Ainv)")
 
 // randi
-print("\nCreating random integer matrix...")
+print("\nCreating random integer matrix R...")
 let R = randi([5,5], imax: 345)
 print("R = \(R)")
 
-// average inv of large matrix
-let numTrials = 3
+// transpose
+print("\nTransposing R...")
+let Rtrans = transpose(R)
+print(Rtrans)
+
+// average stats for large matrix ops
+let numTrials = 2
 let n = 5000
 var createTimes: [Double] = []
 var invertTimes: [Double] = []
+var transposeTimes: [Double] = []
 
-print("\nCreating then inverting \(n)-by-\(n) random integer matrix \(numTrials) times...")
+print("\nCreating, inverting, and transposing \(n)-by-\(n) random matrix \(numTrials) times...")
 for i in 0..<numTrials
 {
 	tic()
@@ -41,7 +47,12 @@ for i in 0..<numTrials
 	tic()
 	let Minv = inv(M)
 	invertTimes.append(toc())
+
+	tic()
+	let Mtrans = transpose(M)
+	transposeTimes.append(toc())
 }
 
 print("Create: mean=\(mean(createTimes))s, std=\(std(createTimes))s")
 print("Invert: mean=\(mean(invertTimes))s, std=\(std(invertTimes))s")
+print("Transpose: mean=\(mean(transposeTimes))s, std=\(std(transposeTimes))s")
