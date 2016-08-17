@@ -64,9 +64,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 	// otherwise return least-squares solution
 	else
 	{
-		// TODO: what's a good way to convert "N" to Int8?
-		let trans: Int8 = 78 // ASCII decimal values: N=78, T=84 
-
+		let trans: Int8 = 78 // ascii 'N'
 		let m = A.size[0]
 		let n = A.size[1]
 		
