@@ -3,6 +3,8 @@
 import Nifty
 #endif
 
+let Pi = 3.14
+
 print("********************")
 print("NIFTY")
 print("********************")
@@ -94,11 +96,6 @@ public func main()
 	let mu = mean(V.data)
 	let _ = toc(units: "ms")
 	print("mean=\(mu)")
-
-	tic()
-	let mu2 = mean2(V.data)
-	let _ = toc(units: "ms")
-	print("mean2=\(mu2)")
 
 	//-----------------------------------------------
 	// std

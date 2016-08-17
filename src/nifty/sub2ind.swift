@@ -20,6 +20,8 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// TODO: check that this works with 1-D size?
+
 /// Convert multidimensional subscripts into monodimensional index.
 ///
 /// - Parameters: 

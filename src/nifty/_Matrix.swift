@@ -19,7 +19,7 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/// Data structure for 2-D, row-major order matrix.
+/// Data structure for a 2-D, row-major order matrix.
 public struct Matrix: CustomStringConvertible
 {
 	/// Number of elements in the matrix.
@@ -229,6 +229,7 @@ public struct Matrix: CustomStringConvertible
 				str += "\(self[r, c])  " 
 			}
 			
+			// TODO: don't add newline on last row... use join instead of loop?
 			str += "\n"
 		}
 
