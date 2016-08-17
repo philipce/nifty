@@ -3,8 +3,6 @@
 import Nifty
 #endif
 
-let Pi = 3.14
-
 print("********************")
 print("NIFTY")
 print("********************")

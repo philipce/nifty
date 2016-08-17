@@ -19,7 +19,6 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-/*
 /// Data structure for a vector.
 public struct Vector: CustomStringConvertible
 {
@@ -36,7 +35,7 @@ public struct Vector: CustomStringConvertible
     public let name: String?
 
     // TODO: add default format string for vector elements
-    public let format: String?
+    public let format: String? = nil
 
     /// Initialize a new vector.
     ///
@@ -75,18 +74,18 @@ public struct Vector: CustomStringConvertible
     /// - Parameters:
     ///     - s: index into vector
     /// - Returns: single value at index/subscript for get
-    public subscript(_ s: Int...) -> Double
+    public subscript(_ s: Int) -> Double
     {
         get
         {
-            precondition(_isValidIndex(s[0]), "Invalid matrix index: \(s[0])")
-            return self.data[s[0]]           
+            precondition(_isValidIndex(s), "Invalid matrix index: \(s)")
+            return self.data[s]           
         }
 
         set(newVal)
         {
-            precondition(_isValidIndex(s[0]), "Invalid matrix index: \(s[0])")
-            self.data[s[0]] = newVal            
+            precondition(_isValidIndex(s), "Invalid matrix index: \(s)")
+            self.data[s] = newVal            
         }
     }
 
@@ -106,7 +105,9 @@ public struct Vector: CustomStringConvertible
     /// - Returns: string representation of vector
     public var description: String
     {
-        // TODO: pad vector cells so everything is evenly spaced, use vector fmt string
+        // TODO: pad vector cells so everything is evenly spaced
+        // TODO: use vector fmt string specific to this vector to determine how many digits and 
+        // decimal places to display. (do this for matrix and tensor also)
         
         var str = "\(self.size)-D vector"
         if let name = self.name
@@ -120,10 +121,37 @@ public struct Vector: CustomStringConvertible
         
         for i in 0..<self.size
         {
-            str += "\(self[1])  "                      
+            str += "\(self[i])  "                      
         }
 
         return str
     }
+
+    //==========================================================================
+    // MARK: PRIVATE HELPERS
+    //==========================================================================
+
+    /// Determine whether a given index is valid for this vector.
+    ///
+    /// - Parameters:
+    ///        - i: index to check
+    ///    - Returns: true if index is valid, else false 
+    private func _isValidIndex(_ i: Int) -> Bool
+    {
+        // FIXME:
+        assert(false, "Unimplemented")
+        return true
+    }
+
+    /// Determine whether a given slice is valid for this vector.
+    ///
+    /// - Parameters:
+    ///        - s: slice to check
+    ///    - Returns: true if slice is valid, else false
+    private func _isValidSlice(_ s: Slice) -> Bool
+    {
+        // FIXME:
+        assert(false, "Unimplemented")
+        return true
+    }
 }
-*/
