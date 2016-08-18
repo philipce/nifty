@@ -19,6 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// import if makefile built separate modules
+#if CLAPACK
+import CLapack
+#endif
+
 public prefix func ~ (A: Matrix) -> Matrix
 {
 	return inv(A)	

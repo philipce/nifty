@@ -19,6 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// import if makefile built separate modules
+#if CLAPACK
+import CLapack
+#endif
+
 infix operator -/ {associativity left precedence 150}
 public func -/ (left: Matrix, right: Matrix) -> Matrix
 {

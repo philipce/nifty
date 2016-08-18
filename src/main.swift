@@ -1,5 +1,5 @@
-// currently, nifty and user code are built together, so there's no module
-#if MODULAR
+// import if makefile built separate modules
+#if NIFTY
 import Nifty
 #endif
 

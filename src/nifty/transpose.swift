@@ -19,6 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// import if makefile built separate modules
+#if CLAPACK
+import CLapack
+#endif
+
 // TODO: there must be a faster way to transpose... 
 // LAPACKE states that it transposes row-major matrices on input (since fortran is column-major), 
 // and that seems to barely be noticeable in inverting large (5000x5000) matrices (both row and 

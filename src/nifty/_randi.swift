@@ -45,7 +45,7 @@ private var _seed: UInt32 = UInt32(Glibc.time(nil))
 ///     - seed: (optional) seed number for random generator; default nil value 
 ///         uses time/counter as seed to ensure unique numbers
 /// - Returns:
-func randi(_ size: [Int], imax: Int, seed: Int? = nil) -> Matrix
+public func randi(_ size: [Int], imax: Int, seed: Int? = nil) -> Matrix
 {
     // TODO: make imax default to RAND_MAX
 
@@ -101,7 +101,7 @@ func randi(_ size: [Int], imax: Int, seed: Int? = nil) -> Matrix
 ///     - seed: (optional) seed number for random generator; default nil value 
 ///         uses time/counter as seed to ensure unique numbers
 /// - Returns: random number
-func randi(imax: Int, seed: Int? = nil) -> Int
+public func randi(imax: Int, seed: Int? = nil) -> Int
 {
     assert(imax > 0 && Int32(imax) <= Glibc.RAND_MAX, 
         "Maximum random value must be in range [1,RAND_MAX]")
