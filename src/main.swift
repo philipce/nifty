@@ -10,6 +10,16 @@ print("********************")
 // wrap stuff in function to avoid creating global vars
 public func main()
 {
+    //-----------------------------------------------
+    // format number string
+    print("\n--------------------")
+    print("Formatting number string...")
+    print(formatNumber(n:123.45, places:1, width:10, exponent:0))
+    print(formatNumber(n:123.45, places:1, width:10, exponent:2))
+    print(formatNumber(n:123.45, places:4, width:10, exponent:2))
+    print(formatNumber(n:123.45, places:6, width:10, exponent:2))
+    print(formatNumber(n:123.45, places:7, width:10, exponent:2))
+
 	//-----------------------------------------------
 	// matrix subscript
 	print("\n--------------------")
