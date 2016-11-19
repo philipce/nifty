@@ -85,7 +85,7 @@ Besides having Swift installed, there are a few things you'll need to run Nifty:
 - LAPACK: Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its 
     linear algebra, mostly for performance reasons. We'll be using the C 
     interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
-        - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
+ - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
 - BLAS: BLAS(http://www.netlib.org/blas/) provides lower level functions 
     used by LAPACK. LAPACK comes with a reference version that is correct, 
     but not suitable for high performance applications. You can improve 
@@ -96,7 +96,7 @@ Besides having Swift installed, there are a few things you'll need to run Nifty:
     Nifty performs the inversion about as fast as MATLAB does. If you do
     switch to OpenBLAS, you'll also need to ensure pthreads is installed.
 - Fortran: LAPACK needs fortran installed.
-        - Ubuntu: `sudo apt-get install gfortran`
+ - Ubuntu: `sudo apt-get install gfortran`
 
 
 
