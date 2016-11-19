@@ -79,24 +79,24 @@ in action!
 _TODO: This is pretty incomplete now but it'll get better!_
 
 Besides having Swift installed, there are a few things you'll need to run Nifty:
-    - Swift Package Manager: this is included with Swift 3.0 and above. If you 
-        somehow didn't get or need to update, go 
-        [here](https://swift.org/package-manager/)
-    - LAPACK: Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its 
-        linear algebra, mostly for performance reasons. We'll be using the C 
-        interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
-            - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
-    - BLAS: BLAS(http://www.netlib.org/blas/) provides lower level functions 
-        used by LAPACK. LAPACK comes with a reference version that is correct, 
-        but not suitable for high performance applications. You can improve 
-        performance by using an optimized implementation instead 
-        (e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
-        reference implementation, Nifty inverts a large matrix in just under 3 
-        minutes whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, 
-        Nifty performs the inversion about as fast as MATLAB does. If you do
-        switch to OpenBLAS, you'll also need to ensure pthreads is installed.
-    - Fortran: LAPACK needs fortran installed.
-            - Ubuntu: `sudo apt-get install gfortran`
+- Swift Package Manager: this is included with Swift 3.0 and above. If you 
+    somehow didn't get or need to update, go 
+    [here](https://swift.org/package-manager/)
+- LAPACK: Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its 
+    linear algebra, mostly for performance reasons. We'll be using the C 
+    interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
+        - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
+- BLAS: BLAS(http://www.netlib.org/blas/) provides lower level functions 
+    used by LAPACK. LAPACK comes with a reference version that is correct, 
+    but not suitable for high performance applications. You can improve 
+    performance by using an optimized implementation instead 
+    (e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
+    reference implementation, Nifty inverts a large matrix in just under 3 
+    minutes whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, 
+    Nifty performs the inversion about as fast as MATLAB does. If you do
+    switch to OpenBLAS, you'll also need to ensure pthreads is installed.
+- Fortran: LAPACK needs fortran installed.
+        - Ubuntu: `sudo apt-get install gfortran`
 
 
 
