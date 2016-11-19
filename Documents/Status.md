@@ -121,13 +121,13 @@ implemented.
 | reduce       | Unimplemented   | None           |                                                                                         |
 | repmat       | Unimplemented   | None           |                                                                                         |
 | reshape      | Unimplemented   | None           |                                                                                         |
-| rmap         | Mostly Complete | None           |                                                                                         |
+| rmap         | Complete        | None           |                                                                                         |
 | round        | Complete        | None           |                                                                                         |
 | rref         | Unimplemented   | None           |                                                                                         |
 | sin          | Complete        | None           |                                                                                         |
 | sind         | Complete        | None           |                                                                                         |
 | sinh         | Complete        | None           |                                                                                         |
-| size         | Mostly Complete | None           |                                                                                         |
+| size         | Complete        | None           |                                                                                         |
 | sqrt         | Complete        | None           |                                                                                         |
 | std          | Unimplemented   | None           |                                                                                         |
 | sub2ind      | Mostly Complete | None           |                                                                                         |
@@ -141,7 +141,7 @@ implemented.
 | times (*)    | Unimplemented   | None           |                                                                                         |
 | toc          | Mostly Complete | None           |                                                                                         |
 | trace        | Unimplemented   | None           |                                                                                         |
-| transpose    | Incomplete      | None           |                                                                                         |
+| transpose    | Complete        | None           |                                                                                         |
 | var          | Unimplemented   | None           |                                                                                         |
 | Vector       | Unimplemented   | None           |                                                                                         |
 | zeros        | Complete        | None           |                                                                                         |

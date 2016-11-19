@@ -1,7 +1,7 @@
 /***************************************************************************************************
- *  toc.swift
+ *  tic_toc.swift
  *
- *  This file provides functionality for stopping an ellapsed time stopwatch.
+ *  This file provides stopwatch functionality.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -21,6 +21,36 @@
 
 import Foundation
 
+// TODO: Improvements:
+// - revisit this impl for efficiency and use of Foundation... perhaps instead of NSDate there is a 
+//        better way to get ellapsed time.
+// - make this thread safe, allow for multiple stopwatches, etc... e.g. have tic return a key, like
+//        a UUID, which toc could then pass in to retrieve the time ellapsed since particular tic
+
+// TODO: Do we really want to use formatter here? Seems overkill
+// Time display settings
+fileprivate var formatSetup = false
+fileprivate let stopwatchFormat = NumberFormatter()
+
+// Start of ellapsed time interval used by tic/toc
+fileprivate var _stopwatch = Date()
+
+/// Restart a stopwatch timer for measuring performance. Ellapsed time since starting the stopwatch 
+/// is measured using the toc() function. 
+///
+/// Note: the stopwatch is automatically started at runtime; to accurately time a particular code 
+///    segment, the stopwatch should be reset at the start of the segment using tic().
+public func tic()
+{
+    _stopwatch = Date()
+
+    if !formatSetup
+    {
+        stopwatchFormat.usesSignificantDigits = true
+        stopwatchFormat.maximumSignificantDigits = 5
+    }
+}
+
 // TODO: format printed time to only have some number of decimal places
 
 /// Measure the ellapsed time since the last call to tic() was made and display to the console.
@@ -37,10 +67,12 @@ public func toc(_ units: UnitDuration = .seconds)
     // seems worth it in this case.
 
     let stop = Date()
-    let ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
+    var ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
         unit: .seconds)
-
-    print("Ellapsed time: \(ellapsed.converted(to: units))")
+    ellapsed.convert(to: units)
+    
+    let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed.value)) ?? "ERROR!"
+    print("Ellapsed time: \(fmt) \(ellapsed.unit.symbol)")
 }
 
 /// Measure the ellapsed time since the last call to tic() was made.
@@ -53,14 +85,15 @@ public func toc(_ units: UnitDuration = .seconds)
 public func toc(returning units: UnitDuration, printing: Bool = false) -> Double
 {
     let stop = Date()
-    let ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
+    var ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
         unit: .seconds)
+    ellapsed.convert(to: units)
 
-    let time = ellapsed.converted(to: units)
     if printing
     {
-        print("Ellapsed time: \(time)")
+        let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed.value)) ?? "ERROR!"
+        print("Ellapsed time: \(fmt) \(ellapsed.unit.symbol)")
     }
 
-    return time.value
+    return ellapsed.value
 }

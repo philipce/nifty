@@ -30,25 +30,25 @@ precedencegroup ExponentiationPrecedence
 }
 
 /// Raise a double to a double power.
-func ** (left: Double, right: Double) -> Double 
+public func ** (left: Double, right: Double) -> Double 
 { 
     return pow(left, right) 
 }
 
 /// Raise a double to an integer power.
-func ** (left: Double, right: Int) -> Double
+public func ** (left: Double, right: Int) -> Double
 {
     return pow(left, Double(right))
 }
 
 /// Raise an integer to a double power.
-func ** (left: Int, right: Double) -> Double
+public func ** (left: Int, right: Double) -> Double
 {
     return pow(Double(left), right)
 }
 
 /// Raise an integer to an integer power
-func ** (left: Int, right: Int) -> Int
+public func ** (left: Int, right: Int) -> Int
 {
     return Int(pow(Double(left), Double(right)))
 }
