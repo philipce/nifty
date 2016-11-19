@@ -18,6 +18,8 @@ contributing!
 ## Getting Started
 ### System Requirements
 
+TODO: update this for new build system
+
 Make sure you can [install Swift](https://swift.org/getting-started/).
 Currently, Nifty is only being developed on Ubuntu, but there's no reason
 it shouldn't work anywhere Swift does.
@@ -26,6 +28,8 @@ Currently, we're working with Swift 3 Preview 1. Other versions or previews
 may not work.
 
 ### Installation
+
+TODO: update this for swift package manager
 
 Eventually Nifty will have a fancy installer. For now, follow the steps below
 to get Nifty up and running.
@@ -40,6 +44,8 @@ to get Nifty up and running.
 - Execute your program from the repository root with `./build/$(uname)/run`
 
 ### Usage
+
+TODO: Update this to point to nifty demo repo
 
 Here's a simple example of Nifty in action!
 
@@ -58,6 +64,8 @@ toc()
 ```
 
 ### Dependencies
+
+TODO: Update all of this for new build system!
 
 All of Nifty's external dependencies are listed in this section. 
 
@@ -140,6 +148,9 @@ The goal is for Nifty to provide correctness and performance similar to other
 numerical computing standards. We'll be testing and benchmarking against
 MATLAB and NumPy.
 
+We will be experimenting with using the [XCTest](https://github.com/apple/swift-corelibs-xctest) 
+framework as it progresses.
+
 ## Contributing
 
 All contributions are welcome! If you think of a nifty feature we ought to 
@@ -154,205 +165,21 @@ have, let us know.
 
 ## Repository Overview
 
-This section gives an overview of how Nifty is organized.
+TODO: update this for swift package manager!
 
-Source code for nifty is found in `src/nifty`. The directory is flat with every 
-Nifty function or data structure in its own, appropriately named source file for
-easy perusal of the code.
+## Nifty Features
 
-Currently we don't build Nifty as its own module for import by the user.
-Instead, user code is compiled together with Nifty and should be placed in 
-`src`, alongside `nifty`. This will eventually change when Nifty is made into 
-a module.
-
-The `build` directory contains compiled Swift code, organized into 
-subdirectories by platform. Currently, this just contains the exectuable built
-from Nifty and user code, though eventually this will contain the built 
-static library, module, and documention files.
-
-The `doc` folder includes documentation (other than what is generated during 
-compiliation—all .swiftdoc files go in `build`).
-
-Headers for any C libraries used go in `include`.
-
-The `lib` directory contains third-party libraries, subdivided by platform.
-
-All test code (verifying Nifty correctness) and all benchmarks (measuring 
-Nifty's performance) are located in the `test` directory. We will be 
-experimenting with using the 
-[XCTest](https://github.com/apple/swift-corelibs-xctest) framework as it 
-progresses.
-
-## Current Status
-
-TODO: organize this better
-
-Currently working on getting the core set of general math and linear algebra
-functions finished.
+We are currently working on getting the core set of general math and linear algebra
+functions finished:
 - general functions and definitions used throughout Nifty
 - matrix definition and linear algebra functionality
 - vector and tensor data structures
 - wrappers on glibc/math.h
 - basic functions related to statistics and probability
 
-Here's an alphabetical list of all Nifty functions so far, for the most part
-they are named and function similarly to MATLAB... 
-
-This is the set of functions we require to be ready, meaning at least in the 
-"Awaiting Test" phase, for the first release.
-
-| Entity Name             | Status          | Test Coverage | Notes                                                                       |
-|-------------------------|-----------------|---------------|-----------------------------------------------------------------------------|
-| `NSEnumerator`          | Complete        | None          |                                                                             |
-| `NSGetSizeAndAlignment` | Complete        | None          |                                                                             |
-| `NSStringFromClass`     | Mostly Complete | None          | Only top-level Swift classes are supported                                  |
-| `NSClassFromString`     | Mostly Complete | None          | Only top-level Swift classes are supported; mangled names are not supported |
-| `NSObject`              | Complete        | None          |                                                                             |
-| `NSSwiftRuntime`        | N/A             | N/A           | For internal use only                                                       |
-| `Boxing`                | N/A             | N/A           | For internal use only                                                       |
-
-
-- acos:			Awaiting Test
-- acosd:		Awaiting Test
-- acosh:		Awaiting Test
-- asin:			Awaiting Test
-- asind:		Awaiting Test
-- asinh:		Awaiting Test
-- atan:			Awaiting Test
-- atan2:		Awaiting Test
-- atan2d:		Awaiting Test
-- atand:		Awaiting Test
-- atanh:		Awaiting Test
-- ceil:			Awaiting Test
-- chol:
-- cond:
-- cos:			Awaiting Test
-- cosd:			Awaiting Test
-- cosh:			Awaiting Test
-- det:	
-- diag:
-- eig:
-- eigs:
-- eq:			Awaiting Test
-- exp:			Awaiting Test
-- exp2:			Awaiting Test
-- expm1:		Awaiting Test
-- eye:			Awaiting Test
-- filter:
-- find:			Awaiting Test
-- floor:		Awaiting Test
-- hypot:		Awaiting Test
-- ge:			Awaiting Test
-- gt:			Awaiting Test
-- ind2sub:		Awaiting Test
-- inf:			Awaiting Test
-- inv (~):		In Progress
-- isequal:		In Progress
-- isinf: 		Awaiting Test
-- isnan: 		Awaiting Test
-- ldivide:
-- le:			Awaiting Test
-- linspace:
-- log:			Awaiting Test
-- log10:		Awaiting Test
-- log2:			Awaiting Test
-- log1p:		Awaiting Test
-- lt:			Awaiting Test
-- lu:
-- map:
-- matrix:		In Progress
-- max:			In Progress
-- mean:
-- median:
-- min:			In Progress
-- minus (-):		Awaiting Test
-- mldivide:
-- mode:
-- mpower (**):		In Progress
-- mrdivide (/):
-- msb: 			Awaiting Test
-- mtimes (*):		In Progress
-- mvnrand:
-- nan:			Awaiting Test
-- ndims:		Awaiting Test
-- ne:			Awaiting Test
-- norm:
-- numel:		Awaiting Test
-- ones:			Awaiting Test
-- operators: 		Awaiting Test
-- pinv: 
-- plus (+):		Awaiting Test
-- poly:
-- pow (**):		Awaiting Test
-- power (.**):		In Progress
-- prod:
-- qr:
-- rand:			Awaiting Test
-- randi:		Awaiting Test
-- randn:
-- randperm:
-- rank:
-- rdivide (./):
-- reduce:
-- repmat:
-- reshape:
-- rmap:			Awaiting Test
-- round:		Awaiting Test
-- rref:
-- sin:			Awaiting Test
-- sind:			Awaiting Test
-- sinh:			Awaiting Test
-- size:			Awaiting Test
-- sqrt:			Awaiting Test
-- std:
-- sub2ind:		In Progress
-- sum:			In Progress
-- svd:
-- tan:			Awaiting Test
-- tand:			Awaiting Test
-- tanh:			Awaiting Test
-- tic: 			Awaiting Test
-- times (*):		Awaiting Test
-- toc: 			Awaiting Test
-- trace:		Awaiting Test
-- transpose (~):	Awaiting Test
-- var:
-- zeros:		Awaiting Test
-
-## Future Work
-
-TODO: flesh out this stream of conciousness type list of things to do in the 
-future:
-- comb through matlab to find relevant functions:
-    http://www.mathworks.com/help/matlab/functionlist-alpha.html	
-- complex functionality from glibc/math:
-  (http://www.gnu.org/software/libc/manual/html_node/Mathematics.html)
-- special functions from glibc/math:
-  (http://www.gnu.org/software/libc/manual/html_node/Special-Functions.html)
-- bayes net
-- decision tree
-- distance metrics: manhattan, euclidean, mahalanobis, etc
-- fft
-- filter2 etc
-- fminsearch... optimization toolbox
-- gaussian process
-- halton sequence
-- image
-- kalman filter
-- kd tree
-- kmeans
-- mdp/pomdp/hmm
-- mean square error
-- neural net
-- particle filter
-- setdiff
-- svm
-- unique
-- viterbi
+See our [status page](Documents/Status.md) for details.
 
 ## License
 
 This project is licensed under the Apache License, Version 2.0, a complete copy of 
 which can found in LICENSE, adjacent to this file.
-
-Copyright 2016 Philip Erickson
