@@ -10,137 +10,95 @@ shortly!*
 Nifty is a Swift numerical computing library designed to provide common 
 mathematical functions in a performant and easy-to-use way.
 
-Nifty is really new and (obviously) super incomplete. The content here is
-the beginnings of the framework but not yet ready for consumption. Come back 
+Nifty is really new and (obviously) incomplete. The content here is the 
+beginnings of the framework but not yet ready for consumption. Come back 
 and check Nifty out later when it's a little farther along. Or, consider
 contributing! 
 
-## Getting Started
-### System Requirements
 
-TODO: update this for new build system
+
+## Goals and Scope
+
+_TODO: flesh out this section_
+
+Goals:
+- Provide a robust, performant numerical computing package suitable for 
+    industrial or research purposes 
+- Do it in a way that will be familiar to those with experience in other such 
+    environments and will also easy to learn for the first-timer 
+- Do as much in Swift as possible, resorting to C libraries only when needed
+    for performance reasons
+- Make exploration of the code as simple as possible, through straight-forward
+    organization and clean, well-commented, easy-to-read code
+- Serve as a place to put the nifty bits of code that always seem to accumulate
+- Serve as a learning tool for those wishing to explore numerical computing
+
+Scope:
+- graphical stuff, e.g. matplotlib, not currently in scope. Perhaps in future,
+    but we'd rather defer to another project on that
+
+
+
+## Getting Started
+
+#### System Requirements
 
 Make sure you can [install Swift](https://swift.org/getting-started/).
-Currently, Nifty is only being developed on Ubuntu, but there's no reason
-it shouldn't work anywhere Swift does.
+Our goal is to stay current as Swift develops, so use the latest release!
 
-Currently, we're working with Swift 3 Preview 1. Other versions or previews
-may not work.
+Currently, Nifty is only being developed on Ubuntu 16.04, but there's no reason
+it shouldn't work anywhere Swift does. Future efforts will be made to bring 
+Nifty to Mac and RaspberryPi!
 
-### Installation
+#### Installation
 
-TODO: update this for swift package manager
+Nifty uses the [Swift Package Manager](https://swift.org/package-manager/) 
+(see the [project repo](https://github.com/apple/swift-package-manager) for more 
+info). It greatly simplifies the build process!
 
-Eventually Nifty will have a fancy installer. For now, follow the steps below
-to get Nifty up and running.
+To use Nifty in your projects:
+- Make sure you have the needed [dependencies](#dependencies) installed
+- Create/modify your project manifest file to include Nifty (here's a 
+[complete example](https://github.com/nifty-swift/Nifty-demo))
+- Let the package manager do the rest! It's that easy!
 
-- Clone this repository
-- Make sure you've met the required [dependencies](#dependencies)
-- Write your Swift code and drop it in the `src` directory, right alongside 
-	`nifty` (make sure your code includes a new `main.swift` file if you want 
-	it to run)
-- Run `make` in the repository root, which will compile your code and Nifty into 
-	the `run` executable
-- Execute your program from the repository root with `./build/$(uname)/run`
+#### Usage
 
-### Usage
+Nifty is intended to be simple and easy to use. For this reason, we've decided
+to structure things similar to how MATLAB works. In fact, many (most) of the 
+function names in Nifty are the same as MATLAB. The hope is that MATLAB users
+will feel right at home and that users of similar packages (e.g. NumPy) will 
+have an easy transition as well, making adoption as smooth as possible for as 
+many people as possible.
 
-TODO: Update this to point to nifty demo repo
+Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see Nifty 
+in action!
 
-Here's a simple example of Nifty in action!
+#### Dependencies
 
-```
-let n = 5000
+_TODO: This is pretty incomplete now but it'll get better!_
 
-print("\nCreating \(n)-by-\(n) random integer matrix...")
-tic()
-let M = randi([n,n], imax: 99999)
-toc()
+Besides having Swift installed, there are a few things you'll need to run Nifty:
+    - Swift Package Manager: this is included with Swift 3.0 and above. If you 
+        somehow didn't get or need to update, go 
+        [here](https://swift.org/package-manager/)
+    - LAPACK: Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its 
+        linear algebra, mostly for performance reasons. We'll be using the C 
+        interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
+            - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
+    - BLAS: BLAS(http://www.netlib.org/blas/) provides lower level functions 
+        used by LAPACK. LAPACK comes with a reference version that is correct, 
+        but not suitable for high performance applications. You can improve 
+        performance by using an optimized implementation instead 
+        (e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
+        reference implementation, Nifty inverts a large matrix in just under 3 
+        minutes whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, 
+        Nifty performs the inversion about as fast as MATLAB does. If you do
+        switch to OpenBLAS, you'll also need to ensure pthreads is installed.
+    - Fortran: LAPACK needs fortran installed.
+            - Ubuntu: `sudo apt-get install gfortran`
 
-print("\nInverting \(n)-by-\(n) random integer matrix...")
-tic()
-let Minv = inv(M)
-toc()
-```
 
-### Dependencies
-
-TODO: Update all of this for new build system!
-
-All of Nifty's external dependencies are listed in this section. 
-
-Eventually, any missing dependencies will be resolved by a fancy installer, but
-for now you may have to take some simple manual steps.
-
-##### Make
-
-For the time being, Nifty uses [make](https://www.gnu.org/software/make/) 
-instead of the Swift Package Manager.
-
-##### GNU C Library
-
-Nifty uses glibc for some basic math functions; fortunately Swift has this
-built in so nothing extra needs to be done.
-
-##### Fortran
-
-Nifty uses Fortran (needs to link against libgfortran for LAPACK). On Ubuntu, you 
-can install it with `sudo apt-get install gfortran`.
-
-##### LAPACK
-
-Nifty relies on [LAPACK](http://www.netlib.org/lapack/) for much of its linear 
-algebra functionality. Follow the steps below to get it set up.
-
-- Download LAPACK (version 3.6.1)
-
-- Extract the file and navigate into the directory
-
-	```
-	tar -xvf lapack-3.6.1.tgz
-	cd lapack-3.6.1
-	```
-
-- Copy the file LAPACK/make.inc.example to LAPACK/make.inc and make any edits 
-	if desired (the unmodified example ran just fine for us)
-
-	```
-	cp make.inc.example make.inc
-	```
-
-- Make the reference [BLAS](http://www.netlib.org/blas/) library
-
-	```
-	make blaslib
-	```
-- Make the LAPACK and BLAS C wrappers 
-	([LAPACKE](http://www.netlib.org/lapack/lapacke.html) and 
-	[CBLAS](http://www.netlib.org/blas/#_cblas))
-
-	```
-	make lapackelib
-	make cblaslib
-	```
-
-- Now build and test LAPACK by simply running `make`
-	- In case of a failure like "recipe for target 'znep.out' failed" during 
-		testing, increase your stack size before trying again, e.g. `ulimit -s 100000`
-	- You may see a few test cases fail, don't worry
-
-- This should produce a number of .a files in the root LAPACK directory—copy 
-	them into the `nifty/lib/$(uname)` directory
-
-##### BLAS
-
-The reference implementation of BLAS that comes with LAPACK will work just fine 
-but it is not very fast. You can improve performance by using an optimized 
-implementation instead (e.g. [OpenBLAS](http://www.openblas.net/)). Simply 
-download or build the static library for your preferred implementation, drop it 
-in `nifty/lib/$(uname)`, and modify the Makefile to link against it instead.
-
-FYI: using the BLAS reference implementation, Nifty inverts a large matrix in 
-just under 3 minutes whereas MATLAB inverts it in 6.5 seconds. Switching to 
-OpenBLAS, Nifty performs the inversion about as fast as MATLAB does.
 
 ## Tests and Benchmarks
 
@@ -148,8 +106,11 @@ The goal is for Nifty to provide correctness and performance similar to other
 numerical computing standards. We'll be testing and benchmarking against
 MATLAB and NumPy.
 
-We will be experimenting with using the [XCTest](https://github.com/apple/swift-corelibs-xctest) 
-framework as it progresses.
+We will be experimenting with using the 
+[XCTest](https://github.com/apple/swift-corelibs-xctest) framework as it 
+progresses.
+
+
 
 ## Contributing
 
@@ -163,9 +124,13 @@ have, let us know.
 5. Push to the branch: `git push origin my-new-feature`
 6. Submit a pull request :D
 
+
+
 ## Repository Overview
 
-TODO: update this for swift package manager!
+_TODO: update this for swift package manager!_
+
+
 
 ## Nifty Features
 
@@ -178,6 +143,15 @@ functions finished:
 - basic functions related to statistics and probability
 
 See our [status page](Documents/Status.md) for details.
+
+
+
+## Distribution
+
+_TODO: If you want to link statically e.g. for distribution, here's an 
+example of how to..._
+
+
 
 ## License
 
