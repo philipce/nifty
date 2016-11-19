@@ -2,6 +2,11 @@
 
 [![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
 
+*Note: Nifty is currently undergoing transition to use the swift package manager!
+It is also undergoing upgrades to 3.0.1. As such, for the next few weeks, the info
+below may not be current and a lot of the files may be missing. This will be fixed 
+shortly!*
+
 Nifty is a Swift numerical computing library designed to provide common 
 mathematical functions in a performant and easy-to-use way.
 
