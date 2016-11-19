@@ -38,7 +38,7 @@ implemented.
 
 | Feature      | Status          | Test Coverage  | Notes                                                                                   |
 |--------------|-----------------|----------------|-----------------------------------------------------------------------------------------|
-| acos         | Complete        | Benchmarked    |                                                                                         |
+| acos         | Complete        | None           |                                                                                         |
 | acosd        | Complete        | None           |                                                                                         |
 | acosh        | Complete        | None           |                                                                                         |
 | asin         | Complete        | None           |                                                                                         |
@@ -52,6 +52,7 @@ implemented.
 | ceil         | Complete        | None           |                                                                                         |
 | chol         | Unimplemented   | None           |                                                                                         |
 | cond         | Unimplemented   | None           |                                                                                         |
+| Constants    | Incomplete      | None           |                                                                                         |
 | cos          | Complete        | None           |                                                                                         |
 | cosd         | Complete        | None           |                                                                                         |
 | cosh         | Complete        | None           |                                                                                         |
