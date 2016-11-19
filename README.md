@@ -198,14 +198,19 @@ functions finished.
 Here's an alphabetical list of all Nifty functions so far, for the most part
 they are named and function similarly to MATLAB... 
 
-Following the function name is the state, one of: blank, which means it hasn't 
-been started; "In Progress", which indicates it is being worked on; "Awaiting 
-Test", which indicates it is pretty much working, just awaiting formal test and 
-(if applicable) benchmarking; "Failing", indicates testing revealed a bug; 
-"Complete", indicates a formal test/benchmark has been created and passed.
-
 This is the set of functions we require to be ready, meaning at least in the 
 "Awaiting Test" phase, for the first release.
+
+| Entity Name             | Status          | Test Coverage | Notes                                                                       |
+|-------------------------|-----------------|---------------|-----------------------------------------------------------------------------|
+| `NSEnumerator`          | Complete        | None          |                                                                             |
+| `NSGetSizeAndAlignment` | Complete        | None          |                                                                             |
+| `NSStringFromClass`     | Mostly Complete | None          | Only top-level Swift classes are supported                                  |
+| `NSClassFromString`     | Mostly Complete | None          | Only top-level Swift classes are supported; mangled names are not supported |
+| `NSObject`              | Complete        | None          |                                                                             |
+| `NSSwiftRuntime`        | N/A             | N/A           | For internal use only                                                       |
+| `Boxing`                | N/A             | N/A           | For internal use only                                                       |
+
 
 - acos:			Awaiting Test
 - acosd:		Awaiting Test
@@ -241,7 +246,7 @@ This is the set of functions we require to be ready, meaning at least in the
 - gt:			Awaiting Test
 - ind2sub:		Awaiting Test
 - inf:			Awaiting Test
-- inv (^-1):	In Progress	(need to overload ^-1 operator)
+- inv (~):		In Progress
 - isequal:		In Progress
 - isinf: 		Awaiting Test
 - isnan: 		Awaiting Test
