@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Round x to an integer value, by default to nearest, and round halfway cases 
 /// away from zero.
-let round: (Double) -> Double = Glibc.round
+public let round: (Double) -> Double = Glibc.round

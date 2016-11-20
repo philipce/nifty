@@ -24,4 +24,4 @@ import Glibc
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
-let log2: (Double) -> Double = Glibc.log2
+public let log2: (Double) -> Double = Glibc.log2

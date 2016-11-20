@@ -30,7 +30,6 @@ import CBlas
 // TODO: decide on operator, add it to documentation. Maybe A^ to transpose? A* should be conjugate.
 // A~ maybe. A` is invalid I believe. Maybe unicode symbols? Aᵀ
 postfix operator ^
-
 public postfix func ^ (A: Matrix) -> Matrix
 {
 	return transpose(A)
@@ -67,5 +66,5 @@ public func transpose(_ A: Matrix) -> Matrix
 	var newName = A.name
 	if newName != nil { newName! += "^"}
 
-	return Matrix(size: [k,m], data: c, name: newName, showTitle: A.showTitle)
+	return Matrix(size: [k,m], data: c, name: newName, title: A.title)
 }

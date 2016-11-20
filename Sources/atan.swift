@@ -27,4 +27,4 @@ import Glibc
 /// value is in units of radians. Mathematically, there are infinitely many 
 /// such values; the one actually returned is the one between -pi/2 and pi/2 
 /// (inclusive).
-let atan: (Double) -> Double = Glibc.atan
+public let atan: (Double) -> Double = Glibc.atan

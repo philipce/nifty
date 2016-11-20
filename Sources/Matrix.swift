@@ -37,7 +37,7 @@ public struct Matrix: CustomStringConvertible
 	public var name: String?
 
 	// Determine whether to show name/info when displaying matrx.
-	public var showTitle: Bool
+	public var title: Bool
 
 	/// Formatter to be used in displaying matrix elements.
 	public var format: NumberFormatter
@@ -49,7 +49,8 @@ public struct Matrix: CustomStringConvertible
 	///			of one side of square matrix if only one number provided
 	///		- data: matrix data in row-major order
 	///		- name: optional name of matrix
-	public init(size: [Int], data: [Double], name: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(size: [Int], data: [Double], name: String? = nil, title: Bool = false)
 	{
 		let numel: Int
 		if size.count == 1
@@ -70,7 +71,7 @@ public struct Matrix: CustomStringConvertible
 		precondition(data.count == numel, "Matrix dimensions must match data")
 		self.data = data	
 		self.name = name	
-		self.showTitle = showTitle
+		self.title = title
 
 		// default display settings
 		let fmt = NumberFormatter()
@@ -89,10 +90,11 @@ public struct Matrix: CustomStringConvertible
 	///			of one side of square matrix if only one number provided
 	///		- data: matrix data where an inner array is an entire row
 	///		- name: optional name of matrix
-	public init(_ data: [[Double]], name: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(_ data: [[Double]], name: String? = nil, title: Bool = false)
 	{
 		let size = [data.count, data[0].count]
-		self.init(size: size, data: Array(data.joined()), name: name, showTitle: showTitle)
+		self.init(size: size, data: Array(data.joined()), name: name, title: title)
 	}
 
 	/// Initialize a new matrix.
@@ -102,10 +104,11 @@ public struct Matrix: CustomStringConvertible
 	///			of one side of square matrix if only one number provided
 	///		- value: single value repeated throughout matrix
 	///		- name: optional name of matrix
-	public init(size: [Int], value: Double, name: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(size: [Int], value: Double, name: String? = nil, title: Bool = false)
 	{
 		let data = Array<Double>(repeating: value, count: size.reduce(1, *))
-		self.init(size: size, data: data, name: name, showTitle: showTitle)
+		self.init(size: size, data: data, name: name, title: title)
 	}
 
 	/// Initialize a new square matrix.
@@ -114,9 +117,10 @@ public struct Matrix: CustomStringConvertible
 	///		- size: length of one side of square matrix
 	///		- value: single value repeated throughout matrix
 	///		- name: optional name of matrix
-	public init(size: Int, value: Double, name: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(size: Int, value: Double, name: String? = nil, title: Bool = false)
 	{
-		self.init(size: [size], value: value, name: name, showTitle: showTitle)						
+		self.init(size: [size], value: value, name: name, title: title)						
 	}
 		
 	/// Initialize a new matrix.
@@ -126,9 +130,10 @@ public struct Matrix: CustomStringConvertible
 	///			of one side of square matrix if only one number provided
 	///		- data: matrix data in row-major order
 	///		- name: optional name of matrix
-	public init(size: Int, data: [Double], name: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(size: Int, data: [Double], name: String? = nil, title: Bool = false)
 	{
-		self.init(size: [size], data: data, name: name, showTitle: showTitle)
+		self.init(size: [size], data: data, name: name, title: title)
 	}	
 
 	/// Initialize a new matrix, copying given matrix and possibly renaming.
@@ -136,13 +141,14 @@ public struct Matrix: CustomStringConvertible
 	/// - Parameters:
 	///		- copy: matrix to copy
 	///		- rename: optional name of new matrix
-	public init(copy: Matrix, rename: String? = nil, showTitle: Bool = false)
+	///		- title: determine whether to print the matrix title; false by default
+	public init(copy: Matrix, rename: String? = nil, title: Bool = false)
 	{
 		self.numel = copy.numel
 		self.size = copy.size
 		self.data = copy.data
 		self.name = rename
-		self.showTitle = copy.showTitle
+		self.title = copy.title
 		self.format = copy.format
 	}
 
@@ -216,7 +222,7 @@ public struct Matrix: CustomStringConvertible
 				if sliceName != nil { sliceName! += "[\(s[0])]" }
 
 				return Matrix([Array(self.data[ranges[0]])], name: sliceName, 
-					showTitle: self.showTitle)
+					title: self.title)
 			}
 
 			// otherwise, slice with range of subscripts
@@ -251,7 +257,7 @@ public struct Matrix: CustomStringConvertible
 			var sliceName = self.name
 			if sliceName != nil { sliceName! += "[\(s[0]), \(s[1])]" }
 
-			return Matrix(size: newSize, data: newData, name: sliceName, showTitle: self.showTitle) 
+			return Matrix(size: newSize, data: newData, name: sliceName, title: self.title) 
 		}
 
 		set(newVal)
@@ -308,10 +314,14 @@ public struct Matrix: CustomStringConvertible
 	/// - Returns: string representation of matrix
 	public var description: String
 	{
+		// TODO: entries in a column should be right justified, e.g.
+		//		 506                    506
+		//	   1,048     instead of     1,048 
+
 		var lines = [String]()
 
 		// create matrix title
-		if self.showTitle
+		if self.title
 		{
 			let title = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
 			lines.append(title)

@@ -31,7 +31,7 @@ public func -/ (left: Matrix, right: Matrix) -> Matrix
 ///
 /// If A is not square then the solution will be the least-squares solution to the system.
 ///
-/// Alternatively, `mldivide(A)` can be executed with `A-/B`.
+/// Alternatively, `mldivide(A, B)` can be executed with `A-/B`.
 ///
 /// - Parameters:
 ///     - A: matrix A in the equation Ax = B
@@ -39,6 +39,13 @@ public func -/ (left: Matrix, right: Matrix) -> Matrix
 /// - Returns: matrix x in the equation Ax = B
 public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 {   
+    // inherit name
+    var newName: String? = nil
+    if let nameA = A.name, let nameB = B.name
+    {
+        newName = "\(nameA)-/\(nameB)"
+    }
+
     // solve if A is square
     if A.size[0] == A.size[1]
     {
@@ -60,7 +67,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
         precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
         precondition(info == 0, "Cannot solve singularity")
 
-        return Matrix(size: [n,nrhs], data: b)
+        return Matrix(size: [n,nrhs], data: b, name: newName, title: A.title || B.title)
     }
 
     // otherwise return least-squares solution
@@ -90,7 +97,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 
             let x = Array(b[0..<(n*nrhs)])  
 
-            return Matrix(size: [n,nrhs], data: x)          
+            return Matrix(size: [n,nrhs], data: x, name: newName, title: A.title || B.title)          
         }
 
         // underdetermined system
@@ -116,7 +123,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 
             let x = Array(b[0..<(n*nrhs)])          
 
-            return Matrix(size: [n,nrhs], data: x)  
+            return Matrix(size: [n,nrhs], data: x, name: newName, title: A.title || B.title)  
         }
     }
 }

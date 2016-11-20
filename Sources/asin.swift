@@ -30,4 +30,4 @@ import Glibc
 /// 
 /// The arc sine function is defined mathematically only over the domain -1 to 
 /// 1. If x is outside the domain, asin signals a domain error.
-let asin: (Double) -> Double = Glibc.asin
+public let asin: (Double) -> Double = Glibc.asin

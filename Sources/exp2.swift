@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
 /// exp(x*log(2)).
-let exp2: (Double) -> Double = Glibc.exp2
+public let exp2: (Double) -> Double = Glibc.exp2

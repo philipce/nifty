@@ -26,4 +26,4 @@ import Glibc
 /// Return a value equivalent to exp (x) - 1. Computed in a way that is 
 /// accurate even if x is near zero—a case where exp (x) - 1 would be 
 /// inaccurate owing to subtraction of two numbers that are nearly equal.
-let expm1: (Double) -> Double = Glibc.expm1
+public let expm1: (Double) -> Double = Glibc.expm1

@@ -26,4 +26,4 @@ import Glibc
 /// Return the nonnegative square root of x.
 /// 
 /// If x is negative, sqrt signals a domain error. Mathematically it should return a complex number.
-let sqrt: (Double) -> Double = Glibc.sqrt
+public let sqrt: (Double) -> Double = Glibc.sqrt

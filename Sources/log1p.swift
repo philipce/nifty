@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
 /// zero.
-let log1p: (Double) -> Double = Glibc.log1p
+public let log1p: (Double) -> Double = Glibc.log1p

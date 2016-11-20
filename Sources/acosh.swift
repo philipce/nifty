@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
 /// is x. If x is less than 1, acosh signals a domain error.
-let acosh: (Double) -> Double = Glibc.acosh
+public let acosh: (Double) -> Double = Glibc.acosh

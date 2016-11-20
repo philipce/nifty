@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to tangent of
 /// - Returns: tangent of x
-func tand(_ x: Double) -> Double 
+public func tand(_ x: Double) -> Double 
 {
     return tan(x * Pi/180)
 }

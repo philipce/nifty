@@ -26,4 +26,4 @@ import Glibc
 /// Return the inverse hyperbolic tangent of x—the value whose hyperbolic 
 /// tangent is x. If the absolute value of x is greater than 1, atanh signals 
 /// a domain error; if it is equal to 1, atanh returns infinity.
-let atanh: (Double) -> Double = Glibc.atanh
+public let atanh: (Double) -> Double = Glibc.atanh

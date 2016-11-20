@@ -1,7 +1,7 @@
 /***************************************************************************************************
- *  acos.swift
+ *  msb.swift
  *
- *  This file provides inverse cosine functionality.
+ *  This file allows for determining the position of the left-most set bit in an unsigned integer.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -19,14 +19,23 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
+/// Return the position of the left-most (most significant) 1 bit in a number.
 ///
-/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
-/// is in units of radians. Mathematically, there are infinitely many such 
-/// values; the one actually returned is the one between 0 and pi (inclusive).
-/// 
-/// The arc cosine function is defined mathematically only over the domain -1 
-/// to 1. If x is outside the domain, acos signals a domain error.
-public let acos: (Double) -> Double = Glibc.acos
+/// Note: negative two's complement numbers all have the left-most bit set to 
+/// 1, hence this function is only defined on unsigned numbers.
+///
+/// - Parameters:
+///     - x: number to find msb in
+/// - Returns: 1-indexed bit position (index 1 is the least significant bit)
+public func msb(_ x: UInt) -> Int
+{
+    var v = x
+    var msb = 0
+    while v != 0
+    {
+        msb += 1
+        v >>= 1
+    }
+
+    return msb
+}

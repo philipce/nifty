@@ -24,4 +24,4 @@ import Glibc
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
-let asinh: (Double) -> Double = Glibc.asinh
+public let asinh: (Double) -> Double = Glibc.asinh

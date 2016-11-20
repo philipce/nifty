@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to take arc sine of
 /// - Returns: arc sine of x
-func asind(_ x: Double) -> Double 
+public func asind(_ x: Double) -> Double 
 {
     return asin(x) * 180/Pi
 }

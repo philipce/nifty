@@ -24,4 +24,4 @@ import Glibc
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Round x upwards to the nearest integer, returning that value as a double.
-let ceil: (Double) -> Double = Glibc.ceil
+public let ceil: (Double) -> Double = Glibc.ceil

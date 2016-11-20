@@ -27,4 +27,4 @@ import Glibc
 ///  
 ///  If the magnitude of the result is too large to be representable, exp 
 ///  signals overflow.
-let exp: (Double) -> Double = Glibc.exp
+public let exp: (Double) -> Double = Glibc.exp

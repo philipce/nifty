@@ -1,7 +1,7 @@
 /***************************************************************************************************
- *  acos.swift
+ *  hypot.swift
  *
- *  This file provides inverse cosine functionality.
+ *  This file provides functionality for computing a hypotenuse.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 May 2016
@@ -23,10 +23,8 @@ import Glibc
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
-/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
-/// is in units of radians. Mathematically, there are infinitely many such 
-/// values; the one actually returned is the one between 0 and pi (inclusive).
-/// 
-/// The arc cosine function is defined mathematically only over the domain -1 
-/// to 1. If x is outside the domain, acos signals a domain error.
-public let acos: (Double) -> Double = Glibc.acos
+/// Return sqrt(x*x+y*y). This is the length of the hypotenuse of a right 
+/// triangle with sides of length x and y, or the distance of the point 
+/// (x, y) from the origin. Using this function instead of the direct formula 
+/// is wise, since the error is much smaller. 
+public let hypot: (Double, Double) -> Double = Glibc.hypot

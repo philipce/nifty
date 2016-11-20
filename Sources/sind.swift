@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to sine of
 /// - Returns: sine of x
-func sind(_ x: Double) -> Double 
+public func sind(_ x: Double) -> Double 
 {
     return sin(x * Pi/180)
 }

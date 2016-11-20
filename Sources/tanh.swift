@@ -25,4 +25,4 @@ import Glibc
 ///    
 /// Return the hyperbolic tangent of x, defined mathematically as 
 /// sinh(x)/cosh(x). May signal overflow if x is too large.
-let tanh: (Double) -> Double = Glibc.tanh
+public let tanh: (Double) -> Double = Glibc.tanh

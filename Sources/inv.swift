@@ -59,8 +59,8 @@ public func inv(_ A: Matrix) -> Matrix
 	precondition(info == 0, "Cannot invert singular matrix")
 	
 	// inherit name
-	var invName = A.name
-	if invName != nil { invName = "~" + invName! }
+	var newName = A.name
+	if newName != nil { newName = "~" + newName! }
 
-	return Matrix(size: Int(n), data: a, name: invName, showTitle: A.showTitle)
+	return Matrix(size: Int(n), data: a, name: newName, title: A.title)
 }

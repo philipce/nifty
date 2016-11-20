@@ -24,4 +24,4 @@ import Glibc
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the base-10 logarithm of x, where log10(x) = log(x)/log(10).
-let log10: (Double) -> Double = Glibc.log10
+public let log10: (Double) -> Double = Glibc.log10

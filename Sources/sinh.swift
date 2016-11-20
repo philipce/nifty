@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Return the hyperbolic sine of x, defined mathematically as 
 /// (exp(x)-exp(-x))/2. May signal overflow if x is too large.
-let sinh: (Double) -> Double = Glibc.sinh
+public let sinh: (Double) -> Double = Glibc.sinh

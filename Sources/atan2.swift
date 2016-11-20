@@ -32,4 +32,4 @@ import Glibc
 /// signed angle between the line from the origin to that point and the x-axis. 
 /// Thus, atan2 is useful for converting Cartesian coordinates to polar 
 /// coordinates.
-let atan2: (Double, Double) -> Double = Glibc.atan2
+public let atan2: (Double, Double) -> Double = Glibc.atan2

@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to cosine of
 /// - Returns: cosine of x
-func cosd(_ x: Double) -> Double 
+public func cosd(_ x: Double) -> Double 
 {
     return cos(x * Pi/180)
 }

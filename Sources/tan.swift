@@ -28,4 +28,4 @@ import Glibc
 /// Mathematically, the tangent function has singularities at odd multiples of 
 /// pi/2. If the argument x is too close to one of these singularities, tan 
 /// will signal overflow.
-let tan: (Double) -> Double = Glibc.tan
+public let tan: (Double) -> Double = Glibc.tan

@@ -28,4 +28,4 @@ import Glibc
 ///
 /// If x is negative, log signals a domain error. If x is zero, it returns 
 /// negative infinity; if x is too close to zero, it may signal overflow.
-let log: (Double) -> Double = Glibc.log
+public let log: (Double) -> Double = Glibc.log

@@ -68,7 +68,7 @@ implemented.
 | filter       | Unimplemented   | None           |                                                                                         |
 | find         | Unimplemented   | None           |                                                                                         |
 | floor        | Complete        | None           |                                                                                         |
-| hypot        | Unimplemented   | None           |                                                                                         |
+| hypot        | Complete        | None           |                                                                                         |
 | ge (>=)      | Complete        | None           |                                                                                         |
 | gt (>)       | Unimplemented   | None           |                                                                                         |
 | ind2sub      | Mostly Complete | None           |                                                                                         |
@@ -84,6 +84,7 @@ implemented.
 | log10        | Complete        | None           |                                                                                         |
 | log2         | Complete        | None           |                                                                                         |
 | log1p        | Complete        | None           |                                                                                         |
+| lsb          | Unimplemented   | None           |                                                                                         |
 | lt (<)       | Complete        | None           |                                                                                         |
 | lu           | Unimplemented   | None           |                                                                                         |
 | map          | Unimplemented   | None           |                                                                                         |
@@ -96,8 +97,9 @@ implemented.
 | mldivide (-/)| Complete        | None           |                                                                                         |
 | mode         | Unimplemented   | None           |                                                                                         |
 | mpower (**)  | Unimplemented   | None           |                                                                                         |
-| mrdivide (/) | Unimplemented   | None           |                                                                                         |
+| mrdivide (/) | Complete        | None           | Current implementation is less efficient--does more transposes than necessary           |
 | msb          | Mostly Complete | None           |                                                                                         |
+| mtimes (*)   | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
 | mvnrand      | Unimplemented   | None           |                                                                                         |
 | nan          | Incomplete      | None           |                                                                                         |
 | ndims        | Complete        | None           |                                                                                         |
@@ -112,9 +114,9 @@ implemented.
 | power (.**)  | Unimplemented   | None           |                                                                                         |
 | prod         | Unimplemented   | None           |                                                                                         |
 | qr           | Unimplemented   | None           |                                                                                         |
-| rand         | Incomplete      | None           |                                                                                         |
-| randi        | Incomplete      | None           |                                                                                         |
-| randn        | Incomplete      | None           |                                                                                         |
+| rand         | Incomplete      | None           | Using glibc random number generator; need to improve                                    |
+| randi        | Incomplete      | None           | Need to get away from glibc rand                                                        |
+| randn        | Unimplemented   | None           |                                                                                         |
 | randperm     | Unimplemented   | None           |                                                                                         |
 | rank         | Unimplemented   | None           |                                                                                         |
 | rdivide      | Unimplemented   | None           |                                                                                         |
@@ -138,7 +140,7 @@ implemented.
 | tanh         | Complete        | None           |                                                                                         |
 | Tensor       | Unimplemented   | None           |                                                                                         |
 | tic          | Mostly Complete | None           |                                                                                         |
-| times (*)    | Unimplemented   | None           |                                                                                         |
+| times (*)    | Incomplete      | None           | Need to add overloads                                                                   |
 | toc          | Mostly Complete | None           |                                                                                         |
 | trace        | Complete        | None           |                                                                                         |
 | transpose    | Complete        | None           |                                                                                         |

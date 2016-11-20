@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Return the sine of x, where x is given in radians and the return value is 
 /// in the range -1 to 1.
-let sin: (Double) -> Double = Glibc.sin
+public let sin: (Double) -> Double = Glibc.sin

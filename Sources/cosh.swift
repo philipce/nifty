@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Return the hyperbolic cosine of x, defined mathematically as 
 /// (exp(x)+exp(-x))/2. May signal overflow if x is too large.
-let cosh: (Double) -> Double = Glibc.cosh
+public let cosh: (Double) -> Double = Glibc.cosh

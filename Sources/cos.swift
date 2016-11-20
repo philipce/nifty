@@ -25,4 +25,4 @@ import Glibc
 ///
 /// Return the cosine of x, where x is given in radians and the return value is 
 /// in the range -1 to 1.
-let cos: (Double) -> Double = Glibc.cos
+public let cos: (Double) -> Double = Glibc.cos

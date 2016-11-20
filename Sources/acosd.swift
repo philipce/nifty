@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to take arc cosine of
 /// - Returns: arc cosine of x
-func acosd(_ x: Double) -> Double 
+public func acosd(_ x: Double) -> Double 
 {
     return acos(x) * 180/Pi
 }

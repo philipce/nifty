@@ -24,7 +24,7 @@
 /// - Parameters:
 ///     - x: value to take arc tangent of
 /// - Returns: arc tangent of x
-func atand(_ x: Double) -> Double 
+public func atand(_ x: Double) -> Double 
 {
     return atan(Double(x)) * 180/Pi
 }
