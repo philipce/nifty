@@ -21,5 +21,7 @@
 
 import Glibc
 
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
 /// Round x downwards to the nearest integer, returning that value as a double. 
 public let floor: (Double) -> Double = Glibc.floor

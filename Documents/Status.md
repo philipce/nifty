@@ -69,7 +69,7 @@ implemented.
 | find         | Unimplemented   | None           |                                                                                         |
 | floor        | Complete        | None           |                                                                                         |
 | hypot        | Unimplemented   | None           |                                                                                         |
-| ge           | Unimplemented   | None           |                                                                                         |
+| ge (>=)      | Completed       | None           |                                                                                         |
 | gt           | Unimplemented   | None           |                                                                                         |
 | ind2sub      | Mostly Complete | None           |                                                                                         |
 | inf          | Incomplete      | None           |                                                                                         |
@@ -78,7 +78,7 @@ implemented.
 | isinf        | Unimplemented   | None           |                                                                                         |
 | isnan        | Incomplete      | None           |                                                                                         |
 | ldivide      | Unimplemented   | None           |                                                                                         |
-| le           | Unimplemented   | None           |                                                                                         |
+| le           | Complete        | None           |                                                                                         |
 | linspace     | Unimplemented   | None           |                                                                                         |
 | log          | Complete        | None           |                                                                                         |
 | log10        | Complete        | None           |                                                                                         |
