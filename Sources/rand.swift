@@ -36,7 +36,7 @@ fileprivate var _seed: Int = Glibc.time(nil)
 ///     - seed: (optional) seed number for random generator; default nil value 
 ///         uses time/counter as seed to ensure unique numbers
 /// - Returns: matrix of random decimal numbers
-func rand(_ size: [Int], seed: Int? = nil) -> Matrix
+public func rand(_ size: [Int], seed: Int? = nil) -> Matrix
 {    
     let totalSize = size.reduce(1, *)
 
@@ -82,7 +82,7 @@ public func rand(_ side: Int, seed: Int? = nil) -> Matrix
 ///     - seed: (optional) seed number for random generator; default nil value 
 ///         uses time/counter as seed to ensure unique numbers
 /// - Returns: random decimal number
-func rand(seed: Int? = nil) -> Double
+public func rand(seed: Int? = nil) -> Double
 {
     if seed == nil || seed! < 0
     {
