@@ -76,7 +76,7 @@ in action!
 
 #### Dependencies
 
-_TODO: This is pretty incomplete now but it'll get better!_
+_TODO: This is pretty vague now but it'll get better!_
 
 Besides having Swift installed, there are a few things you'll need to run Nifty:
 - Swift Package Manager: this is included with Swift 3.0 and above. If you 
@@ -87,15 +87,7 @@ Besides having Swift installed, there are a few things you'll need to run Nifty:
     interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
  - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
 - BLAS: [BLAS](http://www.netlib.org/blas/) provides lower level functions 
-    used by LAPACK (CBLAS provides the C interface). LAPACK comes with a 
-    reference version that is correct, but not suitable for high 
-    performance applications. You can improve  performance by using an 
-    optimized implementation instead 
-    (e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
-    reference implementation, Nifty inverts a large matrix in just under 3 
-    minutes whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, 
-    Nifty performs the inversion about as fast as MATLAB does. If you do
-    switch to OpenBLAS, you'll also need to ensure pthreads is installed.
+    used by LAPACK (CBLAS provides the C interface). 
 - Fortran: LAPACK needs fortran installed.
  - Ubuntu: `sudo apt-get install gfortran`
 
@@ -106,6 +98,16 @@ the required headers (they expect to find them in /usr/include) If your
 package manager installs things differently, you'll have to change the 
 paths in the module map._
 
+_Note on performance: LAPACK comes with a reference version that is correct, 
+but not suitable for high performance applications. You can improve  
+performance by using an optimized implementation instead 
+(e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
+reference implementation, Nifty inverts a large matrix in just under 3 minutes 
+whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, Nifty performs
+the inversion about as fast as MATLAB does (which is also similar to NumPy). 
+If you do switch to OpenBLAS, you'll also need to ensure pthreads is installed.
+Eventually we'll add instructions on how to do that and just make that the 
+default suggestion_
 
 ## Tests and Benchmarks
 
