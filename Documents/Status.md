@@ -69,8 +69,8 @@ implemented.
 | find         | Unimplemented   | None           |                                                                                         |
 | floor        | Complete        | None           |                                                                                         |
 | hypot        | Unimplemented   | None           |                                                                                         |
-| ge (>=)      | Completed       | None           |                                                                                         |
-| gt           | Unimplemented   | None           |                                                                                         |
+| ge (>=)      | Complete        | None           |                                                                                         |
+| gt (>)       | Unimplemented   | None           |                                                                                         |
 | ind2sub      | Mostly Complete | None           |                                                                                         |
 | inf          | Incomplete      | None           |                                                                                         |
 | inv (~)      | Mostly Complete | None           |                                                                                         |
@@ -78,13 +78,13 @@ implemented.
 | isinf        | Unimplemented   | None           |                                                                                         |
 | isnan        | Incomplete      | None           |                                                                                         |
 | ldivide      | Unimplemented   | None           |                                                                                         |
-| le           | Complete        | None           |                                                                                         |
+| le (<=)      | Complete        | None           |                                                                                         |
 | linspace     | Unimplemented   | None           |                                                                                         |
 | log          | Complete        | None           |                                                                                         |
 | log10        | Complete        | None           |                                                                                         |
 | log2         | Complete        | None           |                                                                                         |
 | log1p        | Complete        | None           |                                                                                         |
-| lt           | Unimplemented   | None           |                                                                                         |
+| lt (<)       | Complete        | None           |                                                                                         |
 | lu           | Unimplemented   | None           |                                                                                         |
 | map          | Unimplemented   | None           |                                                                                         |
 | Matrix       | Mostly Complete | None           |                                                                                         |
@@ -93,17 +93,17 @@ implemented.
 | median       | Unimplemented   | None           |                                                                                         |
 | min          | Unimplemented   | None           |                                                                                         |
 | minus (-)    | Unimplemented   | None           |                                                                                         |
-| mldivide     | Unimplemented   | None           |                                                                                         |
+| mldivide (-/)| Complete        | None           |                                                                                         |
 | mode         | Unimplemented   | None           |                                                                                         |
 | mpower (**)  | Unimplemented   | None           |                                                                                         |
 | mrdivide (/) | Unimplemented   | None           |                                                                                         |
 | msb          | Mostly Complete | None           |                                                                                         |
 | mvnrand      | Unimplemented   | None           |                                                                                         |
 | nan          | Incomplete      | None           |                                                                                         |
-| ndims        | Incomplete      | None           |                                                                                         |
+| ndims        | Complete        | None           |                                                                                         |
 | ne           | Unimplemented   | None           |                                                                                         |
 | norm         | Unimplemented   | None           |                                                                                         |
-| numel        | Mostly Complete | None           |                                                                                         |
+| numel        | Complete        | None           |                                                                                         |
 | ones         | Mostly Complete | None           |                                                                                         |
 | pinv         | Unimplemented   | None           |                                                                                         |
 | plus (+)     | Unimplemented   | None           |                                                                                         |
@@ -140,7 +140,7 @@ implemented.
 | tic          | Mostly Complete | None           |                                                                                         |
 | times (*)    | Unimplemented   | None           |                                                                                         |
 | toc          | Mostly Complete | None           |                                                                                         |
-| trace        | Unimplemented   | None           |                                                                                         |
+| trace        | Complete        | None           |                                                                                         |
 | transpose    | Complete        | None           |                                                                                         |
 | var          | Unimplemented   | None           |                                                                                         |
 | Vector       | Unimplemented   | None           |                                                                                         |
