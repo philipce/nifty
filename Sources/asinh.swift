@@ -19,7 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if os(Linux)
 import Glibc
+#else
+import Darwin
+#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
