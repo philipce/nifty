@@ -28,7 +28,7 @@ fileprivate let _RAND_MAX: Int32 = Glibc.RAND_MAX
 #else
 import Darwin
 fileprivate let _rand: () -> Int32 = Darwin.arc4random // Note: rand is unavailable on Mac
-fileprivate let _srand: (UInt32) -> Void = {} // FIXME: arc4random doesn't have a seed so this does nothing! 
+fileprivate let _srand: (UInt32) -> Void = { _ in} // FIXME: arc4random doesn't have a seed so this does nothing! 
 fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
 fileprivate let _RAND_MAX: Int32 = Darwin.RAND_MAX
 #endif
