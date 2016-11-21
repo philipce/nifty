@@ -19,7 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if os(Linux)
 import Glibc
+#else
+import Darwin
+#endif
 
 // FIXME: Glibc random is not very good. It's fine for a first cut, but we should just implement our 
 // own random number generator.

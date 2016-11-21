@@ -19,7 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if os(Linux)
 import Glibc
+#else
+import Darwin
+#endif
 
 // FIXME: get rid of use of glibc rand! Implement random function from scratch
 
