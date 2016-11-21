@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -33,3 +31,18 @@ import Darwin
 /// If x is negative, log signals a domain error. If x is zero, it returns 
 /// negative infinity; if x is too close to zero, it may signal overflow.
 public let log: (Double) -> Double = Glibc.log
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Compute the natural logarithm of x where exp(log(x)) equals x, exactly in 
+/// mathematics and approximately in C.
+///
+/// If x is negative, log signals a domain error. If x is zero, it returns 
+/// negative infinity; if x is too close to zero, it may signal overflow.
+public let log: (Double) -> Double = Darwin.log
+
+#endif

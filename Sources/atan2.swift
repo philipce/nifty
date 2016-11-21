@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -37,3 +35,23 @@ import Darwin
 /// Thus, atan2 is useful for converting Cartesian coordinates to polar 
 /// coordinates.
 public let atan2: (Double, Double) -> Double = Glibc.atan2
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// This function computes the arc tangent of y/x, but the signs of both 
+/// arguments are used to determine the quadrant of the result, and x is 
+/// permitted to be zero. The return value is given in radians and is in the 
+/// range -pi to pi, inclusive.
+/// 
+/// If x and y are coordinates of a point in the plane, atan2 returns the 
+/// signed angle between the line from the origin to that point and the x-axis. 
+/// Thus, atan2 is useful for converting Cartesian coordinates to polar 
+/// coordinates.
+public let atan2: (Double, Double) -> Double = Darwin.atan2
+
+#endif
+

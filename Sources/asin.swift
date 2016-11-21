@@ -21,10 +21,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -35,3 +33,19 @@ import Darwin
 /// The arc sine function is defined mathematically only over the domain -1 to 
 /// 1. If x is outside the domain, asin signals a domain error.
 public let asin: (Double) -> Double = Glibc.asin
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Compute the arc sine of x—that is, the value whose sine is x. The value is in 
+/// units of radians. Mathematically, there are infinitely many such values; the 
+/// one actually returned is the one between -pi/2 and pi/2 (inclusive).
+/// 
+/// The arc sine function is defined mathematically only over the domain -1 to 
+/// 1. If x is outside the domain, asin signals a domain error.
+public let asin: (Double) -> Double = Darwin.asin
+
+#endif

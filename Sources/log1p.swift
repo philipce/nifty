@@ -20,13 +20,24 @@
  **************************************************************************************************/
 
 #if os(Linux)
-import Glibc
-#else
-import Darwin
-#endif
 
+import Glibc
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
 /// zero.
 public let log1p: (Double) -> Double = Glibc.log1p
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
+/// zero.
+public let log1p: (Double) -> Double = Darwin.log1p
+
+#endif
+
+

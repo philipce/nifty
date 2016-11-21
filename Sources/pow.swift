@@ -20,9 +20,31 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// General exponentiation function, returning base raised to power.
+///
+/// Mathematically, pow would return a complex number when base is negative and 
+/// power is not an integral value. pow can’t do that, so instead it signals a 
+/// domain error. May also underflow or overflow the destination type.
+public let pow: (Double, Double) -> Double = Glibc.pow
+
 #else
+
 import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// General exponentiation function, returning base raised to power.
+///
+/// Mathematically, pow would return a complex number when base is negative and 
+/// power is not an integral value. pow can’t do that, so instead it signals a 
+/// domain error. May also underflow or overflow the destination type.
+public let pow: (Double, Double) -> Double = Darwin.pow
+
 #endif
 
 // TODO: verify this precedence
@@ -57,11 +79,3 @@ public func ** (left: Int, right: Int) -> Int
     return Int(pow(Double(left), Double(right)))
 }
 
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// General exponentiation function, returning base raised to power.
-///
-/// Mathematically, pow would return a complex number when base is negative and 
-/// power is not an integral value. pow can’t do that, so instead it signals a 
-/// domain error. May also underflow or overflow the destination type.
-public let pow: (Double, Double) -> Double = Glibc.pow

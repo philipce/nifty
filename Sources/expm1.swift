@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -31,3 +29,17 @@ import Darwin
 /// accurate even if x is near zero—a case where exp (x) - 1 would be 
 /// inaccurate owing to subtraction of two numbers that are nearly equal.
 public let expm1: (Double) -> Double = Glibc.expm1
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return a value equivalent to exp (x) - 1. Computed in a way that is 
+/// accurate even if x is near zero—a case where exp (x) - 1 would be 
+/// inaccurate owing to subtraction of two numbers that are nearly equal.
+public let expm1: (Double) -> Double = Darwin.expm1
+
+#endif
+

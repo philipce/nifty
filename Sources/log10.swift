@@ -20,12 +20,21 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the base-10 logarithm of x, where log10(x) = log(x)/log(10).
 public let log10: (Double) -> Double = Glibc.log10
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the base-10 logarithm of x, where log10(x) = log(x)/log(10).
+public let log10: (Double) -> Double = Darwin.log10
+
+#endif

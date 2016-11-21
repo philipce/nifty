@@ -20,13 +20,23 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Round x to an integer value, by default to nearest, and round halfway cases 
 /// away from zero.
 public let round: (Double) -> Double = Glibc.round
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Round x to an integer value, by default to nearest, and round halfway cases 
+/// away from zero.
+public let round: (Double) -> Double = Darwin.round
+
+#endif

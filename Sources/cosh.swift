@@ -20,13 +20,24 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the hyperbolic cosine of x, defined mathematically as 
 /// (exp(x)+exp(-x))/2. May signal overflow if x is too large.
 public let cosh: (Double) -> Double = Glibc.cosh
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the hyperbolic cosine of x, defined mathematically as 
+/// (exp(x)+exp(-x))/2. May signal overflow if x is too large.
+public let cosh: (Double) -> Double = Darwin.cosh
+
+#endif
+

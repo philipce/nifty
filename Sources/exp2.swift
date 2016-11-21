@@ -20,13 +20,23 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
 /// exp(x*log(2)).
 public let exp2: (Double) -> Double = Glibc.exp2
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
+/// exp(x*log(2)).
+public let exp2: (Double) -> Double = Darwin.exp2
+
+#endif

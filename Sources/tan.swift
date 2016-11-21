@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -33,3 +31,18 @@ import Darwin
 /// pi/2. If the argument x is too close to one of these singularities, tan 
 /// will signal overflow.
 public let tan: (Double) -> Double = Glibc.tan
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the tangent of x, where x is given in radians. 
+///
+/// Mathematically, the tangent function has singularities at odd multiples of 
+/// pi/2. If the argument x is too close to one of these singularities, tan 
+/// will signal overflow.
+public let tan: (Double) -> Double = Darwin.tan
+
+#endif

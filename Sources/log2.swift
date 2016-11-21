@@ -20,12 +20,21 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
 public let log2: (Double) -> Double = Glibc.log2
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
+public let log2: (Double) -> Double = Darwin.log2
+
+#endif

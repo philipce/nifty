@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -32,3 +30,18 @@ import Darwin
 ///  If the magnitude of the result is too large to be representable, exp 
 ///  signals overflow.
 public let exp: (Double) -> Double = Glibc.exp
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+///  Compute e (the base of natural logarithms) raised to the power x.
+///  
+///  If the magnitude of the result is too large to be representable, exp 
+///  signals overflow.
+public let exp: (Double) -> Double = Darwin.exp
+
+#endif
+

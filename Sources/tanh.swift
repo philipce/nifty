@@ -20,13 +20,24 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///    
 /// Return the hyperbolic tangent of x, defined mathematically as 
 /// sinh(x)/cosh(x). May signal overflow if x is too large.
 public let tanh: (Double) -> Double = Glibc.tanh
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///    
+/// Return the hyperbolic tangent of x, defined mathematically as 
+/// sinh(x)/cosh(x). May signal overflow if x is too large.
+public let tanh: (Double) -> Double = Darwin.tanh
+
+#endif
+

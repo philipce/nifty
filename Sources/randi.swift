@@ -21,8 +21,16 @@
 
 #if os(Linux)
 import Glibc
+fileprivate let _rand: (Double) -> Double = Glibc.rand
+fileprivate let _srand: (Double) -> Double = Glibc.srand
+fileprivate let _time: (Double) -> Double = Glibc.time
+fileprivate let _RAND_MAX: (Double) -> Double = Glibc.RAND_MAX
 #else
 import Darwin
+fileprivate let _rand: (Double) -> Double = Darwin.rand
+fileprivate let _srand: (Double) -> Double = Darwin.srand
+fileprivate let _time: (Double) -> Double = Darwin.time
+fileprivate let _RAND_MAX: (Double) -> Double = Darwin.RAND_MAX
 #endif
 
 // FIXME: get rid of use of glibc rand! Implement random function from scratch
@@ -32,7 +40,7 @@ import Darwin
 // TODO: allow better control over range, i.e. min and max
 
 // Counter to prevent rapid-fire calls from having same seed
-fileprivate var _seed: UInt32 = UInt32(Glibc.time(nil))
+fileprivate var _seed: UInt32 = UInt32(_time(nil))
 
 /// Produces uniformly distributed random integers in the interval [0, max].
 ///
@@ -57,17 +65,17 @@ public func randi(_ size: [Int], max: Int, seed: Int? = nil) -> Matrix
     precondition(!size.isEmpty && totalSize > 0, 
         "Matrix dimensions must all be positive")
 
-    precondition(max > 0 && Int32(max) <= Glibc.RAND_MAX, 
+    precondition(max > 0 && Int32(max) <= _RAND_MAX, 
         "Maximum random value must be in range [1,RAND_MAX]")
 
     if seed == nil || seed! < 0
     {
-        Glibc.srand(_seed)
+        _srand(_seed)
         _seed += 1
     }
     else
     {
-        Glibc.srand(UInt32(seed!))
+        _srand(UInt32(seed!))
     }
 
     let bits = msb(UInt(max))
@@ -75,7 +83,7 @@ public func randi(_ size: [Int], max: Int, seed: Int? = nil) -> Matrix
     var randomData = [Double]()
     while true
     {        
-        let r32 = Glibc.rand()
+        let r32 = _rand()
         for chunkIndex in 0..<(32/bits)
         {
             let rbits = (r32 >> Int32(chunkIndex*bits)) & mask
@@ -106,24 +114,24 @@ public func randi(_ size: [Int], max: Int, seed: Int? = nil) -> Matrix
 /// - Returns: random number
 public func randi(max: Int, seed: Int? = nil) -> Int
 {
-    precondition(max > 0 && Int32(max) <= Glibc.RAND_MAX, 
+    precondition(max > 0 && Int32(max) <= _RAND_MAX, 
         "Maximum random value must be in range [1,RAND_MAX]")
 
     if seed == nil || seed! < 0
     {
-        Glibc.srand(_seed)
+        _srand(_seed)
         _seed += 1
     }
     else
     {
-        Glibc.srand(UInt32(seed!))
+        _srand(UInt32(seed!))
     }
 
     let bits = msb(UInt(max))
     let mask = Int32((1 << bits)-1)
     while true
     {        
-        let r32 = Glibc.rand()
+        let r32 = _rand()
         for chunkIndex in 0..<(32/bits)
         {
             let rbits = (r32 >> Int32(chunkIndex*bits)) & mask

@@ -25,13 +25,26 @@ import Glibc
 import Darwin
 #endif
 
+#if os(Linux)
+import Glibc
+fileprivate let _drand48: (Double) -> Double = Glibc.drand48
+fileprivate let _srand48: (Double) -> Double = Glibc.srand48
+fileprivate let _time: (Double) -> Double = Glibc.time
+#else
+import Darwin
+fileprivate let _drand48: (Double) -> Double = Darwin.drand48
+fileprivate let _srand: (Double) -> Double = Darwin.srand48
+fileprivate let _time: (Double) -> Double = Darwin.time
+#endif
+
+
 // FIXME: Glibc random is not very good. It's fine for a first cut, but we should just implement our 
 // own random number generator.
 
 // TODO: this is not safe for multi threading as it uses drand48 instead of
 // drand48_r; change implementation to use drand48_r if needed.
 
-fileprivate var _seed: Int = Glibc.time(nil)
+fileprivate var _seed: Int = _time(nil)
 
 /// Produces uniformly distributed random numbers in the interval [0.0,1.0).
 ///
@@ -48,18 +61,18 @@ public func rand(_ size: [Int], seed: Int? = nil) -> Matrix
 
     if seed == nil || seed! < 0
     {
-        Glibc.srand48(_seed) 
+        _srand48(_seed) 
         _seed += 1
     }
     else
     {
-        Glibc.srand48(seed!)
+        _srand48(seed!)
     }    
 
     var randomData = [Double]()
     for _ in 0..<totalSize
     {
-        randomData.append(Glibc.drand48())
+        randomData.append(_drand48())
     }
 
     return Matrix(size: size, data: randomData)
@@ -90,13 +103,13 @@ public func rand(seed: Int? = nil) -> Double
 {
     if seed == nil || seed! < 0
     {
-        Glibc.srand48(_seed)
+        _srand48(_seed)
         _seed += 1
     }
     else
     {
-        Glibc.srand48(seed!)
+        _srand48(seed!)
     }
     
-    return Glibc.drand48()
+    return _drand48()
 }

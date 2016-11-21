@@ -20,13 +20,24 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
 /// is x. If x is less than 1, acosh signals a domain error.
 public let acosh: (Double) -> Double = Glibc.acosh
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
+/// is x. If x is less than 1, acosh signals a domain error.
+public let acosh: (Double) -> Double = Darwin.acosh
+
+#endif
+

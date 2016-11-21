@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -34,3 +32,19 @@ import Darwin
 /// The arc cosine function is defined mathematically only over the domain -1 
 /// to 1. If x is outside the domain, acos signals a domain error.
 public let acos: (Double) -> Double = Glibc.acos
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
+/// is in units of radians. Mathematically, there are infinitely many such 
+/// values; the one actually returned is the one between 0 and pi (inclusive).
+/// 
+/// The arc cosine function is defined mathematically only over the domain -1 
+/// to 1. If x is outside the domain, acos signals a domain error.
+public let acos: (Double) -> Double = Darwin.acos
+
+#endif

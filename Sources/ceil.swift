@@ -20,12 +20,22 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Round x upwards to the nearest integer, returning that value as a double.
 public let ceil: (Double) -> Double = Glibc.ceil
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Round x upwards to the nearest integer, returning that value as a double.
+public let ceil: (Double) -> Double = Darwin.ceil
+
+#endif
+

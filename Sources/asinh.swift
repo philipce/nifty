@@ -20,12 +20,21 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
 /// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
 public let asinh: (Double) -> Double = Glibc.asinh
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
+public let asinh: (Double) -> Double = Darwin.asinh
+
+#endif

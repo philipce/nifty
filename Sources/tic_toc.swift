@@ -40,6 +40,7 @@ fileprivate var _stopwatch = Date()
 ///
 /// Note: the stopwatch is automatically started at runtime; to accurately time a particular code 
 ///    segment, the stopwatch should be reset at the start of the segment using tic().
+@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
 public func tic()
 {
     _stopwatch = Date()
@@ -60,6 +61,7 @@ public func tic()
 ///
 /// - Parameters:
 ///     - units: units of time to display result in; seconds by default
+@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
 public func toc(_ units: UnitDuration = .seconds)
 {
     // Calling through to more generic toc function would reduce repeated code but introduce another

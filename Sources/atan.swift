@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -32,3 +30,17 @@ import Darwin
 /// such values; the one actually returned is the one between -pi/2 and pi/2 
 /// (inclusive).
 public let atan: (Double) -> Double = Glibc.atan
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Compute the arc tangent of x—that is, the value whose tangent is x. The 
+/// value is in units of radians. Mathematically, there are infinitely many 
+/// such values; the one actually returned is the one between -pi/2 and pi/2 
+/// (inclusive).
+public let atan: (Double) -> Double = Darwin.atan
+
+#endif

@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -32,3 +30,19 @@ import Darwin
 /// (x, y) from the origin. Using this function instead of the direct formula 
 /// is wise, since the error is much smaller. 
 public let hypot: (Double, Double) -> Double = Glibc.hypot
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return sqrt(x*x+y*y). This is the length of the hypotenuse of a right 
+/// triangle with sides of length x and y, or the distance of the point 
+/// (x, y) from the origin. Using this function instead of the direct formula 
+/// is wise, since the error is much smaller. 
+public let hypot: (Double, Double) -> Double = Darwin.hypot
+
+#endif
+
+

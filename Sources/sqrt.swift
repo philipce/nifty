@@ -20,10 +20,8 @@
  **************************************************************************************************/
 
 #if os(Linux)
+
 import Glibc
-#else
-import Darwin
-#endif
 
 /// Convenience wrapper to make glibc implementation available through Nifty.
 ///
@@ -31,3 +29,17 @@ import Darwin
 /// 
 /// If x is negative, sqrt signals a domain error. Mathematically it should return a complex number.
 public let sqrt: (Double) -> Double = Glibc.sqrt
+
+#else
+
+import Darwin
+
+/// Convenience wrapper to make glibc implementation available through Nifty.
+///
+/// Return the nonnegative square root of x.
+/// 
+/// If x is negative, sqrt signals a domain error. Mathematically it should return a complex number.
+public let sqrt: (Double) -> Double = Glibc.sqrt
+
+#endif
+
