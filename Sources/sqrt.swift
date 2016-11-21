@@ -39,7 +39,7 @@ import Darwin
 /// Return the nonnegative square root of x.
 /// 
 /// If x is negative, sqrt signals a domain error. Mathematically it should return a complex number.
-public let sqrt: (Double) -> Double = Glibc.sqrt
+public let sqrt: (Double) -> Double = Darwin.sqrt
 
 #endif
 
