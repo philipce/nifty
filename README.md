@@ -105,7 +105,13 @@ headers, e.g. /usr/local/opt/lapack/include. BLAS is also in Accelerate,
 or you can install OpenBLAS with `brew install homebrew/science/openblas`
 then modify the CBlas package module map to installed location,
 e.g. /usr/local/opt/openblas/include. Also, it looks like OpenBLAS includes
-LAPACK (not sure if it includes it all) so you may just need that._
+LAPACK (not sure if it includes it all) so you may just need that.
+If you manually installed the libraries, then you need to tell `swift build`
+where to look. The only way I got it to work was manually passing flags to 
+the linker, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`.
+Also, I had to modify the CBlas module map to link "openblas" rather than "blas"
+otherwise it would find its preinstalled library that didn't have the CBLAS symbols; 
+openblas does._
 
 _Note on performance: LAPACK comes with a reference version that is correct, 
 but not suitable for high performance applications. You can improve  
