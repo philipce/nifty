@@ -27,14 +27,14 @@ import Darwin
 
 #if os(Linux)
 import Glibc
-fileprivate let _drand48: (Double) -> Double = Glibc.drand48
-fileprivate let _srand48: (Double) -> Double = Glibc.srand48
-fileprivate let _time: (Double) -> Double = Glibc.time
+fileprivate let _drand48: () -> Double = Glibc.drand48
+fileprivate let _srand48: (Int) -> Void = Glibc.srand48
+fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Glibc.time
 #else
 import Darwin
-fileprivate let _drand48: (Double) -> Double = Darwin.drand48
-fileprivate let _srand: (Double) -> Double = Darwin.srand48
-fileprivate let _time: (Double) -> Double = Darwin.time
+fileprivate let _drand48: () -> Double = Darwin.drand48
+fileprivate let _srand: (Int) -> Void = Darwin.srand48
+fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
 #endif
 
 

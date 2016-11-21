@@ -21,16 +21,16 @@
 
 #if os(Linux)
 import Glibc
-fileprivate let _rand: (Double) -> Double = Glibc.rand
-fileprivate let _srand: (Double) -> Double = Glibc.srand
-fileprivate let _time: (Double) -> Double = Glibc.time
-fileprivate let _RAND_MAX: (Double) -> Double = Glibc.RAND_MAX
+fileprivate let _rand: () -> Int32 = Glibc.rand
+fileprivate let _srand: (UInt32) -> Void = Glibc.srand
+fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Glibc.time
+fileprivate let _RAND_MAX: Int32 = Glibc.RAND_MAX
 #else
 import Darwin
-fileprivate let _rand: (Double) -> Double = Darwin.rand
-fileprivate let _srand: (Double) -> Double = Darwin.srand
-fileprivate let _time: (Double) -> Double = Darwin.time
-fileprivate let _RAND_MAX: (Double) -> Double = Darwin.RAND_MAX
+fileprivate let _rand: () -> Int32 = Darwin.rand
+fileprivate let _srand: (UInt32) -> Void = Darwin.srand
+fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
+fileprivate let _RAND_MAX: Int32 = Darwin.RAND_MAX
 #endif
 
 // FIXME: get rid of use of glibc rand! Implement random function from scratch
