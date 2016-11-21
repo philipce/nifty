@@ -27,7 +27,7 @@ fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Glibc.time
 fileprivate let _RAND_MAX: Int32 = Glibc.RAND_MAX
 #else
 import Darwin
-fileprivate let _rand: () -> Int32 = Darwin.arc4random // Note: rand is unavailable on Mac
+fileprivate let _rand: () -> UInt32 = Darwin.arc4random // Note: rand is unavailable on Mac
 fileprivate let _srand: (UInt32) -> Void = { _ in} // FIXME: arc4random doesn't have a seed so this does nothing! 
 fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
 fileprivate let _RAND_MAX: Int32 = Darwin.RAND_MAX
@@ -83,7 +83,7 @@ public func randi(_ size: [Int], max: Int, seed: Int? = nil) -> Matrix
     var randomData = [Double]()
     while true
     {        
-        let r32 = _rand()
+        let r32 = Int32(_rand())
         for chunkIndex in 0..<(32/bits)
         {
             let rbits = (r32 >> Int32(chunkIndex*bits)) & mask
