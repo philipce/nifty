@@ -84,6 +84,7 @@ public func toc(_ units: UnitDuration = .seconds)
 /// - Parameters:
 ///     - units: units of time to measure result in
 ///     - printing: optionally print ellapsed time to console; false by default
+@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
 public func toc(returning units: UnitDuration, printing: Bool = false) -> Double
 {
     let stop = Date()
