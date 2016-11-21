@@ -131,7 +131,7 @@ public func randi(max: Int, seed: Int? = nil) -> Int
     let mask = Int32((1 << bits)-1)
     while true
     {        
-        let r32 = _rand()
+        let r32 = Int32(_rand())
         for chunkIndex in 0..<(32/bits)
         {
             let rbits = (r32 >> Int32(chunkIndex*bits)) & mask
