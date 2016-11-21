@@ -98,6 +98,15 @@ the required headers (they expect to find them in /usr/include) If your
 package manager installs things differently, you'll have to change the 
 paths in the module map._
 
+_Note for Mac: LAPACK comes already installed in the Accelerate framework. 
+Or you can install a dupe with brew, `brew install homebrew/dupes/lapack` 
+then change the module map in CLapacke package to wherever it put the 
+headers, e.g. /usr/local/opt/lapack/include. BLAS is also in Accelerate,
+or you can install OpenBLAS with `brew install homebrew/science/openblas`
+then modify the CBlas package module map to installed location,
+e.g. /usr/local/opt/openblas/include. Also, it looks like OpenBLAS includes
+LAPACK (not sure if it includes it all) so you may just need that._
+
 _Note on performance: LAPACK comes with a reference version that is correct, 
 but not suitable for high performance applications. You can improve  
 performance by using an optimized implementation instead 
@@ -108,6 +117,8 @@ the inversion about as fast as MATLAB does (which is also similar to NumPy).
 If you do switch to OpenBLAS, you'll also need to ensure pthreads is installed.
 Eventually we'll add instructions on how to do that and just make that the 
 default suggestion_
+
+
 
 ## Tests and Benchmarks
 

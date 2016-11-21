@@ -19,7 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if os(Linux)
 import Glibc
+#else
+import Darwin
+#endif
 
 // TODO: verify this precedence
 infix operator ** : ExponentiationPrecedence
