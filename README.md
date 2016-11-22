@@ -114,8 +114,8 @@ otherwise it would find its preinstalled library that didn't have the CBLAS symb
 openblas does._
 
 _Note on performance: LAPACK comes with a reference version that is correct, 
-but not suitable for high performance applications. You can improve  
-performance by using an optimized implementation instead 
+but not suitable for high performance applications. You can improve performance 
+by using an optimized implementation instead 	
 (e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
 reference implementation, Nifty inverts a large matrix in just under 3 minutes 
 whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, Nifty performs
