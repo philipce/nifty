@@ -19,6 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+<<<<<<< HEAD
+import Foundation
+
+/// Return a matrix of random real numbers in the specified range.
+=======
 #if os(Linux)
 import Glibc
 #else
@@ -47,20 +52,60 @@ fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
 fileprivate var _seed: Int = _time(nil)
 
 /// Produces uniformly distributed random numbers in the interval [0.0,1.0).
+>>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 ///
+/// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
+///    matrix rather than many individual numbers.
+/// - Note: Generated numbers are limited to a maximum magnitude of 2^53-1; this ensures that they
+///    can be stored as Doubles without loss of precision.
 /// - Parameters:
-///     - size: size of the array to create
-///     - seed: (optional) seed number for random generator; default nil value 
-///         uses time/counter as seed to ensure unique numbers
-/// - Returns: matrix of random decimal numbers
-public func rand(_ size: [Int], seed: Int? = nil) -> Matrix
-{    
+///    - size: size of random matrix to generate
+///    - min: optionally specify minimum integer value to return, inclusive
+///    - max: optionally specify maximum integer value to return, inclusive
+///    - seed: optionally provide specific seed for generator. If threadSafe is set, this seed will
+///        not be applied to global generator.
+///    - threadSafe: if set to true, a new random generator instance will be created that will be 
+///        be used and exist only for the duration of this call. Otherwise, global instance is used.
+public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Matrix
+{
     let totalSize = size.reduce(1, *)
 
     precondition(!size.isEmpty && totalSize > 0, "Matrix dimensions must all be positive")
+    precondition(max < 9007199254740992.0 && max > -9007199254740992.0, "|Max| must be below 2^53")
+    precondition(min < 9007199254740992.0 && min > -9007199254740992.0, "|Min| must be below 2^53")
+    precondition(max > min, "Max must be greater than min")    
 
-    if seed == nil || seed! < 0
+    let range = max-min
+
+    // If not set to be thread safe, save time and use global generator. Otherwise, make new one.
+    var curRandGen: UniformRandomGenerator
+    if !threadSafe
     {
+<<<<<<< HEAD
+        if let gen = g_UniformRandGen
+        {
+            curRandGen = gen          
+        }
+        // initialize global generator if needed
+        else
+        {
+            // Seed random number generator with all significant digits in current time.
+            curRandGen = UniformRandomGenerator(seed: seed ?? 
+                UInt64(Date().timeIntervalSince1970*10000))
+            g_UniformRandGen = curRandGen
+        }
+    }
+    else
+    {
+        // TODO: Foundation currently doesn't provide a way for getting thread ID. As a temporary 
+        // substitue, use the hash of the current thread object representation (I believe the 
+        // address in the thread description is unique to each thread) as a seed, if one wasn't 
+        // given, to ensure different random numbers between threads. Add the time (times 10000 so 
+        // all significant digits are in integer) so the same thread seeds differently on each call.
+        let ts = UInt64(abs("\(Thread.current)".hash)) + UInt64(Date().timeIntervalSince1970*10000)
+        curRandGen = UniformRandomGenerator(seed: seed ?? ts)
+=======
         _srand48(_seed) 
         _seed += 1
     }
@@ -73,34 +118,32 @@ public func rand(_ size: [Int], seed: Int? = nil) -> Matrix
     for _ in 0..<totalSize
     {
         randomData.append(_drand48())
+>>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
     }
 
-    return Matrix(size: size, data: randomData)
+    // Grab random doubles until we've got enough in range
+    var randomData = [Double]()
+    while true
+    {        
+        let r = curRandGen.doub()
+
+        // scale and shift value to range [min, max]
+        let scaledShiftedValue = r * range + min
+        randomData.append(scaledShiftedValue)
+        if randomData.count == totalSize
+        {
+            return Matrix(size: size, data: randomData)
+        }
+    }
 }
 
-/// Produces a square matrix of uniformly distributed random numbers in the interval [0.0,1.0).
-///
-/// - Parameters:
-///     - side: length of side of the square matrix to create
-///     - seed: (optional) seed number for random generator; default nil value 
-///         uses time/counter as seed to ensure unique numbers
-/// - Returns: matrix of random decimal numbers
-public func rand(_ side: Int, seed: Int? = nil) -> Matrix
+public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Double
 {
-    return rand([side, side], seed: seed)
-}
-
-/// Produces a uniformly distributed random number in the interval [0.0,1.0).
-///
-/// TODO: this is not safe for multi threading as it uses drand48 instead of
-/// drand48_r; change implementation to use drand48_r if needed.
-///
-/// - Parameters:
-///     - seed: (optional) seed number for random generator; default nil value 
-///         uses time/counter as seed to ensure unique numbers
-/// - Returns: random decimal number
-public func rand(seed: Int? = nil) -> Double
-{
+<<<<<<< HEAD
+    let m = rand([1], min: min, max: max, seed: seed, threadSafe: threadSafe)
+    return m.data[0]
+=======
     if seed == nil || seed! < 0
     {
         _srand48(_seed)
@@ -112,4 +155,5 @@ public func rand(seed: Int? = nil) -> Double
     }
     
     return _drand48()
+>>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 }
