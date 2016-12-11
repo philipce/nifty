@@ -19,40 +19,9 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-<<<<<<< HEAD
 import Foundation
 
 /// Return a matrix of random real numbers in the specified range.
-=======
-#if os(Linux)
-import Glibc
-#else
-import Darwin
-#endif
-
-#if os(Linux)
-import Glibc
-fileprivate let _drand48: () -> Double = Glibc.drand48
-fileprivate let _srand48: (Int) -> Void = Glibc.srand48
-fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Glibc.time
-#else
-import Darwin
-fileprivate let _drand48: () -> Double = Darwin.drand48
-fileprivate let _srand48: (Int) -> Void = Darwin.srand48
-fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
-#endif
-
-
-// FIXME: Glibc random is not very good. It's fine for a first cut, but we should just implement our 
-// own random number generator.
-
-// TODO: this is not safe for multi threading as it uses drand48 instead of
-// drand48_r; change implementation to use drand48_r if needed.
-
-fileprivate var _seed: Int = _time(nil)
-
-/// Produces uniformly distributed random numbers in the interval [0.0,1.0).
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 ///
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
 ///    matrix rather than many individual numbers.
@@ -82,7 +51,6 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
     var curRandGen: UniformRandomGenerator
     if !threadSafe
     {
-<<<<<<< HEAD
         if let gen = g_UniformRandGen
         {
             curRandGen = gen          
@@ -105,20 +73,6 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
         // all significant digits are in integer) so the same thread seeds differently on each call.
         let ts = UInt64(abs("\(Thread.current)".hash)) + UInt64(Date().timeIntervalSince1970*10000)
         curRandGen = UniformRandomGenerator(seed: seed ?? ts)
-=======
-        _srand48(_seed) 
-        _seed += 1
-    }
-    else
-    {
-        _srand48(seed!)
-    }    
-
-    var randomData = [Double]()
-    for _ in 0..<totalSize
-    {
-        randomData.append(_drand48())
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
     }
 
     // Grab random doubles until we've got enough in range
@@ -140,20 +94,6 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
 public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Double
 {
-<<<<<<< HEAD
     let m = rand([1], min: min, max: max, seed: seed, threadSafe: threadSafe)
     return m.data[0]
-=======
-    if seed == nil || seed! < 0
-    {
-        _srand48(_seed)
-        _seed += 1
-    }
-    else
-    {
-        _srand48(seed!)
-    }
-    
-    return _drand48()
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 }

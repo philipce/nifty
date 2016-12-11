@@ -37,8 +37,7 @@ fileprivate var _stopwatch = Date()
 /// is measured using the toc() function. 
 ///
 /// Note: the stopwatch is automatically started at runtime; to accurately time a particular code 
-///    segment, the stopwatch should be reset at the start of the segment using tic().
-@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
+/// segment, the stopwatch should be reset at the start of the segment using tic().
 public func tic()
 {
     _stopwatch = Date()
@@ -54,12 +53,7 @@ public func tic()
 ///
 /// - Parameters:
 ///     - units: units of time to display result in; seconds by default
-<<<<<<< HEAD
 public func toc(_ units: StopwatchUnit = .seconds)
-=======
-@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
-public func toc(_ units: UnitDuration = .seconds)
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 {
     // Calling through to more generic toc function would reduce repeated code but introduce another
     // function call, reducing the accuracy of the stopwatch. Such a small amount of repeated code
@@ -76,15 +70,10 @@ public func toc(_ units: UnitDuration = .seconds)
 /// Measure the ellapsed time since the last call to tic() was made and return the result.
 ///
 /// - Parameters:
-///     - units: units of time to measure result in
+///     - returning units: units of time to return measured time in
 ///     - printing: optionally print ellapsed time to console; false by default
-<<<<<<< HEAD
 /// - Returns: ellapsed time in the specified units
 public func toc(returning units: StopwatchUnit, printing: Bool = false) -> Double
-=======
-@available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
-public func toc(returning units: UnitDuration, printing: Bool = false) -> Double
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 {
     let stop = Date()
     let ellapsed_secs = Double(stop.timeIntervalSince(_stopwatch))

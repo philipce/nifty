@@ -19,7 +19,6 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-<<<<<<< HEAD
 /// Internal structure for generating uniform random numbers. Random number generation throughout 
 /// Nifty should use this object as a base.
 ///
@@ -43,21 +42,6 @@ public class UniformRandomGenerator
         self.w = self.v
         let _ = self.uint64()
     }
-=======
-#if os(Linux)
-import Glibc
-fileprivate let _rand: () -> Int32 = Glibc.rand
-fileprivate let _srand: (UInt32) -> Void = Glibc.srand
-fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Glibc.time
-fileprivate let _RAND_MAX: Int32 = Glibc.RAND_MAX
-#else
-import Darwin
-fileprivate let _rand: () -> UInt32 = Darwin.arc4random // Note: rand is unavailable on Mac
-fileprivate let _srand: (UInt32) -> Void = { _ in} // FIXME: arc4random doesn't have a seed so this does nothing! 
-fileprivate let _time: (UnsafeMutablePointer<time_t>!) -> time_t = Darwin.time
-fileprivate let _RAND_MAX: Int32 = Darwin.RAND_MAX
-#endif
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 
     func uint64() -> UInt64
     {
@@ -81,17 +65,12 @@ fileprivate let _RAND_MAX: Int32 = Darwin.RAND_MAX
         return UInt32(self.uint64() >> 32)
     }
 
-<<<<<<< HEAD
     func doub() -> Double
     {
         // TODO: Revist and test the need to use only 53 bits. Is it really necessary?
         // Integers up to 2^53-1 can be stored in double without loss of precision. Beyond that, 
         // precision may be lost, which would mean multiple UInt64s may map to same double, throwing
         // off uniformity. Use only 53 bits of UInt64 to prevent this and multiply by 1/(2^53-1)
-=======
-// Counter to prevent rapid-fire calls from having same seed
-fileprivate var _seed: UInt32 = UInt32(_time(nil))
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 
         return 1.110223024625156786942664549657E-16  * Double(self.uint64() >> 11)
     }
@@ -133,7 +112,6 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: 
     precondition(min < 9007199254740992 && min > -9007199254740992, "|Min| must be below 2^53")
     precondition(max > min, "Max must be greater than min")    
 
-<<<<<<< HEAD
     // Note: The weirdness below in computing the range is to deal with potential overflow.
     //
     // For one, if max = Int.max and min < 0, then max-min is too large to fit in an Int; so we need
@@ -158,28 +136,6 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: 
     if !threadSafe
     {
         if let gen = g_UniformRandGen
-=======
-    precondition(max > 0 && Int32(max) <= _RAND_MAX, 
-        "Maximum random value must be in range [1,RAND_MAX]")
-
-    if seed == nil || seed! < 0
-    {
-        _srand(_seed)
-        _seed += 1
-    }
-    else
-    {
-        _srand(UInt32(seed!))
-    }
-
-    let bits = msb(UInt(max))
-    let mask = Int32((1 << bits)-1)
-    var randomData = [Double]()
-    while true
-    {        
-        let r32 = Int32(_rand())
-        for chunkIndex in 0..<(32/bits)
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
         {
             curRandGen = gen          
         }
@@ -192,7 +148,6 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: 
             g_UniformRandGen = curRandGen
         }
     }
-<<<<<<< HEAD
     else
     {
         // TODO: Foundation currently doesn't provide a way for getting thread ID. As a temporary 
@@ -203,27 +158,6 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: 
         let ts = UInt64(abs("\(Thread.current)".hash)) + UInt64(Date().timeIntervalSince1970*10000)
         curRandGen = UniformRandomGenerator(seed: seed ?? ts)
     }
-=======
-}
-
-/// Produces a uniformly distributed random number in the interval [0, max].
-///
-/// The max value, max, returned by this function must be less than RAND_MAX.
-/// RAND_MAX is an integer constant representing the largest value the 
-/// Glibc.rand function can return. In the GNU C Library, it is 2147483647, 
-/// which is the largest signed integer representable in 32 bits. In other 
-/// libraries, it may be as low as 32767.
-///
-/// - Parameters:
-///     - max: the largest random integer to allow
-///     - seed: (optional) seed number for random generator; default nil value 
-///         uses time/counter as seed to ensure unique numbers
-/// - Returns: random number
-public func randi(max: Int, seed: Int? = nil) -> Int
-{
-    precondition(max > 0 && Int32(max) <= _RAND_MAX, 
-        "Maximum random value must be in range [1,RAND_MAX]")
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 
     // Create mask that will select the right-most number of bits we need to represent the random 
     // number out of a 64 bit number. For example, a random number in the range 0-3 needs 2 bits,
@@ -233,20 +167,11 @@ public func randi(max: Int, seed: Int? = nil) -> Int
     let mask: UInt64
     if bits == 64 
     {
-<<<<<<< HEAD
         mask = UInt64.max
     }
     else
     {
         mask = (UInt64(1) << bits)-1   
-=======
-        _srand(_seed)
-        _seed += 1
-    }
-    else
-    {
-        _srand(UInt32(seed!))
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
     }
 
     // Grab 64 random bits at a time, breaking it down into as many chunks of the needed size as 
@@ -254,13 +179,8 @@ public func randi(max: Int, seed: Int? = nil) -> Int
     var randomData = [Double]()
     while true
     {        
-<<<<<<< HEAD
         let r64 = curRandGen.uint64()
         for chunkIndex in 0..<(64/bits)
-=======
-        let r32 = Int32(_rand())
-        for chunkIndex in 0..<(32/bits)
->>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
         {
             let bitChunk = (r64 >> UInt64(chunkIndex*bits)) & mask
 
