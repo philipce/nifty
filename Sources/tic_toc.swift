@@ -19,15 +19,13 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-import Foundation
-
 // TODO: Improvements:
-// - revisit this impl for efficiency and use of Foundation... perhaps instead of NSDate there is a 
-//        better way to get ellapsed time.
 // - make this thread safe, allow for multiple stopwatches, etc... e.g. have tic return a key, like
 //        a UUID, which toc could then pass in to retrieve the time ellapsed since particular tic
+// - do we really want to use formatter here? Seems overkill
 
-// TODO: Do we really want to use formatter here? Seems overkill
+import Foundation
+
 // Time display settings
 fileprivate var formatSetup = false
 fileprivate let stopwatchFormat = NumberFormatter()
@@ -52,51 +50,69 @@ public func tic()
     }
 }
 
-// TODO: format printed time to only have some number of decimal places
-
 /// Measure the ellapsed time since the last call to tic() was made and display to the console.
-///
-/// This function is useful when the caller doesn't want to store the ellapsed time and wants to
-/// avoid compiler warnings about unused returns.
 ///
 /// - Parameters:
 ///     - units: units of time to display result in; seconds by default
+<<<<<<< HEAD
+public func toc(_ units: StopwatchUnit = .seconds)
+=======
 @available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
 public func toc(_ units: UnitDuration = .seconds)
+>>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 {
     // Calling through to more generic toc function would reduce repeated code but introduce another
     // function call, reducing the accuracy of the stopwatch. Such a small amount of repeated code
     // seems worth it in this case.
 
     let stop = Date()
-    var ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
-        unit: .seconds)
-    ellapsed.convert(to: units)
+    let ellapsed_secs = Double(stop.timeIntervalSince(_stopwatch))
+    let ellapsed = ellapsed_secs * units.rawValue
     
-    let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed.value)) ?? "ERROR!"
-    print("Ellapsed time: \(fmt) \(ellapsed.unit.symbol)")
+    let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed)) ?? "ERROR!"
+    print("Ellapsed time: \(fmt) \(units)")
 }
 
-/// Measure the ellapsed time since the last call to tic() was made.
-///
-/// This function is useful when the caller needs to store the ellapsed time.
+/// Measure the ellapsed time since the last call to tic() was made and return the result.
 ///
 /// - Parameters:
 ///     - units: units of time to measure result in
 ///     - printing: optionally print ellapsed time to console; false by default
+<<<<<<< HEAD
+/// - Returns: ellapsed time in the specified units
+public func toc(returning units: StopwatchUnit, printing: Bool = false) -> Double
+=======
 @available(OSX 10.12, *) // TODO: remove after getting rid of use of UnitDuration in toc
 public func toc(returning units: UnitDuration, printing: Bool = false) -> Double
+>>>>>>> bfd1bccbd8982391e7a2dba8f4c560d1fd12c532
 {
     let stop = Date()
-    var ellapsed = Measurement<UnitDuration>(value: stop.timeIntervalSince(_stopwatch),
-        unit: .seconds)
-    ellapsed.convert(to: units)
+    let ellapsed_secs = Double(stop.timeIntervalSince(_stopwatch))
+    let ellapsed = ellapsed_secs * units.rawValue
 
     if printing
     {
-        let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed.value)) ?? "ERROR!"
-        print("Ellapsed time: \(fmt) \(ellapsed.unit.symbol)")
+        let fmt = stopwatchFormat.string(from: NSNumber(value: ellapsed)) ?? "ERROR!"
+        print("Ellapsed time: \(fmt) \(units)")
     }
 
-    return ellapsed.value
+    return ellapsed
+}
+
+/// Enumerate the units supported by the stopwatch, with a raw value that is the conversion
+/// factor from seconds to the particular case.
+///
+/// Note: This enum is used instead of Foundation's UnitDuration for two reasons: 1) UnitDuration 
+/// only has hours, minutes, and seconds, and 2) UnitDuration imposes availability constraints
+/// on Mac.
+public enum StopwatchUnit: Double
+{
+    case weeks    = 1.6534
+    case days     = 1.1574E-5
+    case hours    = 2.7777E-4
+    case minutes  = 1.6666E-2
+    case seconds  = 1.0
+    case ms       = 1.0E3
+    case us       = 1.0E6
+    case ns       = 1.0E9
 }
