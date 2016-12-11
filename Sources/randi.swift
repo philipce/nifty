@@ -102,7 +102,7 @@ var g_UniformRandGen: UniformRandomGenerator? = nil
 ///        not be applied to global generator.
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
-public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: UInt64? = nil, 
+public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Matrix
 {
     let totalSize = size.reduce(1, *)
@@ -199,7 +199,7 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int16.max), seed: 
     }
 }
 
-public func randi(min: Int = Int.min, max: Int = Int.max, seed: UInt64? = nil, 
+public func randi(min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Int
 {
     let m = randi([1], min: min, max: max, seed: seed, threadSafe: threadSafe)
