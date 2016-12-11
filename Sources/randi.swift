@@ -25,7 +25,9 @@
 /// Algorithm based on:
 /// Press, William H. "Numerical recipes 3rd edition: The art of scientific computing.", Cambridge 
 /// university press, 2007. Chapter 7.1, pg 342-343.
-public class UniformRandomGenerator
+/// 
+/// The period of the generator is about 3.138E57. 
+internal class UniformRandomGenerator
 {
     var u: UInt64
     var v: UInt64
@@ -76,15 +78,15 @@ public class UniformRandomGenerator
     }
 }
 
+// Global random number generator instance used for generation of uniform randoms, unless function
+// is called with the `threadSafe` option set.
+internal var g_UniformRandGen: UniformRandomGenerator? = nil
+
 //==================================================================================================
 // MARK: PUBLIC RANDI INTERFACE
 //==================================================================================================
 
 import Foundation
-
-// Global random number generator instance used for generation of uniform randoms, unless function
-// is called with the `threadSafe` option set.
-var g_UniformRandGen: UniformRandomGenerator? = nil
 
 /// Return a matrix of random integers in the specified range.
 ///
@@ -99,7 +101,7 @@ var g_UniformRandGen: UniformRandomGenerator? = nil
 ///    - min: optionally specify minimum integer value to return, inclusive
 ///    - max: optionally specify maximum integer value to return, inclusive
 ///    - seed: optionally provide specific seed for generator. If threadSafe is set, this seed will
-///        not be applied to global generator.
+///        not be applied to global generator, but to the temporary generator instance
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
 public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
@@ -135,16 +137,22 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: 
     var curRandGen: UniformRandomGenerator
     if !threadSafe
     {
-        if let gen = g_UniformRandGen
+        // create or reseed global generator with given seed
+        if let s = seed
+        {
+            curRandGen = UniformRandomGenerator(seed: s)
+            g_UniformRandGen = curRandGen
+        }
+        // just use the current global generator if there is one
+        else if let gen = g_UniformRandGen
         {
             curRandGen = gen          
         }
-        // initialize global generator if needed
+        // initialize global generator with default seed
         else
         {
             // Seed random number generator with all significant digits in current time.
-            curRandGen = UniformRandomGenerator(seed: seed ?? 
-                UInt64(Date().timeIntervalSince1970*10000))
+            curRandGen = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*10000))
             g_UniformRandGen = curRandGen
         }
     }

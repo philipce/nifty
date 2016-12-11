@@ -51,16 +51,22 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
     var curRandGen: UniformRandomGenerator
     if !threadSafe
     {
-        if let gen = g_UniformRandGen
+        // create or reseed global generator with given seed
+        if let s = seed
+        {
+            curRandGen = UniformRandomGenerator(seed: s)
+            g_UniformRandGen = curRandGen
+        }
+        // just use the current global generator if there is one
+        else if let gen = g_UniformRandGen
         {
             curRandGen = gen          
         }
-        // initialize global generator if needed
+        // initialize global generator with default seed
         else
         {
             // Seed random number generator with all significant digits in current time.
-            curRandGen = UniformRandomGenerator(seed: seed ?? 
-                UInt64(Date().timeIntervalSince1970*10000))
+            curRandGen = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*10000))
             g_UniformRandGen = curRandGen
         }
     }
