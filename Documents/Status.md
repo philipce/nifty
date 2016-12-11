@@ -114,9 +114,9 @@ implemented.
 | power (.**)  | Unimplemented   | None           |                                                                                         |
 | prod         | Unimplemented   | None           |                                                                                         |
 | qr           | Unimplemented   | None           |                                                                                         |
-| rand         | Incomplete      | None           | Using glibc random number generator; need to improve                                    |
-| randi        | Incomplete      | None           | Need to get away from glibc rand                                                        |
-| randn        | Unimplemented   | None           |                                                                                         |
+| rand         | Complete        | None           |                                                                                         |
+| randi        | Complete        | None           |                                                                                         |
+| randn        | Complete        | None           |                                                                                         |
 | randperm     | Unimplemented   | None           |                                                                                         |
 | rank         | Unimplemented   | None           |                                                                                         |
 | rdivide      | Unimplemented   | None           |                                                                                         |
