@@ -88,6 +88,9 @@ internal var g_UniformRandGen: UniformRandomGenerator? = nil
 
 import Foundation
 
+// TODO: get rid of size parameter in randi that returns matrix... randi(_ size: [Int] ) will return
+// Tensor, not matrix.
+
 /// Return a matrix of random integers in the specified range.
 ///
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
@@ -97,19 +100,20 @@ import Foundation
 ///    can be generated is Int.min+1, not Int.min; this is so the range `min-max` can be computed 
 ///    without overflow.
 /// - Parameters:
-///    - size: size of random matrix to generate
+///    - rows: number of rows in matrix to generate
+///    - columns: number of columns in matrix to generate
 ///    - min: optionally specify minimum integer value to return, inclusive
 ///    - max: optionally specify maximum integer value to return, inclusive
 ///    - seed: optionally provide specific seed for generator. If threadSafe is set, this seed will
 ///        not be applied to global generator, but to the temporary generator instance
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
-public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
+public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Matrix
 {
-    let totalSize = size.reduce(1, *)
+    let totalSize = rows * columns
 
-    precondition(!size.isEmpty && totalSize > 0, "Matrix dimensions must all be positive")
+    precondition(rows > 0 && columns > 0, "Matrix dimensions must all be positive")
     precondition(max < 9007199254740992 && max > -9007199254740992, "|Max| must be below 2^53")
     precondition(min < 9007199254740992 && min > -9007199254740992, "|Min| must be below 2^53")
     precondition(max > min, "Max must be greater than min")    
@@ -200,22 +204,16 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: 
                 randomData.append(shiftedValue)
                 if randomData.count == totalSize
                 {
-                    return Matrix(size, data: randomData)
+                    return Matrix(rows, columns, data: randomData)
                 }
             }
         }
     }
 }
 
-public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Matrix
-{
-    return randi([rows, columns], min: min, max: max, seed: seed, threadSafe: threadSafe)
-}
-
 public func randi(min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Int
 {
-    let m = randi([1], min: min, max: max, seed: seed, threadSafe: threadSafe)
+    let m = randi(1, 1, min: min, max: max, seed: seed, threadSafe: threadSafe)
     return Int(m.data[0])
 }

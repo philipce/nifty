@@ -70,19 +70,20 @@ import Foundation
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
 ///    matrix rather than many individual numbers.
 /// - Parameters:
-///    - size: size of random matrix to generate
+///    - rows: number of rows in matrix to generate
+///    - columns: number of columns in matrix to generate
 ///    - mean: optionally specify a mean other than the default zero mean
 ///    - std: optionally specify standard deviation other than the default unit
 ///    - seed: optionally provide specific seed for generator. If threadSafe is set, this seed will
 ///        not be applied to global generator, but to the temporary generator instance
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
-public func randn(_ size: [Int], mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 
+public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Matrix
 {
-    let totalSize = size.reduce(1, *)
+    let totalSize = rows * columns
 
-    precondition(!size.isEmpty && totalSize > 0, "Matrix dimensions must all be positive")
+    precondition(rows > 0 && columns > 0, "Matrix dimensions must all be positive")
     precondition(std >= 0, "Standard deviation cannot be negative")
 
     // If not set to be thread safe, save time and use global generator. Otherwise, make new one.
@@ -133,18 +134,12 @@ public func randn(_ size: [Int], mean: Double = 0.0, std: Double = 1.0, seed: UI
         randomData.append(curRandGen.doub())
     }
 
-    return Matrix(size, data: randomData)
-}
-
-public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Matrix
-{
-    return randn([rows, columns], mean: mean, std: std, seed: seed, threadSafe: threadSafe)
+    return Matrix(rows, columns, data: randomData)
 }
 
 public func randn(mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Double
 {
-    let m = randn([1], mean: mean, std: std, seed: seed, threadSafe: threadSafe)
+    let m = randn(1, 1, mean: mean, std: std, seed: seed, threadSafe: threadSafe)
     return m.data[0]
 }

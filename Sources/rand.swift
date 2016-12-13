@@ -21,6 +21,9 @@
 
 import Foundation
 
+// TODO: get rid of size parameter in rand that returns matrix... rand(_ size: [Int] ) will return
+// Tensor, not matrix.
+
 /// Return a matrix of random real numbers in the specified range.
 ///
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
@@ -28,19 +31,20 @@ import Foundation
 /// - Note: Generated numbers are limited to a maximum magnitude of 2^53-1; this ensures that they
 ///    can be stored as Doubles without loss of precision.
 /// - Parameters:
-///    - size: size of random matrix to generate
+///    - rows: number of rows in matrix to generate
+///    - columns: number of columns in matrix to generate
 ///    - min: optionally specify minimum integer value to return, inclusive
 ///    - max: optionally specify maximum integer value to return, inclusive
 ///    - seed: optionally provide specific seed for generator. If threadSafe is set, this seed will
 ///        not be applied to global generator.
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
-public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Matrix
+public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1.0, 
+    seed: UInt64? = nil, threadSafe: Bool = false) -> Matrix
 {
-    let totalSize = size.reduce(1, *)
+    let totalSize = rows * columns
 
-    precondition(!size.isEmpty && totalSize > 0, "Matrix dimensions must all be positive")
+    precondition(rows > 0 && columns > 0, "Matrix dimensions must all be positive")
     precondition(max < 9007199254740992.0 && max > -9007199254740992.0, "|Max| must be below 2^53")
     precondition(min < 9007199254740992.0 && min > -9007199254740992.0, "|Min| must be below 2^53")
     precondition(max > min, "Max must be greater than min")    
@@ -92,20 +96,14 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
         randomData.append(scaledShiftedValue)
         if randomData.count == totalSize
         {
-            return Matrix(size, data: randomData)
+            return Matrix(rows, columns, data: randomData)
         }
     }
-}
-
-public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Matrix
-{
-    return rand([rows, columns], min: min, max: max, seed: seed, threadSafe: threadSafe)
 }
 
 public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Double
 {
-    let m = rand([1], min: min, max: max, seed: seed, threadSafe: threadSafe)
+    let m = rand(1, 1, min: min, max: max, seed: seed, threadSafe: threadSafe)
     return m.data[0]
 }
