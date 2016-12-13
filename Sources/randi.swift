@@ -200,11 +200,17 @@ public func randi(_ size: [Int], min: Int = 0, max: Int = Int(Int32.max), seed: 
                 randomData.append(shiftedValue)
                 if randomData.count == totalSize
                 {
-                    return Matrix(size: size, data: randomData)
+                    return Matrix(size, data: randomData)
                 }
             }
         }
     }
+}
+
+public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Matrix
+{
+    return randi([rows, columns], min: min, max: max, seed: seed, threadSafe: threadSafe)
 }
 
 public func randi(min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 

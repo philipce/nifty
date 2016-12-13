@@ -19,17 +19,22 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// TODO: remove the optional column... maybe a vector wants an eye function?
+
 /// Create a matrix with ones on the main diagonal and zeros elsewhere.
 ///
 /// - Parameters:
-///     - size: size of matrix to create
-/// - Returns: specified matrix
-public func eye(_ size: [Int]) -> Matrix
+///    - rows: number of rows; or edge length in square matrix if columns is nil
+///    - columns: number of columns; if nil, return square identity matrix
+/// - Returns: identity matrix of specified size
+public func eye(_ rows: Int, _ columns: Int? = nil) -> Matrix
 {   
-    precondition(size.count == 2, "Only 2-D identity matrices are supported")
+    let cols = columns ?? rows
+
+    precondition(rows > 0 && cols > 0, "Invalid matrix dimensions: \([rows, cols])")
     
-    var M = zeros(size)
-    for d in 0..<size[0]
+    var M = zeros(rows, cols)
+    for d in 0..<rows
     {
         M[d,d] = 1
     }
@@ -37,27 +42,16 @@ public func eye(_ size: [Int]) -> Matrix
     return M
 }
 
-public func eye(_ size: Int...) -> Matrix
-{   
-    return eye(size)
-}
-
-/// Create a square identity matrix of the given size.
-///
-/// - Parameters:
-///     - size: edge size of identity matrix to create
-/// - Returns: square identity matrix
-public func eye(_ size: Int) -> Matrix
+public func eye(_ size: [Int]) -> Matrix
 {
-    return eye([size,size])
+    precondition(size.count == 2, "Matrix size must be 2 dimensional")
+    return eye(size[0], size[1])
 }
 
 /// Return the scalar multiplicative identity.
 ///
 /// - Returns: the scalar 1
-public func eye() -> Int
+public func eye() -> Double
 {
-	return 1
+	return 1.0
 }
-
-

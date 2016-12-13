@@ -26,5 +26,5 @@
 /// - Returns: number of elements in matrix
 public func numel(_ A: Matrix) -> Int
 {    
-    return A.numel
+    return A.count
 }

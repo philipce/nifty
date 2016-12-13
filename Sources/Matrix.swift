@@ -25,10 +25,12 @@ import Foundation
 public struct Matrix: CustomStringConvertible
 {
 	/// Number of elements in the matrix.
-	public let numel: Int
+	public let count: Int
 
 	/// Number of [rows, columns] in the matrix.
 	public var size: [Int]
+    public var rows: Int { return self.size[0] }
+    public var columns: Int { return self.size[1] }
 
 	/// Data contained in matrix in row-major order.
 	public var data: [Double]
@@ -36,8 +38,8 @@ public struct Matrix: CustomStringConvertible
 	/// Optional name of matrix (e.g., for use in display).
 	public var name: String?
 
-	// Determine whether to show name/info when displaying matrx.
-	public var title: Bool
+	/// Determine whether to show name when displaying matrx.
+	public var showName: Bool
 
 	/// Formatter to be used in displaying matrix elements.
 	public var format: NumberFormatter
@@ -45,33 +47,35 @@ public struct Matrix: CustomStringConvertible
 	/// Initialize a new matrix.
 	///
 	/// - Parameters:
-	///		- size: number of rows, columns if two numbers are provided; length 
-	///			of one side of square matrix if only one number provided
-	///		- data: matrix data in row-major order
-	///		- name: optional name of matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(size: [Int], data: [Double], name: String? = nil, title: Bool = false)
-	{
-		let numel: Int
-		if size.count == 1
+    ///    - rows: number of rows in matrix; or if columns is omitted, side length in square matrix
+	///    - columns: number of columns in a matrix; if omitted, matrix is square 
+	///	   - data: matrix data in row-major order
+	///	   - name: optional name of matrix
+	///	   - showName: determine whether to print the matrix showName; false by default
+	public init(_ rows: Int, _ columns: Int? = nil, data: [Double], name: String? = nil, showName: Bool = false)
+	{       
+        let newSize: [Int]
+        let newCount: Int 
+		if columns == nil
 		{
-			self.size = [size[0], size[0]]
-			numel = self.size[0] * self.size[0]
+
+			newSize = [rows, rows]
+			newCount = rows * rows
 		}
 		else
 		{
-			precondition(size.count == 2, "Matrix must be 2-D")
-			self.size = size
-			numel = self.size[0] * self.size[1]			
+			newSize = [rows, columns!]
+			newCount = rows * columns!
 		}
 
-		precondition(numel > 0, "Matrix have at least 1 element")
-		self.numel = numel			
+        precondition(rows >= 1 && newCount >= 1, "Matrix have at least 1 row and 1 column")
+		precondition(data.count == newCount, "Matrix dimensions must match data")
 
-		precondition(data.count == numel, "Matrix dimensions must match data")
+        self.size = newSize
+        self.count = newCount
 		self.data = data	
 		self.name = name	
-		self.title = title
+		self.showName = showName
 
 		// default display settings
 		let fmt = NumberFormatter()
@@ -83,150 +87,134 @@ public struct Matrix: CustomStringConvertible
 		self.format = fmt
 	}
 
-	/// Initialize a new matrix.
-	///
-	/// - Parameters:
-	///		- size: number of rows, columns if two numbers are provided; length 
-	///			of one side of square matrix if only one number provided
-	///		- data: matrix data where an inner array is an entire row
-	///		- name: optional name of matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(_ data: [[Double]], name: String? = nil, title: Bool = false)
-	{
-		let size = [data.count, data[0].count]
-		self.init(size: size, data: Array(data.joined()), name: name, title: title)
-	}
+    /// Initialize a new matrix.
+    ///
+    /// - Parameters:
+    ///    - size: size of matrix  
+    ///    - data: matrix data in row-major order
+    ///    - name: optional name of matrix
+    ///    - showName: determine whether to print the matrix showName; false by default
+    public init(_ size: [Int], data: [Double], name: String? = nil, showName: Bool = false)
+    {
+        precondition(size.count == 2, "Matrix must be 2 dimensional")
+        self.init(size[0], size[1], data: data, name: name, showName: showName)
+    }
 
 	/// Initialize a new matrix.
 	///
 	/// - Parameters:
-	///		- size: number of rows, columns if two numbers are provided; length 
-	///			of one side of square matrix if only one number provided
-	///		- value: single value repeated throughout matrix
-	///		- name: optional name of matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(size: [Int], value: Double, name: String? = nil, title: Bool = false)
+    ///    - rows: number of rows in matrix; or if columns is omitted, side length in square matrix
+    ///    - columns: number of columns in a matrix; if omitted, matrix is square 
+	///	   - value: single value repeated throughout matrix
+	///	   - name: optional name of matrix
+	///	   - showName: determine whether to print the matrix showName; false by default
+	public init(_ rows: Int, _ columns: Int? = nil, value: Double, name: String? = nil, showName: Bool = false)
 	{
-		let data = Array<Double>(repeating: value, count: size.reduce(1, *))
-		self.init(size: size, data: data, name: name, title: title)
+		let data = Array<Double>(repeating: value, count: abs(rows * (columns ?? rows)))
+		self.init(rows, columns, data: data, name: name, showName: showName)
 	}
 
-	/// Initialize a new square matrix.
-	///
-	/// - Parameters:
-	///		- size: length of one side of square matrix
-	///		- value: single value repeated throughout matrix
-	///		- name: optional name of matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(size: Int, value: Double, name: String? = nil, title: Bool = false)
-	{
-		self.init(size: [size], value: value, name: name, title: title)						
-	}
-		
-	/// Initialize a new matrix.
-	///
-	/// - Parameters:
-	///		- size: number of rows, columns if two numbers are provided; length 
-	///			of one side of square matrix if only one number provided
-	///		- data: matrix data in row-major order
-	///		- name: optional name of matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(size: Int, data: [Double], name: String? = nil, title: Bool = false)
-	{
-		self.init(size: [size], data: data, name: name, title: title)
-	}	
+    /// Initialize a new matrix.
+    ///
+    /// - Parameters:
+    ///    - size: size of matrix
+    ///    - value: single value repeated throughout matrix
+    ///    - name: optional name of matrix
+    ///    - showName: determine whether to print the matrix showName; false by default
+    public init(_ size: [Int], value: Double, name: String? = nil, showName: Bool = false)
+    {
+        precondition(size.count == 2, "Matrix must be 2 dimensional")
+        self.init(size[0], size[1], value: value, name: name, showName: showName)
+    }
+	
+    /// Initialize a new matrix, inferring dimension from provided data.
+    ///
+    /// - Parameters:
+    ///        - data: matrix data where each inner array represents an entire row
+    ///        - name: optional name of matrix
+    ///        - showName: determine whether to print the matrix showName; false by default
+    public init(_ data: [[Double]], name: String? = nil, showName: Bool = false)
+    {        
+        // TODO: add in check to make sure all rows are same length; the delegate constructor will 
+        // catch most cases of mismatch row size when it checks that the dimensions match the data,
+        // but if e.g. it was a 2x2 matrix, and one row had 1 element and the other had 4, it 
+        // wouldn't flag it as an error.
 
+        let size = [data.count, data[0].count]        
+        self.init(size, data: Array(data.joined()), name: name, showName: showName)
+    }    
+    
 	/// Initialize a new matrix, copying given matrix and possibly renaming.
 	///
 	/// - Parameters:
-	///		- copy: matrix to copy
-	///		- rename: optional name of new matrix
-	///		- title: determine whether to print the matrix title; false by default
-	public init(copy: Matrix, rename: String? = nil, title: Bool = false)
+	///    - copy: matrix to copy
+	///    - rename: optional name of new matrix
+	///    - showName: determine whether to print the matrix showName; false by default
+	public init(copy: Matrix, rename: String? = nil, showName: Bool = false)
 	{
-		self.numel = copy.numel
+		self.count = copy.count
 		self.size = copy.size
 		self.data = copy.data
 		self.name = rename
-		self.title = copy.title
+		self.showName = copy.showName
 		self.format = copy.format
 	}
 
-	/// Access a single element of the matrix.
-	///
-	/// - Parameters:
-	///		- s: row, column subscript into matrix if two numbers are provided;
-	///			linear index into row-major order data if only one 
-	/// - Returns: single value at index/subscript for get
-	public subscript(_ s: Int...) -> Double
-	{
-		get { return self[s] }
-		set { self[s] = newValue }
-	}
-
-	/// Access a single element of the matrix.
-	///
-	/// - Parameters:
-	///		- s: row, column subscript into matrix if two numbers are provided;
-	///			linear index into row-major order data if only one 
-	/// - Returns: single value at index/subscript for get
-	public subscript(_ s: [Int]) -> Double
+    /// Access a single element of the matrix with a row, column subscript.
+    ///
+    /// - Parameters:
+    ///    - row: row subscript
+    ///    - column: column subscript
+    /// - Returns: single value at subscript
+	public subscript(_ row: Int, _ column: Int) -> Double
 	{
 		get
 		{
-			if s.count == 1
-			{
-				precondition(s[0] >= 0 && s[0] < self.numel, "Invalid matrix index: \(s[0])")
-				return self.data[s[0]]
-			}
-			else
-			{	
-				let index = sub2ind(size: self.size, subscripts: s)				
-				precondition(index >= 0, "Invalid matrix subscripts: \(s)")
-				return self.data[index]
-			}
+			let index = sub2ind(row, column, size: self.size)				
+			precondition(index >= 0, "Invalid matrix subscripts: \([row, column])")
+			return self.data[index]
 		}
 
 		set(newVal)
 		{
-			if s.count == 1
-			{
-				precondition(s[0] >= 0 && s[0] < self.numel, "Invalid matrix index: \(s[0])")
-				self.data[s[0]] = newVal
-			}
-			else
-			{	
-				let index = sub2ind(size: self.size, subscripts: s)				
-				precondition(index >= 0, "Invalid matrix subscripts: \(s)")
-				self.data[index] = newVal
-			}
+			let index = sub2ind(row, column, size: self.size)				
+			precondition(index >= 0, "Invalid matrix subscripts: \([row, column])")
+			self.data[index] = newVal
 		}
 	}
 
-	/// Access a slice of the matrix.
+    /// Access a single element of the matrix with a row-major linear index.
+    ///
+    /// - Parameters:
+    ///    - index: linear index into matrix
+    /// - Returns: single value at index
+    public subscript(_ index: Int) -> Double
+    {
+        get
+        {
+            precondition(index >= 0 && index < self.count, "Matrix index \(index) out of bounds")
+            return self.data[index]            
+        }
+
+        set(newVal)
+        {
+            precondition(index >= 0 && index < self.count, "Matrix index \(index) out of bounds")
+            self.data[index] = newVal
+        }
+
+    }
+
+	/// Access a slice of the matrix with a row, column range subscript.
 	///
-	/// - Parameters:
-	///		- s: two values, either Ints or Ranges, defining the matrix slice
+    /// - Parameters:
+    ///    - rows: row range; or if columns is omitted, linear index range
+    ///    - columns: column range; if omitted, use linear index range instead
 	/// - Returns: new matrix composed of slice
-	public subscript(_ s: SliceIndex...) -> Matrix
+	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix
 	{
 		get 
 		{ 
-			let ranges = _convertToCountableClosedRanges(s)
-
-			// slice with range of linear indices
-			if ranges.count == 1
-			{
-				// inherit name, add slice info
-				var sliceName = self.name
-				if sliceName != nil { sliceName! += "[\(s[0])]" }
-
-				return Matrix([Array(self.data[ranges[0]])], name: sliceName, 
-					title: self.title)
-			}
-
-			// otherwise, slice with range of subscripts
-			precondition(ranges.count == 2, "Invalid matrix slice: \(s)")
+			let ranges = _convertToCountableClosedRanges([rows, columns])
 
 			// determine size of resulting matrix slice, and start/end subscripts to read
 			var newSize = [Int](repeating: 0, count: ranges.count)
@@ -244,7 +232,7 @@ public struct Matrix: CustomStringConvertible
 			var curSub = startSub
 			while true
 			{
-				newData.append(self[curSub])
+				newData.append(self[curSub[0], curSub[1]])
 				guard let inc = _cascadeIncrementSubscript(curSub, min: startSub, max: endSub) else
 				{
 					break
@@ -255,24 +243,14 @@ public struct Matrix: CustomStringConvertible
 
 			// inherit name, add slice info
 			var sliceName = self.name
-			if sliceName != nil { sliceName! += "[\(s[0]), \(s[1])]" }
+			if sliceName != nil { sliceName! += "[\(rows), \(columns)]" }
 
-			return Matrix(size: newSize, data: newData, name: sliceName, title: self.title) 
+			return Matrix(newSize, data: newData, name: sliceName, showName: self.showName) 
 		}
 
 		set(newVal)
 		{
-			let ranges = _convertToCountableClosedRanges(s)
-
-			// slice with range of linear indices
-			if ranges.count == 1
-			{
-				self.data[ranges[0]] = ArraySlice(newVal.data)
-				return
-			}
-
-			// otherwise, slice with range of subscripts
-			precondition(ranges.count == 2, "Invalid matrix slice: \(s)")
+			let ranges = _convertToCountableClosedRanges([rows, columns])
 
 			// determine range of writes in each dimension
             var startSub = [Int](repeating: 0, count: ranges.count)
@@ -285,14 +263,14 @@ public struct Matrix: CustomStringConvertible
 
             // ensure that new data size matches size of slice to write to
             let sliceSize = [endSub[0]-startSub[0]+1, endSub[1]-startSub[1]+1]
-            precondition(sliceSize == newVal.size, "Supplied data size does not match destination")        
+            precondition(sliceSize == newVal.size, "Supplied data does not match matrix slice size")        
 
             // start writing to matrix, rolling over each dimension
 			var newData = newVal.data
 			var curSub = startSub
 			for i in 0..<newData.count
             {
-                self[curSub] = newData[i]
+                self[curSub[0], curSub[1]] = newData[i]
 
                 
                 guard let inc = _cascadeIncrementSubscript(curSub, min: startSub, max: endSub) else
@@ -305,12 +283,37 @@ public struct Matrix: CustomStringConvertible
 		}
 	}
 
+    /// Access a slice of the matrix with a row-major linear index range.
+    ///
+    /// - Parameters:
+    ///    - index: linear index range 
+    /// - Returns: new matrix composed of slice
+    public subscript(_ index: SliceIndex) -> Matrix
+    {
+        get
+        {
+            let range = (_convertToCountableClosedRanges([index]))[0]
+
+            // inherit name, add slice info
+            var sliceName = self.name
+            if sliceName != nil { sliceName! += "[\(index)]" }
+
+            return Matrix([Array(self.data[range])], name: sliceName, showName: self.showName)
+        }
+        set(newVal)
+        {
+            let range = (_convertToCountableClosedRanges([index]))[0]
+            self.data[range] = ArraySlice(newVal.data)
+
+            return
+        }
+    }
+
 	/// Return matrix contents in an easily readable grid format.
 	///
-	/// Note: The formatter associated with this matrix is used as a suggestion; elements may be
-	///	formatted differently to improve readability. Elements that can't be displayed under the 
-	/// current formatting constraints will be displayed as '#'.
-	///
+	/// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
+	///	    formatted differently to improve readability. Elements that can't be displayed under the 
+	///     current formatting constraints will be displayed as '#'.	
 	/// - Returns: string representation of matrix
 	public var description: String
 	{
@@ -320,11 +323,11 @@ public struct Matrix: CustomStringConvertible
 
 		var lines = [String]()
 
-		// create matrix title
-		if self.title
+		// create matrix showName
+		if self.showName
 		{
-			let title = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
-			lines.append(title)
+			let showName = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
+			lines.append(showName)
 		}
 		
 		// create string representation of each matrix row		

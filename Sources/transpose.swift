@@ -66,5 +66,5 @@ public func transpose(_ A: Matrix) -> Matrix
 	var newName = A.name
 	if newName != nil { newName! += "^"}
 
-	return Matrix(size: [k,m], data: c, name: newName, title: A.title)
+	return Matrix(k, m, data: c, name: newName, showName: A.showName)
 }

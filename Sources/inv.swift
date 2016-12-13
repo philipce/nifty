@@ -62,5 +62,5 @@ public func inv(_ A: Matrix) -> Matrix
 	var newName = A.name
 	if newName != nil { newName = "~" + newName! }
 
-	return Matrix(size: Int(n), data: a, name: newName, title: A.title)
+	return Matrix(Int(n), data: a, name: newName, showName: A.showName)
 }

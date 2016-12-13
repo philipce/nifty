@@ -22,29 +22,29 @@
 /// Create a matrix of the given size where all elements are zero.
 ///
 /// - Parameters:
-///     - size: size of matrix to create
+///    - rows: number of rows in zero matrix
+///    - columns: number of columns in zero matrix
 /// - Returns: zero matrix
-public func zeros(_ size: [Int]) -> Matrix
+public func zeros(_ rows: Int, _ columns: Int) -> Matrix
 {
-    precondition(!size.isEmpty && size.reduce(1, *) > 0, 
-    	"Matrix dimensions must all be positive")
+    precondition(rows > 0 && columns > 0, "Matrix dimensions must both be at least 1")
 
-    return Matrix(size: size, value: 0)
+    return Matrix(rows, columns, value: 0)
 }
 
-public func zeros(_ size: Int...) -> Matrix
-{
-    return zeros(size)
-}
 
-/// Creates a square matrix of the given size where all elements are zero.
+// TODO: implement this vector constructor:
+
+/*
+/// Creates a vector of the given size where all elements are zero.
 ///
 /// - Parameters:
-///     - size: edge size of matrix to create
-/// - Returns: square zero matrix
-public func zeros(_ size: Int) -> Matrix
+///     - count: number of elements in zero vector
+/// - Returns: zero vector
+public func zeros(_ count: Int) -> Vector
 {
-    precondition(size > 0, "Matrix dimensions must be positive")
+    precondition(count > 0, "Vector must contain at least 1 element")
 
-    return Matrix(size: [size,size], value: 0)
+    return Vector(count, value: 0)
 }
+*/

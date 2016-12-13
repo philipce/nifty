@@ -67,7 +67,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
         precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
         precondition(info == 0, "Cannot solve singularity")
 
-        return Matrix(size: [n,nrhs], data: b, name: newName, title: A.title || B.title)
+        return Matrix(n, nrhs, data: b, name: newName, showName: A.showName || B.showName)
     }
 
     // otherwise return least-squares solution
@@ -97,7 +97,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 
             let x = Array(b[0..<(n*nrhs)])  
 
-            return Matrix(size: [n,nrhs], data: x, name: newName, title: A.title || B.title)          
+            return Matrix(n, nrhs, data: x, name: newName, showName: A.showName || B.showName)          
         }
 
         // underdetermined system
@@ -108,7 +108,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 
             // solution is larger than B so extra space must be added
             var b = Array<Double>(repeating: 0, count: n*nrhs)
-            b[0..<B.numel] = B.data[0..<B.numel]        
+            b[0..<B.count] = B.data[0..<B.count]        
 
             // The leading dimension equals the number of elements in the major dimension. In this 
             // case, we are doing row-major so lda is the number of columns in A, e.g.
@@ -123,7 +123,7 @@ public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
 
             let x = Array(b[0..<(n*nrhs)])          
 
-            return Matrix(size: [n,nrhs], data: x, name: newName, title: A.title || B.title)  
+            return Matrix(n, nrhs, data: x, name: newName, showName: A.showName || B.showName)  
         }
     }
 }

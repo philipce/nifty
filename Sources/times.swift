@@ -32,15 +32,15 @@
 /// - Returns: element wise matrix product of A and B
 func times(_ A: Matrix, _ B: Matrix) -> Matrix
 {
-    assert(size(A) == size(B), "Matrices must have the same size")
+    assert(A.size == B.size, "Matrices must have the same size")
 
     var newData = [Double]()
-    for i in 0..<numel(A)
+    for i in 0..<A.count
     {
         newData.append(A[i] * B[i])
     }
 
-    return Matrix(size: size(A), data: newData)
+    return Matrix(A.rows, A.columns, data: newData)
 }
 
 // TODO: determine where this stuff goes, here or mtimes:

@@ -92,9 +92,15 @@ public func rand(_ size: [Int], min: Double = 0.0, max: Double = 1.0, seed: UInt
         randomData.append(scaledShiftedValue)
         if randomData.count == totalSize
         {
-            return Matrix(size: size, data: randomData)
+            return Matrix(size, data: randomData)
         }
     }
+}
+
+public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Matrix
+{
+    return rand([rows, columns], min: min, max: max, seed: seed, threadSafe: threadSafe)
 }
 
 public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 

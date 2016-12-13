@@ -31,7 +31,7 @@
 ///     - size: size of data structure
 ///     - subscripts: subscripts into data structure
 /// - Returns: index into flattened data structure, or -1 if subscript is out of bounds
-public func sub2ind(size: [Int], subscripts: [Int]) -> Int
+public func sub2ind(_ subscripts: Int..., size: [Int]) -> Int
 {
     precondition(size.count == subscripts.count, "Size and subscripts must match in dimension")
     

@@ -133,7 +133,13 @@ public func randn(_ size: [Int], mean: Double = 0.0, std: Double = 1.0, seed: UI
         randomData.append(curRandGen.doub())
     }
 
-    return Matrix(size: size, data: randomData)
+    return Matrix(size, data: randomData)
+}
+
+public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Matrix
+{
+    return randn([rows, columns], mean: mean, std: std, seed: seed, threadSafe: threadSafe)
 }
 
 public func randn(mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 

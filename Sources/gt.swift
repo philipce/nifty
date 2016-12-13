@@ -33,15 +33,15 @@ public func > (left: Int, right: Matrix)       -> Matrix { return gt(left, right
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
 public func gt(_ A: Matrix, _ B: Matrix) -> Matrix
 {
-    assert(size(A) == size(B), "Matrices must be same size")
+    precondition(A.size == B.size, "Matrices must be same size")
 
     var m = [Double]()
-    for i in 0..<numel(A)
+    for i in 0..<A.count
     {        
         m.append(A[i] > B[i] ? 1 : 0)
     }
 
-    return Matrix(size: size(A), data: m)
+    return Matrix(A.size, data: m)
 }
 
 /// Determine greater than inequality.
@@ -53,12 +53,12 @@ public func gt(_ A: Matrix, _ B: Matrix) -> Matrix
 public func gt(_ A: Matrix, _ b: Double) -> Matrix
 {
     var m = [Double]()
-    for i in 0..<numel(A)
+    for i in 0..<A.count
     {        
         m.append(A[i] > b ? 1 : 0)
     }
 
-    return Matrix(size: size(A), data: m)
+    return Matrix(A.size, data: m)
 }
 
 /// Determine greater than inequality.
@@ -81,12 +81,12 @@ public func gt(_ A: Matrix, _ b: Int) -> Matrix
 public func gt(_ a: Double, _ B: Matrix) -> Matrix
 {
     var m = [Double]()
-    for i in 0..<numel(B)
+    for i in 0..<B.count
     {        
         m.append(a > B[i] ? 1 : 0)
     }
 
-    return Matrix(size: size(B), data: m)
+    return Matrix(B.size, data: m)
 }
 
 /// Determine greater than inequality.
