@@ -93,7 +93,7 @@ public struct Matrix: CustomStringConvertible
     ///    - size: size of matrix  
     ///    - data: matrix data in row-major order
     ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix showName; false by default
+    ///    - showName: determine whether to print the matrix name; false by default
     public init(_ size: [Int], data: [Double], name: String? = nil, showName: Bool = false)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
@@ -107,7 +107,7 @@ public struct Matrix: CustomStringConvertible
     ///    - columns: number of columns in a matrix; if omitted, matrix is square 
 	///	   - value: single value repeated throughout matrix
 	///	   - name: optional name of matrix
-	///	   - showName: determine whether to print the matrix showName; false by default
+	///	   - showName: determine whether to print the matrix name; false by default
 	public init(_ rows: Int, _ columns: Int? = nil, value: Double, name: String? = nil, showName: Bool = false)
 	{
 		let data = Array<Double>(repeating: value, count: abs(rows * (columns ?? rows)))
@@ -120,7 +120,7 @@ public struct Matrix: CustomStringConvertible
     ///    - size: size of matrix
     ///    - value: single value repeated throughout matrix
     ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix showName; false by default
+    ///    - showName: determine whether to print the matrix name; false by default
     public init(_ size: [Int], value: Double, name: String? = nil, showName: Bool = false)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
@@ -132,7 +132,7 @@ public struct Matrix: CustomStringConvertible
     /// - Parameters:
     ///        - data: matrix data where each inner array represents an entire row
     ///        - name: optional name of matrix
-    ///        - showName: determine whether to print the matrix showName; false by default
+    ///        - showName: determine whether to print the matrix name; false by default
     public init(_ data: [[Double]], name: String? = nil, showName: Bool = false)
     {        
         // TODO: add in check to make sure all rows are same length; the delegate constructor will 
@@ -149,7 +149,7 @@ public struct Matrix: CustomStringConvertible
 	/// - Parameters:
 	///    - copy: matrix to copy
 	///    - rename: optional name of new matrix
-	///    - showName: determine whether to print the matrix showName; false by default
+	///    - showName: determine whether to print the matrix name; false by default
 	public init(copy: Matrix, rename: String? = nil, showName: Bool = false)
 	{
 		self.count = copy.count
@@ -362,9 +362,9 @@ public struct Matrix: CustomStringConvertible
 }
 
 //==================================================================================================
-// MARK: FILE PRIVATE HELPER FUNCTIONS
+// MARK: HELPER FUNCTIONS
 //==================================================================================================
-fileprivate func _convertToCountableClosedRanges(_ s: [SliceIndex]) -> [CountableClosedRange<Int>]
+internal func _convertToCountableClosedRanges(_ s: [SliceIndex]) -> [CountableClosedRange<Int>]
 {
 	var ranges = [CountableClosedRange<Int>]()
 	for el in s
