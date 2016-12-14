@@ -101,6 +101,13 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
     }
 }
 
+public func rand(_ elements: Int, min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Vector
+{
+    let m = rand(1, elements, min: min, max: max, seed: seed, threadSafe: threadSafe)
+    return Vector(m)
+}
+
 public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
     threadSafe: Bool = false) -> Double
 {

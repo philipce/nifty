@@ -88,9 +88,6 @@ internal var g_UniformRandGen: UniformRandomGenerator? = nil
 
 import Foundation
 
-// TODO: get rid of size parameter in randi that returns matrix... randi(_ size: [Int] ) will return
-// Tensor, not matrix.
-
 /// Return a matrix of random integers in the specified range.
 ///
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
@@ -209,6 +206,13 @@ public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int3
             }
         }
     }
+}
+
+public func randi(_ elements: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
+    threadSafe: Bool = false) -> Vector
+{
+    let m = randi(1, elements, min: min, max: max, seed: seed, threadSafe: threadSafe)
+    return Vector(m)
 }
 
 public func randi(min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 

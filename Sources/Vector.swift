@@ -34,7 +34,7 @@ public struct Vector: CustomStringConvertible
     public var data: [Double]
 
     /// Optional name of vector for use in display
-    public let name: String?
+    public var name: String?
 
     /// Determine whether to show name when displaying matrx.
     public var showName: Bool
@@ -98,6 +98,17 @@ public struct Vector: CustomStringConvertible
         self.format = copy.format
     }
 
+    /// Vectorize a given matrix to form a new vector.
+    ///
+    /// - Parameters:
+    ///    - matrix: matrix to vectorize
+    ///    - rename: optional name of new vector
+    ///    - showName: determine whether to print the vector name; false by default
+    public init(_ matrix: Matrix, rename: String? = nil, showName: Bool = false)
+    {
+        self.init(matrix.data, name: rename, showName: showName)
+    }
+
     /// Access a single element of the vector.
     ///
     /// - Parameters:
@@ -107,13 +118,13 @@ public struct Vector: CustomStringConvertible
     {
         get
         {
-            precondition(s > 0 && s < self.count, "Invalid vector index: \(s)")
+            precondition(s >= 0 && s < self.count, "Invalid vector index: \(s)")
             return self.data[s]           
         }
 
         set(newVal)
         {
-            precondition(s > 0 && s < self.count, "Invalid vector index: \(s)")
+            precondition(s >= 0 && s < self.count, "Invalid vector index: \(s)")
             self.data[s] = newVal            
         }
     }
@@ -144,6 +155,8 @@ public struct Vector: CustomStringConvertible
         }
     }
 
+    // TODO: add setter that can take a matrix or tensor too
+
     /// Return vector contents in an easily readable format.
     ///
     /// - Note: The formatter associated with this vector is used as a suggestion; elements may be
@@ -152,8 +165,40 @@ public struct Vector: CustomStringConvertible
     /// - Returns: string representation of vector
     public var description: String
     {
-        // FIXME: do this right; see Matrix impl
+        var elements = [String]()
 
-        return "\(self.data)"
+        // create vector title
+        var title = ""
+        if self.showName
+        {
+            title = (self.name ?? "\(self.count)D vector") + ": "
+        }
+
+        // create string representation of each vector element
+        for i in 0..<self.count
+        {
+            let el = self[i]
+            var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+
+            // if element doesn't fit in desired width, format in minimal notation
+            if s.characters.count > self.format.formatWidth            
+            {
+                let oldMaxSigDig = self.format.maximumSignificantDigits
+                let oldNumberStyle = self.format.numberStyle
+                self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
+                self.format.numberStyle = .scientific
+                s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+                self.format.maximumSignificantDigits = oldMaxSigDig
+                self.format.numberStyle = oldNumberStyle
+            }
+
+            let sign = el < 0 ? "-" : " "
+            s = sign + s
+            s = s.trimmingCharacters(in: .whitespaces)
+
+            elements.append(s)
+        }
+
+        return "\(title)<\(elements.joined(separator: "   "))>"
     }
 }

@@ -51,14 +51,13 @@ public struct Matrix: CustomStringConvertible
 	///    - columns: number of columns in a matrix; if omitted, matrix is square 
 	///	   - data: matrix data in row-major order
 	///	   - name: optional name of matrix
-	///	   - showName: determine whether to print the matrix showName; false by default
+	///	   - showName: determine whether to print the matrix name; false by default
 	public init(_ rows: Int, _ columns: Int? = nil, data: [Double], name: String? = nil, showName: Bool = false)
 	{       
         let newSize: [Int]
         let newCount: Int 
 		if columns == nil
 		{
-
 			newSize = [rows, rows]
 			newCount = rows * rows
 		}
@@ -130,9 +129,9 @@ public struct Matrix: CustomStringConvertible
     /// Initialize a new matrix, inferring dimension from provided data.
     ///
     /// - Parameters:
-    ///        - data: matrix data where each inner array represents an entire row
-    ///        - name: optional name of matrix
-    ///        - showName: determine whether to print the matrix name; false by default
+    ///    - data: matrix data where each inner array represents an entire row
+    ///    - name: optional name of matrix
+    ///    - showName: determine whether to print the matrix name; false by default
     public init(_ data: [[Double]], name: String? = nil, showName: Bool = false)
     {        
         // TODO: add in check to make sure all rows are same length; the delegate constructor will 
@@ -309,6 +308,8 @@ public struct Matrix: CustomStringConvertible
         }
     }
 
+    // TODO: add setter that can take a tensor or vector too
+
 	/// Return matrix contents in an easily readable grid format.
 	///
 	/// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
@@ -321,19 +322,23 @@ public struct Matrix: CustomStringConvertible
 		//		 506                    506
 		//	   1,048     instead of     1,048 
 
+        // TODO: make the specifed format indicate the max spacing, but make it actually dynamic to
+        // save space; e.g. a matrix of single digit numbers doesn't need more than two spaces
+        // between columns--downsize the format width to what's needed by the largest element
+
 		var lines = [String]()
 
-		// create matrix showName
+		// create matrix title
 		if self.showName
 		{
-			let showName = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
-			lines.append(showName)
+			let title = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
+			lines.append(title)
 		}
 		
 		// create string representation of each matrix row		
 		for r in 0..<self.size[0]
 		{
-			var row = "\(r): "
+			var row = "R\(r): "
 			for c in 0..<self.size[1]
 			{				
 				let el = self[r, c]			
