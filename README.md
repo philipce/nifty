@@ -59,22 +59,24 @@ does (which is also similar to NumPy).
 
 * Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
 
-   Switch between the different installed BLAS options using: 
-   `sudo update-alternatives --config libblas.so`
+   _(switch between the different installed BLAS options using: 
+   `sudo update-alternatives --config libblas.so`)_
 
 * Mac: `brew install homebrew/science/openblas`
 
+   _(LAPACK comes already installed in the Accelerate framework, so you
+   could just use that instead)_
 
+##### Import Nifty
 
+Once you've installed the above dependencies, using Nifty in your project
+simply requires that you create/modify your project manifest file to 
+point to the Nifty repository as a dependency, and then `import Nifty` in
+whatever files you want to use it! Check out this  
+[complete example](https://github.com/nifty-swift/Nifty-demo) to see just
+how easy the Swift Package Manager makes your life.
 
-
-To use Nifty in your projects:
-- Make sure you have the needed [dependencies](#dependencies) installed
-- Create/modify your project manifest file to include Nifty (here's a 
-[complete example](https://github.com/nifty-swift/Nifty-demo))
-- Let the package manager do the rest! It's that easy!
-
-#### Usage
+##### Using Nifty
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided
 to structure things similar to how MATLAB works. In fact, many (most) of the 
@@ -86,22 +88,7 @@ many people as possible.
 Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see Nifty 
 in action!
 
-#### Dependencies
-
-_TODO: This is pretty vague now but it'll get better!_
-
-Besides having Swift installed, there are a few things you'll need to run Nifty:
-- Swift Package Manager: this is included with Swift 3.0 and above. If you 
-    somehow didn't get or need to update, go 
-    [here](https://swift.org/package-manager/)
-- LAPACK: Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its 
-    linear algebra, mostly for performance reasons. We'll be using the C 
-    interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
- - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
-- BLAS: [BLAS](http://www.netlib.org/blas/) provides lower level functions 
-    used by LAPACK (CBLAS provides the C interface). 
-- Fortran: LAPACK needs fortran installed.
- - Ubuntu: `sudo apt-get install gfortran`
+##### Adapting System Paths
 
 _Note: The system modules used by Nifty (e.g. 
 [CLapacke](https://github.com/nifty-swift/CLapacke), 
@@ -110,7 +97,6 @@ the required headers (they expect to find them in /usr/include) If your
 package manager installs things differently, you'll have to change the 
 paths in the module map._
 
-_Note for Mac: LAPACK comes already installed in the Accelerate framework. 
 Or you can install a dupe with brew, `brew install homebrew/dupes/lapack` 
 then change the module map in CLapacke package to wherever it put the 
 headers, e.g. /usr/local/opt/lapack/include. BLAS is also in Accelerate,
@@ -124,19 +110,6 @@ the linker, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/u
 Also, I had to modify the CBlas module map to link "openblas" rather than "blas"
 otherwise it would find its preinstalled library that didn't have the CBLAS symbols; 
 openblas does._
-
-_Note on performance: LAPACK comes with a reference version that is correct, 
-but not suitable for high performance applications. You can improve performance 
-by using an optimized implementation instead 	
-(e.g. [OpenBLAS](http://www.openblas.net/)). For example, using the BLAS 
-reference implementation, Nifty inverts a large matrix in just under 3 minutes 
-whereas MATLAB inverts it in 6.5 seconds. Switching to OpenBLAS, Nifty performs
-the inversion about as fast as MATLAB does (which is also similar to NumPy). 
-If you do switch to OpenBLAS, you'll also need to ensure pthreads is installed.
-Eventually we'll add instructions on how to do that and just make that the 
-default suggestion_
-
-
 
 ## Tests and Benchmarks
 
@@ -180,14 +153,6 @@ have, let us know.
 4. Commit your changes: `git commit -am 'Add some feature'`
 5. Push to the branch: `git push origin my-new-feature`
 6. Submit a pull request :D
-
-
-
-## Repository Overview
-
-_TODO: update this for swift package manager!_
-
-
 
 ## Nifty Features
 
