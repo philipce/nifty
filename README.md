@@ -14,7 +14,7 @@ Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built
 
 ##### Install Swift
 
-Follow these [instructions to install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release!
+Follow these instructions to [install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release!
 
 Nifty uses the [Swift Package Manager](https://swift.org/package-manager/) (see the [project repo](https://github.com/apple/swift-package-manager) for more info). It greatly simplifies the build process! It comes included with Swift 3.0 and above.
 
