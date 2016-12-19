@@ -59,8 +59,8 @@ does (which is also similar to NumPy).
 
 * Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
 
-...Switch between the different installed BLAS options using: 
-`sudo update-alternatives --config libblas.so`
+   Switch between the different installed BLAS options using: 
+   `sudo update-alternatives --config libblas.so`
 
 * Mac: `brew install homebrew/science/openblas`
 
