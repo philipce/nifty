@@ -36,10 +36,10 @@ Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra
 ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). LAPACK needs Fortran,
 so if it's not already on your computer, you may need to install that too.
 
-* On Ubuntu:
+* Ubuntu:
 `sudo apt-get install gfortran liblapack3 liblapacke liblapacke-dev`
 
-* On Mac:
+* Mac:
 `brew install homebrew/dupes/lapack`
 
 ##### Install OpenBLAS
@@ -57,17 +57,12 @@ under 3 minutes on a reference machine, whereas MATLAB does it in 6.5 seconds.
 Switching to OpenBLAS, Nifty performs the inversion about as fast as MATLAB 
 does (which is also similar to NumPy).
 
-* On Ubuntu:
+* Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
 
-`sudo apt-get install libopenblas-base libopenblas-dev`
-
-Switch between the different installed BLAS options using:
-
+...Switch between the different installed BLAS options using: 
 `sudo update-alternatives --config libblas.so`
 
-* On Mac:
-
-`brew install homebrew/science/openblas`
+* Mac: `brew install homebrew/science/openblas`
 
 
 
