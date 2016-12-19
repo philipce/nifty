@@ -88,6 +88,7 @@ Nifty is intended to be broad in scope; almost any generally interesting tool re
 All contributions are welcome—whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. 
 
 To contribute code to this project:
+
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Check out the documentation for the Nifty style guide
