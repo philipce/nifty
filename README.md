@@ -4,7 +4,7 @@
 
 Nifty is a Swift numerical computing library designed to provide a wide range of performant and easy-to-use mathematical tools.
 
-Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, [consider contributing]()!
+Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, [consider contributing](#Contributing)!
 
 ## Getting Started
 
