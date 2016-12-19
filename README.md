@@ -2,41 +2,33 @@
 
 [![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
 
-*Note: Nifty is currently undergoing transition to use the swift package manager!
-It is also undergoing upgrades to 3.0.1. As such, for the next few weeks, the info
-below may not be current and a lot of the files may be missing. This will be fixed 
-shortly!*
-
 Nifty is a Swift numerical computing library designed to provide common 
 mathematical functions in a performant and easy-to-use way.
 
-Nifty is really new and (obviously) incomplete. The content here is the 
-beginnings of the framework but not yet ready for consumption. Come back 
-and check Nifty out later when it's a little farther along. Or, consider
-contributing! 
+Nifty is really new and (obviously) not complete. The library is constantly 
+expanding--if it doesn't yet have what you need, it will soon! So come back 
+later and check Nifty out when it's a little farther along. Or, consider 
+contributing! Suggestions, submissions, and requests are welcome.
 
-
-
-## Goals and Scope
-
-_TODO: flesh out this section_
-
-Goals:
-- Provide a robust, performant numerical computing package suitable for 
-    industrial or research purposes 
-- Do it in a way that will be familiar to those with experience in other such 
-    environments and will also easy to learn for the first-timer 
-- Do as much in Swift as possible, resorting to C libraries only when needed
-    for performance reasons
+##### Goals
+- Provide a viable alternative to packages such as NumPy and MATLAB for those
+    who wish to develop in Swift.
+- Do as much in Swift as possible, resorting to external C libraries only when
+    necessary for performance reasons.    
 - Make exploration of the code as simple as possible, through straight-forward
-    organization and clean, well-commented, easy-to-read code
-- Serve as a place to put the nifty bits of code that always seem to accumulate
-- Serve as a learning tool for those wishing to explore numerical computing
+    organization and clean, well-commented, easy-to-read code.
+- Serve as a learning tool for those wishing to explore numerical computing.
 
-Scope:
-- graphical stuff, e.g. matplotlib, not currently in scope. Perhaps in future,
-    but we'd rather defer to another project on that
-
+##### Scope
+Nifty is intended to be broad in scope; almost any generally interesting tool
+related to numerical or scientific computing is fair game. A few of the things
+that Nifty does not *currently* intend to provide are listed below. These items
+would take a lot of effort to do correctly and would distract from getting the 
+core functionality done, so for the time being, we'd rather defer to other 
+projects.
+- Graphical stuff, e.g. matplotlib
+- Time series stuff, e.g. pandas
+- Modeling and simulation stuff, e.g. simulink
 
 
 ## Getting Started
