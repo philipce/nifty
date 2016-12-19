@@ -10,43 +10,68 @@ expanding--if it doesn't yet have what you need, it will soon! So come back
 later and check Nifty out when it's a little farther along. Or, consider 
 contributing! Suggestions, submissions, and requests are welcome.
 
-##### Goals
-- Provide a viable alternative to packages such as NumPy and MATLAB for those
-    who wish to develop in Swift.
-- Do as much in Swift as possible, resorting to external C libraries only when
-    necessary for performance reasons.    
-- Make exploration of the code as simple as possible, through straight-forward
-    organization and clean, well-commented, easy-to-read code.
-- Serve as a learning tool for those wishing to explore numerical computing.
-
-##### Scope
-Nifty is intended to be broad in scope; almost any generally interesting tool
-related to numerical or scientific computing is fair game. A few of the things
-that Nifty does not *currently* intend to provide are listed below. These items
-would take a lot of effort to do correctly and would distract from getting the 
-core functionality done, so for the time being, we'd rather defer to other 
-projects.
-- Graphical stuff, e.g. matplotlib
-- Time series stuff, e.g. pandas
-- Modeling and simulation stuff, e.g. simulink
-
-
 ## Getting Started
 
-#### System Requirements
+##### System Requirements
 
-Make sure you can [install Swift](https://swift.org/getting-started/).
+Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally 
+built on a Mac) but there's no reason it shouldn't work anywhere Swift does.
+Future efforts will be made to get Nifty on embedded platforms, like the 
+Raspberry Pi!
+
+##### Install Swift
+
+Follow these [instructions to install Swift](https://swift.org/getting-started/).
 Our goal is to stay current as Swift develops, so use the latest release!
-
-Currently, Nifty is only being developed on Ubuntu 16.04, but there's no reason
-it shouldn't work anywhere Swift does. Future efforts will be made to bring 
-Nifty to Mac and RaspberryPi!
-
-#### Installation
 
 Nifty uses the [Swift Package Manager](https://swift.org/package-manager/) 
 (see the [project repo](https://github.com/apple/swift-package-manager) for more 
-info). It greatly simplifies the build process!
+info). It greatly simplifies the build process! It comes included with Swift 3.0
+and above.
+
+##### Install LAPACK
+
+Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra  
+(mostly for performance reasons). We'll be using the C interface 
+([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). LAPACK needs Fortran,
+so if it's not already on your computer, you may need to install that too.
+
+* On Ubuntu:
+`sudo apt-get install gfortran liblapack3 liblapacke liblapacke-dev`
+
+* On Mac:
+`brew install homebrew/dupes/lapack`
+
+##### Install OpenBLAS
+
+BLAS [BLAS](http://www.netlib.org/blas/) provides lower level functions 
+used by LAPACK (CBLAS provides the C interface). LAPACK comes with a 
+reference implementation of BLAS that is correct but not suitable for high 
+performance applications. You can improve performance by using an optimized
+implementation instead, like [OpenBLAS](http://www.openblas.net/)).
+
+It is strongly recommended that you use OpenBLAS or some other optimized 
+BLAS library; you will see vast performance improvements. For example, 
+using the BLAS reference implementation, Nifty inverts a large matrix in just 
+under 3 minutes on a reference machine, whereas MATLAB does it in 6.5 seconds. 
+Switching to OpenBLAS, Nifty performs the inversion about as fast as MATLAB 
+does (which is also similar to NumPy).
+
+* On Ubuntu:
+
+`sudo apt-get install libopenblas-base libopenblas-dev`
+
+Switch between the different installed BLAS options using:
+
+`sudo update-alternatives --config libblas.so`
+
+* On Mac:
+
+`brew install homebrew/science/openblas`
+
+
+
+
 
 To use Nifty in your projects:
 - Make sure you have the needed [dependencies](#dependencies) installed
@@ -128,7 +153,26 @@ We will be experimenting with using the
 [XCTest](https://github.com/apple/swift-corelibs-xctest) framework as it 
 progresses.
 
+## Goals & Scope
+The goals of Nifty can be summarized as follows:
+- Provide a viable alternative to packages such as NumPy and MATLAB for those
+    who wish to develop in Swift.
+- Do as much in Swift as possible, resorting to external C libraries only when
+    necessary for performance reasons.    
+- Make exploration of the code as simple as possible, through plain 
+    organization and clean, easy-to-read code.
+- Serve as a learning opportunity for those wishing to explore numerical 
+    computing.
 
+Nifty is intended to be broad in scope; almost any generally interesting tool
+related to numerical or scientific computing is fair game. A few of the things
+that Nifty does not *currently* intend to provide are listed below. These items
+would take a lot of effort to do correctly and would distract from getting the 
+core functionality done, so for the time being, we'd rather defer to other 
+projects.
+- Graphical stuff, e.g. matplotlib
+- Time series stuff, e.g. pandas
+- Modeling and simulation stuff, e.g. simulink
 
 ## Contributing
 
