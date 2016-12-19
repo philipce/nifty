@@ -2,9 +2,9 @@
 
 [![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
 
-Nifty is a Swift numerical computing library designed to provide common mathematical functions in a performant and easy-to-use way.
+Nifty is a Swift numerical computing library designed to provide a wide range of performant and easy-to-use mathematical tools.
 
-Nifty is really new and (obviously) not complete. The library is constantly expanding--if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, consider contributing! Suggestions, submissions, and requests are welcome.
+Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, [consider contributing]()!
 
 ## Getting Started
 
@@ -85,8 +85,9 @@ Nifty is intended to be broad in scope; almost any generally interesting tool re
 
 ## Contributing
 
-All contributions are welcome! If you think of a nifty feature we ought to have, let us know. 
+All contributions are welcome—whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. 
 
+To contribute code to this project:
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Check out the documentation for the Nifty style guide
@@ -94,9 +95,11 @@ All contributions are welcome! If you think of a nifty feature we ought to have,
 5. Push to the branch: `git push origin my-new-feature`
 6. Submit a pull request!
 
+For anything else, feel free to open an issue!
+
 ## Distribution
 
-If you want to statically link Nifty and all its dependencies (e.g. for distribution) an example of how to do that will be forthcoming... For now, here's a stackoverflow [post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/36573936?noredirect=1#comment60786135_36573936) that shows basically how you might accomplish that.
+If you want to statically link Nifty and all its dependencies (e.g. for distribution) an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that shows basically how you can accomplish that.
 
 ## License
 
