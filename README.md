@@ -100,7 +100,7 @@ For anything else, feel free to open an issue!
 
 ## Distribution
 
-If you want to statically link Nifty and all its dependencies (e.g. for distribution) an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that shows basically how you can accomplish that.
+If you want to statically link Nifty and all its dependencies (e.g. for distribution), an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that shows basically how you can accomplish that.
 
 ## License
 
