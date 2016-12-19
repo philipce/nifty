@@ -26,7 +26,7 @@ Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra for pe
 
 * Mac: `brew install homebrew/dupes/lapack`
 
-   _(LAPACK comes already installed in the Accelerate framework, so you could just use that instead)_
+   _LAPACK comes already installed in the Accelerate framework, so you could just use that instead_
 
 ##### Install OpenBLAS
 
@@ -36,23 +36,34 @@ It is strongly recommended that you use OpenBLAS or some other optimized BLAS li
 
 * Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
 
-   _(switch between the different installed BLAS options using:_ `sudo update-alternatives --config libblas.so`_)_
+   _You can switch between the different installed BLAS options using:_ `sudo update-alternatives --config libblas.so`
 
 * Mac: `brew install homebrew/science/openblas`
    
 ##### Import Nifty
 
-Once you've installed the above dependencies, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it! Check out this [complete example](https://github.com/nifty-swift/Nifty-demo) to see just how easy the Swift Package Manager makes your life.
-
-##### Using Nifty
+Once you've installed the above dependencies, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it.
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similar to how MATLAB works. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
 
-Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see Nifty in action!
+Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
-##### Adapting System Paths
+##### Adapt System Library Paths
 
-_Note: The system modules used by Nifty (e.g. [CLapacke](https://github.com/nifty-swift/CLapacke), [CBlas](https://github.com/nifty-swift/CBlas)), have hard coded paths to the required headers (they expect to find them in /usr/include) If your package manager installs things differently, you'll have to change the paths in the module map._ Or you can install a dupe with brew, `brew install homebrew/dupes/lapack` then change the module map in CLapacke package to wherever it put the headers, e.g. /usr/local/opt/lapack/include. BLAS is also in Accelerate,or you can install OpenBLAS with `brew install homebrew/science/openblas` then modify the CBlas package module map to installed location,e.g. /usr/local/opt/openblas/include. Also, it looks like OpenBLAS includes LAPACK (not sure if it includes it all) so you may just need that.If you manually installed the libraries, then you need to tell `swift build`where to look. The only way I got it to work was manually passing flags to the linker, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`.Also, I had to modify the CBlas module map to link "openblas" rather than "blas"otherwise it would find its preinstalled library that didn't have the CBLAS symbols; openblas does._
+The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
+ 
+Also, if you decide to use a different system library for one of the system modules (e.g. [ATLAS](http://math-atlas.sourceforge.net/)), you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
+
+## Nifty Features
+
+We are currently working on getting the core set of general math and linear algebra functions finished:
+- general functions and definitions used throughout Nifty
+- matrix definition and linear algebra functionality
+- vector and tensor data structures
+- wrappers on glibc/math.h
+- basic functions related to statistics and probability
+
+See our [status page](Documents/Status.md) for details.
 
 ## Tests and Benchmarks
 
@@ -83,22 +94,9 @@ All contributions are welcome! If you think of a nifty feature we ought to have,
 5. Push to the branch: `git push origin my-new-feature`
 6. Submit a pull request!
 
-## Nifty Features
-
-We are currently working on getting the core set of general math and linear algebra functions finished:
-- general functions and definitions used throughout Nifty
-- matrix definition and linear algebra functionality
-- vector and tensor data structures
-- wrappers on glibc/math.h
-- basic functions related to statistics and probability
-
-See our [status page](Documents/Status.md) for details.
-
-
 ## Distribution
 
-_TODO: If you want to link statically e.g. for distribution, here's an example of how to..._
-
+If you want to statically link Nifty and all its dependencies, e.g. for distribution, an example of how to do that will be forthcoming... For now, here's a stackoverflow [post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/36573936?noredirect=1#comment60786135_36573936) that shows basically how you might accomplish that.
 
 ## License
 
