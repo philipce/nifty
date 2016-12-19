@@ -30,7 +30,7 @@ Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra for pe
 
 ##### Install OpenBLAS
 
-[BLAS](http://www.netlib.org/blas/) provides lower level functions used by LAPACK (CBLAS provides the C interface). LAPACK comes with a reference implementation of BLAS that is correct but not suitable for high performance applications. You can improve performance by using an optimized implementation instead, like [OpenBLAS](http://www.openblas.net/)).
+[BLAS](http://www.netlib.org/blas/) provides lower level functions used by LAPACK (CBLAS provides the C interface). LAPACK comes with a reference implementation of BLAS that is correct but not suitable for high performance applications. You can improve performance by using an optimized implementation instead, like [OpenBLAS](http://www.openblas.net/).
 
 It is strongly recommended that you use OpenBLAS or some other optimized BLAS library; you will see vast performance improvements. For example, using the BLAS reference implementation, Nifty inverts a large matrix in just under 3 minutes on a reference machine, whereas MATLAB does the same in 6.5 seconds. Switching to OpenBLAS, Nifty performs the inversion about as fast as MATLAB does (which is also similar to NumPy, btw).
 
@@ -50,7 +50,7 @@ Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see an exampl
 
 ##### Adapt System Library Paths
 
-The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
+The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
  
 Also, if you decide to use a different system library for one of the system modules (e.g. [ATLAS](http://math-atlas.sourceforge.net/)), you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
@@ -96,7 +96,7 @@ All contributions are welcome! If you think of a nifty feature we ought to have,
 
 ## Distribution
 
-If you want to statically link Nifty and all its dependencies, e.g. for distribution, an example of how to do that will be forthcoming... For now, here's a stackoverflow [post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/36573936?noredirect=1#comment60786135_36573936) that shows basically how you might accomplish that.
+If you want to statically link Nifty and all its dependencies (e.g. for distribution) an example of how to do that will be forthcoming... For now, here's a stackoverflow [post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/36573936?noredirect=1#comment60786135_36573936) that shows basically how you might accomplish that.
 
 ## License
 

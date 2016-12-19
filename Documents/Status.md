@@ -138,22 +138,20 @@ implemented.
 | tan          | Complete        | None           |                                                                                         |
 | tand         | Complete        | None           |                                                                                         |
 | tanh         | Complete        | None           |                                                                                         |
-| Tensor       | Unimplemented   | None           |                                                                                         |
+| Tensor       | Incomplete      | None           |                                                                                         |
 | tic          | Mostly Complete | None           |                                                                                         |
 | times (*)    | Incomplete      | None           | Need to add overloads                                                                   |
 | toc          | Mostly Complete | None           |                                                                                         |
 | trace        | Complete        | None           |                                                                                         |
 | transpose    | Complete        | None           |                                                                                         |
 | var          | Unimplemented   | None           |                                                                                         |
-| Vector       | Unimplemented   | None           |                                                                                         |
+| Vector       | Incomplete      | None           |                                                                                         |
 | zeros        | Complete        | None           |                                                                                         |
 
 
 ### Future Work
 
-This is an unorganized list of ideas of things we might want to include with Nifty 
-(TODO: flesh out this stream of conciousness type list):
-
+This is an unorganized, stream-of-consciousness type list of ideas of things we might want to include with Nifty: 
 - comb through matlab to find relevant functions:
     http://www.mathworks.com/help/matlab/functionlist-alpha.html    
 - complex functionality from glibc/math:
