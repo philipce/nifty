@@ -12,22 +12,22 @@ Nifty is really new and (obviously) not complete. The library is constantly expa
 
 Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built on a Mac) but there's no reason it shouldn't work anywhere Swift does. Future efforts will be made to get Nifty on embedded platforms, like the Raspberry Pi!
 
+_Note to Mac users: The plan is to soon have an Xcode project available so you can skip the rest of the install steps... for now you'll have to roll your own if you want it in Xcode!_
+
 ##### Install Swift
 
-Follow these instructions to [install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release!
+Follow these [instructions to install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release!
 
 Nifty uses the [Swift Package Manager](https://swift.org/package-manager/) (see the [project repo](https://github.com/apple/swift-package-manager) for more info). It greatly simplifies the build process! It comes included with Swift 3.0 and above.
 
 ##### Install LAPACK
 
-Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra for performance reasons. We'll be using the C interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). LAPACK needs Fortran, so if it's not already on your computer, you may need to install that too.
+Nifty uses [LAPACK](http://www.netlib.org/lapack/) for its linear algebra for performance reasons. We'll be using the C interface ([LAPACKE](http://www.netlib.org/lapack/lapacke.html)). 
 
-* Ubuntu: `sudo apt-get install gfortran liblapack3 liblapacke liblapacke-dev`
+* Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
 
 * Mac: `brew install homebrew/dupes/lapack`
-
-   _LAPACK comes already installed in the Accelerate framework, so you could just use that instead_
-
+   
 ##### Install OpenBLAS
 
 [BLAS](http://www.netlib.org/blas/) provides lower level functions used by LAPACK (CBLAS provides the C interface). LAPACK comes with a reference implementation of BLAS that is correct but not suitable for high performance applications. You can improve performance by using an optimized implementation instead, like [OpenBLAS](http://www.openblas.net/).
@@ -40,15 +40,17 @@ It is strongly recommended that you use OpenBLAS or some other optimized BLAS li
 
 * Mac: `brew install homebrew/science/openblas`
    
-##### Import Nifty
+##### Using Nifty
 
 Once you've installed the above dependencies, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it.
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
 
-Check out the [demo](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
+Check out this [Nifty demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
-##### Adapt System Library Paths
+##### Troubleshooting
+
+If you're having troubles, you may find the following helpful:
 
 The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
  
@@ -100,7 +102,7 @@ For anything else, feel free to open an issue!
 
 ## Distribution
 
-If you want to statically link Nifty and all its dependencies (e.g. for distribution), an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that shows basically how you can accomplish that.
+If you want to statically link Nifty and all its dependencies (e.g. for distribution), an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that you may find helpful.
 
 ## License
 
