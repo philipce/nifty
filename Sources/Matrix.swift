@@ -428,3 +428,68 @@ fileprivate func _cascadeIncrementSubscript(_ sub: [Int], min: [Int], max: [Int]
 
 	return nil
 }
+
+
+/*
+//  Write some awesome Swift code, or import libraries like "Foundation",
+//  "Dispatch", or "Glibc"
+
+print("Hello world!")
+
+struct Complex: CustomStringConvertible
+{
+    var r: Double
+    var i: Double
+    var description: String
+    {
+        if i >= 0
+        {
+            return "\(r)+\(i)i"
+        }
+        else
+        {
+            return "\(r)\(i)i"
+        }
+    }
+    
+    init(_ real: Double, _ imaginary: Double)
+    {
+        self.r = real
+        self.i = imaginary
+    }
+}
+
+struct Matrix<T>: CustomStringConvertible
+{
+    var data: [T]
+    
+    init(_ data: [T])
+    {
+        self.data = data
+    }
+    
+    var description: String
+    {
+        return "\(T.self): \(self.data)"
+    }
+}
+
+func intmat(_ m: Matrix<Int>)
+{
+    
+    print("I'm an int matrix: \(m.data)")
+}
+
+
+let mi = Matrix([1,2,3])
+let md = Matrix([1.045, 2.0243, 3])
+let ms = Matrix(["one", "two", "three"])
+let mc = Matrix([Complex(0.23,-8), Complex(1.1,-5.6), Complex(12,4)])
+
+intmat(mi)
+
+print(mi)
+print(md)
+print(ms)
+print(mc)
+*/
