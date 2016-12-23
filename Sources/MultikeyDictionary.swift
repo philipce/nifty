@@ -1,7 +1,7 @@
 /***************************************************************************************************
- *  Matrix.swift
+ *  MultikeyDictionary.swift
  *
- *  This file defines the Ternary Search Trie data structure. 
+ *  This file defines a multi-key dictionary data structure. 
  *
  *  Author: Philip Erickson
  *  Creation Date: 14 Aug 2016
@@ -19,7 +19,7 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-public struct MultiDictionary<KeyType: Comparable, Value>
+public struct MultikeyDictionary<KeyType: Comparable, Value>
 {    
     public var count: Int 
     public let keys: Int
@@ -85,23 +85,35 @@ public struct MultiDictionary<KeyType: Comparable, Value>
     {
         assert(keySet.count == self.keys)
 
-        if !self.contains(keySet)
+        // assign don't-care keys
+        var assignedKeys = keySet.map({$0 ?? self.dontCareKey()})
+
+        if !self.contains(assignedKeys)
         {
             self.count += 1
         }
 
-        self.put(self.root, keySet, 0, value)
+        self.root = self.put(self.root, assignedKeys, 0, value)
     }
 
-    private func put(_ node: Node<Value>, _ keySet: KeySet, _ index: Int, _ value: Value)
+    private func put(_ node: Node<Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<Value>
     {
         assert(keySet.count == self.keys)
+        assert(keySet[index] != nil, "Don't-care keys should all be assigned at this point")
 
-        if node == nil && index == self.keys-1
+        let curKey = keySet[index]!
+        let retNode = node ?? Node<KeyType, Value>(key: curKey, value: nil)
+
+        if curKey < retNode.key
         {
-            
 
         }
+        else if curKey == retNode.key
+        {
+
+        }
+
+
         else if node == nil
         {
 
@@ -112,7 +124,16 @@ public struct MultiDictionary<KeyType: Comparable, Value>
     }
 
 
+    // Returns a key for use in inserting values with dont-care keys in the key set. The key
+    // is just a counter value so it is guaranteed to be unique.
+    private var _dontCareCount: UInt = 0
+    private func dontCareKey() -> String
+    {
+        let s = "\(_dontCareCount)"
+        _dontCareCount += 1
 
+        return s
+    }
 }
 
 
@@ -123,13 +144,16 @@ fileprivate class Node<KeyType: Comparable, Value>
     var value: Value?
 
     // sub-tries, relative to this node's key
-    var lesser  : Node<Value>
-    var equal   : Node<Value>
-    var greater : Node<Value>    
+    var lesser  : Node<Value>?
+    var equal   : Node<Value>?
+    var greater : Node<Value>?   
 
     init(key: String, value: Value?)
     {
         self.key = key
         self.value = value
+        self.lesser = nil
+        self.equal = nil
+        self.greater = nil
     }
 }
