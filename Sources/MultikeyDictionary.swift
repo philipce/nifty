@@ -19,6 +19,9 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// Adapted from the "Ternary Search Trie" as discussed in: Sedgewick, R., Wayne, K. (2011). 
+// Algorithms, 4th Edition. Addison-Wesley. ISBN: 978-0-321-57351-3 
+
 public struct MultikeyDictionary<KeyType: Comparable, Value>
 {    
     public var count: Int 
@@ -26,19 +29,19 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
 
     public typealias KeySet = [KeyType?]
 
-    let root: Node<KeyType, Value>?
+    private var root: Node<KeyType, Value>?
 
     public init(keys: Int)
     {
         self.count = 0
         self.keys = keys
-        self.root = Node(label: "", value: nil)        
+        self.root = nil      
     }
 
-    public func contains(_ keys: KeySet) -> Bool
+    public func contains(_ keySet: KeySet) -> Bool
     {
-        precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
-        let matches = self.get(key)
+        precondition(keySet.count == self.keys, "Expected \(self.keys) search keys")
+        let matches = self.get(keySet)
 
         return matches.count > 0
     }
@@ -49,17 +52,26 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
     {
         assert(keySet.count == self.keys)
 
-        let nodes = self.get(self.root, keySet, 0)
+        
+        if self.root == nil
+        {
+            assert(self.count == 0)    
+            return []
+        }
+        
+        // FIXME: get should return list of nodes; shouldn't wrap result in array
+        let nodes = [self.get(self.root!, keySet, 0)]
         let values = nodes.filter({$0.value != nil}).map({$0.value!})
 
         return values
     }
 
-    private func get(_ node: Node<Value>, _ keySet: KeySet, _ index: Int)
+    private func get(_ node: Node<KeyType, Value>, _ keySet: KeySet, _ index: Int) -> Node<KeyType, Value>
     {
         assert(keySet.count == self.keys)
 
-        let curKey = keySet[index]
+        // FIXME: need to handle nil keys in key set as wildcards, not force unwrap!
+        let curKey = keySet[index]!
 
         if curKey < node.key
         {
@@ -81,12 +93,12 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
 
 
 
-    private func put(_ keySet: KeySet, _ value: Value)
+    private mutating func put(_ keySet: KeySet, _ value: Value)
     {
         assert(keySet.count == self.keys)
 
         // assign don't-care keys
-        var assignedKeys = keySet.map({$0 ?? self.dontCareKey()})
+        var assignedKeys = keySet // FIXME: how to handle generating new key of KeyType? keySet.map({$0 ?? self.dontCareKey()})
 
         if !self.contains(assignedKeys)
         {
@@ -96,9 +108,11 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         self.root = self.put(self.root, assignedKeys, 0, value)
     }
 
-    private func put(_ node: Node<Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<Value>
+    private func put(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<KeyType, Value>
     {
         assert(keySet.count == self.keys)
+        
+        // FIXME: unable to assign don't-cares for generic KeyType
         assert(keySet[index] != nil, "Don't-care keys should all be assigned at this point")
 
         let curKey = keySet[index]!
@@ -106,29 +120,37 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
 
         if curKey < retNode.key
         {
-
+            retNode.lesser = self.put(retNode.lesser, keySet, index, value)
         }
-        else if curKey == retNode.key
+        else if curKey > retNode.key
         {
-
+            retNode.greater = self.put(retNode.greater, keySet, index, value)
         }
-
-
-        else if node == nil
+        else
         {
-
+            // if all keys in the set have been used, then this node should store value
+            if index == self.keys-1
+            {
+                retNode.value = value 
+            }
+            // otherwise, move on to the next key in the set
+            else
+            {
+                retNode.equal = self.put(retNode.equal, keySet, index+1, value)
+            }
         }
 
-
-
+        return retNode
     }
-
 
     // Returns a key for use in inserting values with dont-care keys in the key set. The key
     // is just a counter value so it is guaranteed to be unique.
     private var _dontCareCount: UInt = 0
-    private func dontCareKey() -> String
+    private mutating func dontCareKey() -> String
     {
+    
+        // FIXME: remove this since it only applies to string, not generic KeyType
+        
         let s = "\(_dontCareCount)"
         _dontCareCount += 1
 
@@ -144,11 +166,11 @@ fileprivate class Node<KeyType: Comparable, Value>
     var value: Value?
 
     // sub-tries, relative to this node's key
-    var lesser  : Node<Value>?
-    var equal   : Node<Value>?
-    var greater : Node<Value>?   
+    var lesser  : Node<KeyType, Value>?
+    var equal   : Node<KeyType, Value>?
+    var greater : Node<KeyType, Value>?   
 
-    init(key: String, value: Value?)
+    init(key: KeyType, value: Value?)
     {
         self.key = key
         self.value = value
