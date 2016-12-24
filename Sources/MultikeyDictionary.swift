@@ -19,18 +19,18 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// Adapted from the section on "Ternary Search Tries" in: Sedgewick, R., Wayne, K. (2011). 
-// Algorithms, 4th Edition. Addison-Wesley. ISBN: 978-0-321-57351-3 
+// Adapted from the section on "Ternary Search Tries" in the following textbook:  
+// "Algorithms, 4th Edition", Sedgewick, R., Wayne, K. (2011). 
 
-public struct MultikeyDictionary<KeyType: Comparable, Value>
-{    
+public struct MultikeyDictionary<KeyType: Comparable, ValueType>
+{   
     public var count: Int 
-    public let keys: Int
+    public let keys: Int     
 
-    public typealias KeySet = [KeyType?]
-
-    private var root: Node<KeyType, Value>?
-
+    /// Initialize a new multikey dictionary where elements are indexed by the given number of keys.
+    ///
+    /// - Parameters:
+    ///		- keys: number of keys to index each element with
     public init(keys: Int)
     {
         self.count = 0
@@ -38,29 +38,131 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         self.root = nil      
     }
 
-    public func contains(_ keySet: KeySet) -> Bool
-    {
-        precondition(keySet.count == self.keys, "Expected \(self.keys) search keys")
-        let matches = self.get(keySet)
-
-        return matches.count > 0
-    }
-
-   	public mutating func insert(_ value: Value, keys: KeyType?...)
+    /// Insert a new value into the dictionary with the given keys.
+    ///
+    /// - Parameters:
+    ///		- value: the value to insert
+    ///		- keys: the keys to index the inserted value
+    public mutating func insert(_ value: ValueType, keys: KeyType...)
    	{   	
-   		self.put(keySet: keys, value: value)
+   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+   		self.put(value, keys)
    	}
 
-   	public func find(_ keys: KeyType?...) -> [Value]
+   	public mutating func insert(_ value: ValueType, keys: [KeyType])
+   	{   
+   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+   		self.put(value, keys)
+   	}
+
+   	/// Find the values in the dictionary that match the given keys.
+    ///
+    ///	- Note: nil search keys are considered wild cards and will match any key
+    /// - Parameters:
+    ///		- keys: the keys to use in finding matching elements
+   	public func find(_ keys: KeyType?...) -> [ValueType]
    	{
+   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
    		return self.get(keys)
    	}
 
+   	public func find(_ keys: [KeyType?]) -> [ValueType]
+   	{
+   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+   		return self.get(keys)
+   	}
 
-    private func get(_ keySet: KeySet) -> [Value]
+   	/// Determine if the dictionary contains an element matching the given keys.
+   	///
+   	/// - Parameters:
+   	///		- keys: the keys to match
+    public func contains(_ keys: [KeyType?]) -> Bool
+    {
+        precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+        return self.get(keys).count > 0
+    }  
+
+    /// Remove all values matching the given keys from the dictionary.
+    ///
+    /// - Parameters:
+    ///		- keys: specify the element(s) to remove
+    public mutating func remove(_ keys: [KeyType])
+    {
+    	// FIXME: implement remove in a better way...
+    	///This seems a hacky way to do this: have to first find if it exists in the collection
+    	// then have to go find again where to put the new value. Instead, we should have a 
+    	// dedicated remove function that walks the trie and removes all matches (allowing wild
+    	// cards) and then removing unnecessary nodes. We changed put to allow an optional value
+    	// so this could nil it out, but once we do this right, we should undo that change.    	    
+    	precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+
+    	if self.contains(keys)
+    	{
+    		self.count -= 1
+    	}
+    	self.put(nil, keys)
+    } 
+
+    /// Remove all elements from the dictionary.
+    public mutating func removeAll()
+    {
+    	self.count = 0
+    	self.root = nil
+    }
+
+   	//----------------------------------------------------------------------------------------------
+    // PRIVATE MEMBER DATA/FUNCTIONS
+    //----------------------------------------------------------------------------------------------
+
+   	private var root: Node<KeyType, ValueType>?
+
+   	private mutating func put(_ value: ValueType?, _ keySet: [KeyType])
     {
         assert(keySet.count == self.keys)
 
+        if !self.contains(keySet)
+        {
+            self.count += 1
+        }
+
+        self.root = self.put(value, self.root, keySet, 0)
+    }
+
+    private mutating func put(_ value: ValueType?, _ node: Node<KeyType, ValueType>?, _ keySet: [KeyType], _ index: Int) -> Node<KeyType, ValueType>
+    {
+        assert(keySet.count == self.keys)        
+
+        let curKey = keySet[index]
+        let retNode = node ?? Node<KeyType, ValueType>(key: curKey, value: nil)
+
+        if curKey < retNode.key
+        {
+            retNode.lesser = self.put(value, retNode.lesser, keySet, index)
+        }
+        else if curKey > retNode.key
+        {
+            retNode.greater = self.put(value, retNode.greater, keySet, index)
+        }
+        else
+        {
+            // if all keys in the set have been used, then this node should store value
+            if index == self.keys-1
+            {
+                retNode.value = value 
+            }
+            // otherwise, move on to the next key in the set
+            else
+            {
+                retNode.equal = self.put(value, retNode.equal, keySet, index+1)
+            }
+        }
+
+        return retNode
+    }
+
+    private func get(_ keySet: [KeyType?]) -> [ValueType]
+    {
+        assert(keySet.count == self.keys)
         
         if self.root == nil
         {
@@ -75,7 +177,7 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         return values
     }
 
-    private func get(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int) -> Node<KeyType, Value>?
+    private func get(_ node: Node<KeyType, ValueType>?, _ keySet: [KeyType?], _ index: Int) -> Node<KeyType, ValueType>?
     {
     	guard let node = node else
     	{
@@ -106,85 +208,20 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
     }
 
 
-
-    private mutating func put(keySet: KeySet, value: Value)
-    {
-        assert(keySet.count == self.keys)
-
-        // assign don't-care keys
-        let assignedKeys = keySet // FIXME: how to handle generating new key of KeyType? keySet.map({$0 ?? self.dontCareKey()})
-
-        if !self.contains(assignedKeys)
-        {
-            self.count += 1
-        }
-
-        self.root = self.put(self.root, assignedKeys, 0, value)
-    }
-
-    private mutating func put(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<KeyType, Value>
-    {
-        assert(keySet.count == self.keys)
-        
-        // FIXME: unable to assign don't-cares for generic KeyType
-        assert(keySet[index] != nil, "Don't-care keys should all be assigned at this point")
-
-        let curKey = keySet[index]!
-        let retNode = node ?? Node<KeyType, Value>(key: curKey, value: nil)
-
-        if curKey < retNode.key
-        {
-            retNode.lesser = self.put(retNode.lesser, keySet, index, value)
-        }
-        else if curKey > retNode.key
-        {
-            retNode.greater = self.put(retNode.greater, keySet, index, value)
-        }
-        else
-        {
-            // if all keys in the set have been used, then this node should store value
-            if index == self.keys-1
-            {
-                retNode.value = value 
-            }
-            // otherwise, move on to the next key in the set
-            else
-            {
-                retNode.equal = self.put(retNode.equal, keySet, index+1, value)
-            }
-        }
-
-        return retNode
-    }
-
-    // Returns a key for use in inserting values with dont-care keys in the key set. The key
-    // is just a counter value so it is guaranteed to be unique.
-    private var _dontCareCount: UInt = 0
-    private mutating func dontCareKey() -> String
-    {
-    
-        // FIXME: remove this since it only applies to string, not generic KeyType
-        
-        let s = "\(_dontCareCount)"
-        _dontCareCount += 1
-
-        return s
-    }
 }
 
-
-
-fileprivate class Node<KeyType: Comparable, Value>
+/// Helper class representing node in multikey dictionary. Reference semantics needed.
+fileprivate class Node<KeyType: Comparable, ValueType>
 {    
     let key: KeyType
-    var value: Value?
+    var value: ValueType?
 
     // sub-tries, relative to this node's key
-    var lesser  : Node<KeyType, Value>?
-    var equal   : Node<KeyType, Value>?
-    var greater : Node<KeyType, Value>?   
+    var lesser  : Node<KeyType, ValueType>?
+    var equal   : Node<KeyType, ValueType>?
+    var greater : Node<KeyType, ValueType>?   
 
-    init(key: KeyType, value: Value?)
+    init(key: KeyType, value: ValueType?)
     {
         self.key = key
         self.value = value
