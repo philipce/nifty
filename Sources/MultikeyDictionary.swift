@@ -4,7 +4,7 @@
  *  This file defines a multi-key dictionary data structure. 
  *
  *  Author: Philip Erickson
- *  Creation Date: 14 Aug 2016
+ *  Creation Date: 21 Dec 2016
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,7 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// Adapted from the "Ternary Search Trie" as discussed in: Sedgewick, R., Wayne, K. (2011). 
+// Adapted from the section on "Ternary Search Tries" in: Sedgewick, R., Wayne, K. (2011). 
 // Algorithms, 4th Edition. Addison-Wesley. ISBN: 978-0-321-57351-3 
 
 public struct MultikeyDictionary<KeyType: Comparable, Value>
@@ -46,6 +46,15 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         return matches.count > 0
     }
 
+   	public mutating func insert(_ value: Value, keys: KeyType?...)
+   	{   	
+   		self.put(keySet: keys, value: value)
+   	}
+
+   	public func find(_ keys: KeyType?...) -> [Value]
+   	{
+   		return self.get(keys)
+   	}
 
 
     private func get(_ keySet: KeySet) -> [Value]
@@ -61,13 +70,18 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         
         // FIXME: get should return list of nodes; shouldn't wrap result in array
         let nodes = [self.get(self.root!, keySet, 0)]
-        let values = nodes.filter({$0.value != nil}).map({$0.value!})
+        let values = nodes.filter({$0 != nil && $0!.value != nil}).map({$0!.value!})
 
         return values
     }
 
-    private func get(_ node: Node<KeyType, Value>, _ keySet: KeySet, _ index: Int) -> Node<KeyType, Value>
+    private func get(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int) -> Node<KeyType, Value>?
     {
+    	guard let node = node else
+    	{
+    		return nil
+    	}
+
         assert(keySet.count == self.keys)
 
         // FIXME: need to handle nil keys in key set as wildcards, not force unwrap!
@@ -93,12 +107,12 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
 
 
 
-    private mutating func put(_ keySet: KeySet, _ value: Value)
+    private mutating func put(keySet: KeySet, value: Value)
     {
         assert(keySet.count == self.keys)
 
         // assign don't-care keys
-        var assignedKeys = keySet // FIXME: how to handle generating new key of KeyType? keySet.map({$0 ?? self.dontCareKey()})
+        let assignedKeys = keySet // FIXME: how to handle generating new key of KeyType? keySet.map({$0 ?? self.dontCareKey()})
 
         if !self.contains(assignedKeys)
         {
@@ -108,7 +122,7 @@ public struct MultikeyDictionary<KeyType: Comparable, Value>
         self.root = self.put(self.root, assignedKeys, 0, value)
     }
 
-    private func put(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<KeyType, Value>
+    private mutating func put(_ node: Node<KeyType, Value>?, _ keySet: KeySet, _ index: Int, _ value: Value) -> Node<KeyType, Value>
     {
         assert(keySet.count == self.keys)
         
