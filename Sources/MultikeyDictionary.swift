@@ -19,13 +19,30 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// Adapted from the section on "Ternary Search Tries" in the following textbook:  
-// "Algorithms, 4th Edition", Sedgewick, R., Wayne, K. (2011). 
+// Adapted from the section on "Ternary Search Tries" in "Algorithms, 4th Edition", Sedgewick, 
+// R., Wayne, K. (2011). 
 
-public struct MultikeyDictionary<KeyType: Comparable, ValueType>
+// TODO: make dictionary iterable!
+
+// TODO: allow for wild card inserts: this allows nil values in the insertion keyset. The result of 
+//	this operation is to 1) re-write the values for any existing keys that match the given key set and
+//	2) insert a new node such that any specific query on the wildcard will match. 
+//
+// Maybe the 2 features noted above should be separate functions? insert and upate?
+// 
+// For example, dictionary D has entries: ["Bob", "Smith", "Blonde"]=4 and ["Bob", "Ross", "Blonde"]=27.
+// Now, D.insert(9, keys: "Bob", nil, "Blonde") should result in having ["Bob","Smith","Blonde"]=9 and 
+// ["Bob","Ross","Blonde"]=9 and ["Bob", nil, "Blonde"]=9. If I were later to do D.find("Bob","Jensen","Blonde"),
+// it would match the wildcard middle key and return 9.
+
+// TODO: add method that performs a wildcard find, but returns all found values AND their entire key set
+// For example, for D.find(["Bob", nil, "Blond"]), I might want to get back (["Bob", "Smith", "Blond"], 4)
+// and (["Bob", "Ross", "Blond"], 27)
+
+public struct MultikeyDictionary<Key: Comparable, Value>
 {   
     public var count: Int 
-    public let keys: Int     
+    public let keyCount: Int     
 
     /// Initialize a new multikey dictionary where elements are indexed by the given number of keys.
     ///
@@ -34,7 +51,7 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
     public init(keys: Int)
     {
         self.count = 0
-        self.keys = keys
+        self.keyCount = keys
         self.root = nil      
     }
 
@@ -43,65 +60,57 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
     /// - Parameters:
     ///		- value: the value to insert
     ///		- keys: the keys to index the inserted value
-    public mutating func insert(_ value: ValueType, keys: KeyType...)
+    public mutating func insert(_ value: Value, keys: [Key])
    	{   	
-   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+   		precondition(keys.count == self.keyCount, "Expected \(self.keyCount) search keys")
    		self.put(value, keys)
    	}
-
-   	public mutating func insert(_ value: ValueType, keys: [KeyType])
-   	{   
-   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
-   		self.put(value, keys)
-   	}
+   	public mutating func insert(_ value: Value, keys: Key...) { self.insert(value, keys: keys) }
 
    	/// Find the values in the dictionary that match the given keys.
     ///
     ///	- Note: nil search keys are considered wild cards and will match any key
     /// - Parameters:
     ///		- keys: the keys to use in finding matching elements
-   	public func find(_ keys: KeyType?...) -> [ValueType]
+   	public func find(_ keys: [Key?]) -> [Value]
    	{
-   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+   		precondition(keys.count == self.keyCount, "Expected \(self.keyCount) search keys")
    		return self.get(keys)
    	}
-
-   	public func find(_ keys: [KeyType?]) -> [ValueType]
-   	{
-   		precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
-   		return self.get(keys)
-   	}
+   	public func find(_ keys: Key?...) -> [Value] { return self.find(keys) }
 
    	/// Determine if the dictionary contains an element matching the given keys.
    	///
    	/// - Parameters:
    	///		- keys: the keys to match
-    public func contains(_ keys: [KeyType?]) -> Bool
+    public func contains(_ keys: [Key?]) -> Bool
     {
-        precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+        precondition(keys.count == self.keyCount, "Expected \(self.keyCount) search keys")
         return self.get(keys).count > 0
     }  
+    public func contains(_ keys: Key?...) -> Bool { return self.contains(keys) }  
 
     /// Remove all values matching the given keys from the dictionary.
     ///
     /// - Parameters:
-    ///		- keys: specify the element(s) to remove
-    public mutating func remove(_ keys: [KeyType])
+    ///		- keys: specify the element to remove
+    public mutating func remove(_ keys: [Key])
     {
     	// FIXME: implement remove in a better way...
-    	///This seems a hacky way to do this: have to first find if it exists in the collection
+    	// This seems a hacky way to do this: have to first find if it exists in the collection
     	// then have to go find again where to put the new value. Instead, we should have a 
     	// dedicated remove function that walks the trie and removes all matches (allowing wild
     	// cards) and then removing unnecessary nodes. We changed put to allow an optional value
     	// so this could nil it out, but once we do this right, we should undo that change.    	    
-    	precondition(keys.count == self.keys, "Expected \(self.keys) search keys")
+    	precondition(keys.count == self.keyCount, "Expected \(self.keyCount) search keys")
 
     	if self.contains(keys)
     	{
     		self.count -= 1
-    	}
-    	self.put(nil, keys)
+    		self.put(nil, keys)
+    	}    	
     } 
+    public mutating func remove(_ keys: Key...) { return self.remove(keys) }
 
     /// Remove all elements from the dictionary.
     public mutating func removeAll()
@@ -114,11 +123,11 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
     // PRIVATE MEMBER DATA/FUNCTIONS
     //----------------------------------------------------------------------------------------------
 
-   	private var root: Node<KeyType, ValueType>?
+   	private var root: Node<Key, Value>?
 
-   	private mutating func put(_ value: ValueType?, _ keySet: [KeyType])
+   	private mutating func put(_ value: Value?, _ keySet: [Key])
     {
-        assert(keySet.count == self.keys)
+        assert(keySet.count == self.keyCount)
 
         if !self.contains(keySet)
         {
@@ -128,12 +137,12 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
         self.root = self.put(value, self.root, keySet, 0)
     }
 
-    private mutating func put(_ value: ValueType?, _ node: Node<KeyType, ValueType>?, _ keySet: [KeyType], _ index: Int) -> Node<KeyType, ValueType>
+    private mutating func put(_ value: Value?, _ node: Node<Key, Value>?, _ keySet: [Key], _ index: Int) -> Node<Key, Value>
     {
-        assert(keySet.count == self.keys)        
+        assert(keySet.count == self.keyCount)        
 
         let curKey = keySet[index]
-        let retNode = node ?? Node<KeyType, ValueType>(key: curKey, value: nil)
+        let retNode = node ?? Node<Key, Value>(key: curKey, value: nil)
 
         if curKey < retNode.key
         {
@@ -146,7 +155,7 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
         else
         {
             // if all keys in the set have been used, then this node should store value
-            if index == self.keys-1
+            if index == self.keyCount-1
             {
                 retNode.value = value 
             }
@@ -160,9 +169,9 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
         return retNode
     }
 
-    private func get(_ keySet: [KeyType?]) -> [ValueType]
+    private func get(_ keySet: [Key?]) -> [Value]
     {
-        assert(keySet.count == self.keys)
+        assert(keySet.count == self.keyCount)
         
         if self.root == nil
         {
@@ -170,58 +179,66 @@ public struct MultikeyDictionary<KeyType: Comparable, ValueType>
             return []
         }
         
-        // FIXME: get should return list of nodes; shouldn't wrap result in array
-        let nodes = [self.get(self.root!, keySet, 0)]
-        let values = nodes.filter({$0 != nil && $0!.value != nil}).map({$0!.value!})
+        let nodes = self.get(self.root!, keySet, 0)
+        let values = nodes.filter({$0.value != nil}).map({$0.value!})
 
         return values
     }
 
-    private func get(_ node: Node<KeyType, ValueType>?, _ keySet: [KeyType?], _ index: Int) -> Node<KeyType, ValueType>?
+    private func get(_ optNode: Node<Key, Value>?, _ keySet: [Key?], _ index: Int) -> [Node<Key, Value>]
     {
-    	guard let node = node else
+    	guard let node = optNode else
     	{
-    		return nil
+    		return []
     	}
 
-        assert(keySet.count == self.keys)
+        assert(keySet.count == self.keyCount)
 
-        // FIXME: need to handle nil keys in key set as wildcards, not force unwrap!
-        let curKey = keySet[index]!
+        let curKey = keySet[index]
+        var matches = [Node<Key, Value>]()
 
-        if curKey < node.key
+        if curKey == nil || curKey! < node.key
         {
-            return get(node.lesser, keySet, index)
+            let lesserMatches: [Node<Key, Value>] = get(node.lesser, keySet, index)
+            matches.append(contentsOf: lesserMatches)
         }
-        else if curKey > node.key
+
+        if curKey == nil || curKey! > node.key
         {
-            return get(node.greater, keySet, index)
+        	let greaterMatches: [Node<Key, Value>] = get(node.greater, keySet, index)
+            matches.append(contentsOf: greaterMatches)
         }
-        else if index < self.keys-1
+
+        if curKey == nil || curKey! == node.key
         {
-            return get(node.equal, keySet, index+1)
-        }
-        else
-        {
-            return node
-        }
+	        if index < self.keyCount-1
+	        {
+	        	let equalMatches: [Node<Key, Value>] = get(node.equal, keySet, index+1)
+	            matches.append(contentsOf: equalMatches)
+	        }
+	        else
+	        {
+	        	matches.append(node)
+	            //return [node]
+	        }
+	    }
+
+	    return matches
     }
-
-
 }
 
 /// Helper class representing node in multikey dictionary. Reference semantics needed.
-fileprivate class Node<KeyType: Comparable, ValueType>
+fileprivate class Node<Key: Comparable, Value>
 {    
-    let key: KeyType
-    var value: ValueType?
+    let key: Key
+    var value: Value?
 
     // sub-tries, relative to this node's key
-    var lesser  : Node<KeyType, ValueType>?
-    var equal   : Node<KeyType, ValueType>?
-    var greater : Node<KeyType, ValueType>?   
+    var lesser  : Node<Key, Value>?
+    var equal   : Node<Key, Value>?
+    var greater : Node<Key, Value>?   
 
-    init(key: KeyType, value: ValueType?)
+    init(key: Key, value: Value?)
     {
         self.key = key
         self.value = value
