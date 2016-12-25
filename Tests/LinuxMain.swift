@@ -1,6 +1,8 @@
 import XCTest
-@testable import niftyTests
+@testable import NiftyTests
 
-XCTMain([
-     testCase(niftyTests.allTests),
-])
+var tests = [XCTestCaseEntry]()
+
+tests += MultikeyDictionary_test.allTests
+
+XCTMain(tests)
