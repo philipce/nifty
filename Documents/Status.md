@@ -100,7 +100,7 @@ implemented.
 | mrdivide (/)       | Complete        | None           | Current implementation is less efficient--does more transposes than necessary           |
 | msb                | Mostly Complete | None           |                                                                                         |
 | mtimes (*)         | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
-| MultikeyDictionary | Incomplete      | Incomplete     | Currently only have basic insert/find/remove                                            |
+| MultikeyDictionary | Mostly Complete | Substantial    | Currently only have basic insert/find/remove                                            |
 | mvnrand            | Unimplemented   | None           |                                                                                         |
 | nan                | Incomplete      | None           |                                                                                         |
 | ndims              | Complete        | None           |                                                                                         |
