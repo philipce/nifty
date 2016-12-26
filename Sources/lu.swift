@@ -19,6 +19,8 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// TODO: MATLAB provides more info, e.g. (L,U,P,Q,R) = lu(A). Should we provide Q and R?
+
 import CLapacke
 
 /// Compute the LU decomposition of a given square matrix.
@@ -27,9 +29,56 @@ import CLapacke
 ///
 /// - Parameters:
 ///     - A: matrix to decompose
+/// - Returns: lower triangular matrix L and the upper triangular matrix U
+public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix)
+{
+	let (L, U, _) = _lu(A)
+
+	return (L, U)
+}
+
+/// Compute the LU decomposition of a given square matrix.
+///
+///	A warning is printed if the U factor is singular.
+///
+/// - Parameters:
+///     - A: matrix to decompose
 /// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the permutation
-///		matrix P (indicating how the rows of L were permuted), such that P*A=L*U.
+///		matrix P (indicating how the rows of L were permuted), such that P*A=L*U
 public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
+{
+	let (L, U, ipiv) = _lu(A)
+
+	// FIXME: verify that this ipiv to permutation conversion is correct
+	// The dimensions on the ipiv array concern me, still unclear on the 
+	// dimensionality, "(min(M,N))" from LAPACK doc...
+	let m = Int32(A.size[0])
+	let n = Int32(A.size[1])
+	var P = ipiv2p(ipiv: ipiv, m: m, n: n)
+
+	if let nameA = A.name
+	{
+		P.name = "lu(\(nameA)).P"
+	}
+	if A.showName
+	{
+		P.showName = true
+	}
+
+	return (L, U, P)
+}
+
+/// Compute the LU decomposition, returning L, U, and the pivot indices.
+///
+///	A warning is printed if the U factor is singular.
+///
+/// This function is just useful as an intermediate, so that the user can avoid computing the
+/// permutation matrix from the pivot indices if the permutation matrix isn't needed.
+///
+/// - Parameters:
+///     - A: matrix to decompose
+/// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the pivot indices
+fileprivate func _lu(_ A: Matrix) -> (L: Matrix, U: Matrix, ipiv: [Int32])
 {
 	let m = Int32(A.size[0])
 	let n = Int32(A.size[1])	
@@ -81,23 +130,16 @@ public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
 	var L = Matrix(Int(m), Int(m), data: l)
 	var U = Matrix(Int(m), Int(n), data: u)
 
-	// FIXME: verify that this ipiv to permutation conversion is correct
-	// The dimensions on the ipiv array concern me, still unclear on the 
-	// dimensionality, "(min(M,N))" from LAPACK doc...
-	var P = ipiv2p(ipiv: ipiv, m: m, n: n)
-
 	if let nameA = A.name
 	{
 		L.name = "lu(\(nameA)).L"
 		U.name = "lu(\(nameA)).U"
-		P.name = "lu(\(nameA)).P"
 	}
 	if A.showName
 	{
 		L.showName = true
 		U.showName = true
-		P.showName = true
 	}
 
-	return (L, U, P)
+	return (L, U, ipiv)
 }
