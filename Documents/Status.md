@@ -74,6 +74,7 @@ implemented.
 | ind2sub            | Mostly Complete | None           |                                                                                         |
 | inf                | Incomplete      | None           |                                                                                         |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
+| ipiv2p             | Incomplete      | None           | Internal only function for converting LAPACK pivot indices... super hacky seeming...    |
 | isequal            | Unimplemented   | None           |                                                                                         |
 | isinf              | Unimplemented   | None           |                                                                                         |
 | isnan              | Incomplete      | None           |                                                                                         |
@@ -86,7 +87,7 @@ implemented.
 | log1p              | Complete        | None           |                                                                                         |
 | lsb                | Unimplemented   | None           |                                                                                         |
 | lt (<)             | Complete        | None           |                                                                                         |
-| lu                 | Unimplemented   | None           |                                                                                         |
+| lu                 | Mostly Complete | Incomplete     |                                                                                         |
 | map                | Unimplemented   | None           |                                                                                         |
 | Matrix             | Mostly Complete | None           |                                                                                         |
 | max                | Unimplemented   | None           |                                                                                         |
@@ -137,6 +138,7 @@ implemented.
 | sub2ind            | Mostly Complete | None           |                                                                                         |
 | sum                | Unimplemented   | None           |                                                                                         |
 | svd                | Unimplemented   | None           |                                                                                         |
+| swap               | Incomplete      | None           | Need to add support for vectors, tensors, matrix columns, etc.                          |
 | tan                | Complete        | None           |                                                                                         |
 | tand               | Complete        | None           |                                                                                         |
 | tanh               | Complete        | None           |                                                                                         |

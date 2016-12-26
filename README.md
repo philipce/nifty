@@ -36,8 +36,6 @@ It is strongly recommended that you use OpenBLAS or some other optimized BLAS li
 
 * Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
 
-   _You can switch between the different installed BLAS options using:_ `sudo update-alternatives --config libblas.so`
-
 * Mac: `brew install homebrew/science/openblas`
    
 ##### Using Nifty
