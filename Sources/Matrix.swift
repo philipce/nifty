@@ -38,6 +38,9 @@ public struct Matrix: CustomStringConvertible
 	/// Optional name of matrix (e.g., for use in display).
 	public var name: String?
 
+	// FIXME: allow constructors to take an optional showName: if given either true or false,
+	// that's the value that sticks. If left nil, showName=true iff name!=nil
+
 	/// Determine whether to show name when displaying matrx.
 	public var showName: Bool
 
