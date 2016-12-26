@@ -19,18 +19,16 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// TODO: this function only returns L and U--extend it to return P, Q, and R (as in MATLAB)
-
 import CLapacke
 
 /// Compute the LU decomposition of a given square matrix.
 ///
-///	A warning is printed if the given matrix is singular.
+///	A warning is printed if the U factor is singular.
 ///
 /// - Parameters:
 ///     - A: matrix to decompose
-/// - Returns: the lower triangular matrix L and the upper triangular matrix U, and the permutation
-///		matrix P (indicating how the rows of L were permuted), such that A=P*L*U.
+/// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the permutation
+///		matrix P (indicating how the rows of L were permuted), such that P*A=L*U.
 public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
 {
 	let m = Int32(A.size[0])
@@ -52,15 +50,6 @@ public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
 			"but the factor U is exactly singular, and division by zero will occur if it is used " +
 			"to solve a system of equations.")
 	}
-
-	// // use LU factorization to compute inverse
-	// info = LAPACKE_dgetri(LAPACK_ROW_MAJOR, n, &a, lda, &ipiv)
-	// precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
-	// precondition(info == 0, "Cannot invert singular matrix")
-	
-	print("a = \n\(a)\n")
-
-	print("ipiv = \n\(ipiv)\n")
 
 	// separate out lower and upper components
 	var u = [Double](repeating: 0, count: Int(m)*Int(n))
@@ -109,12 +98,6 @@ public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
 		U.showName = true
 		P.showName = true
 	}
-
-	// // inherit name
-	// var newName = A.name
-	// if newName != nil { newName = "LU(" + newName! + ")" }
-
-	// return Matrix(Int(n), data: a, name: newName, showName: A.showName)
 
 	return (L, U, P)
 }

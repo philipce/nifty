@@ -4,5 +4,6 @@ import XCTest
 var tests = [XCTestCaseEntry]()
 
 tests += MultikeyDictionary_test.allTests
+tests += lu_test.allTests
 
 XCTMain(tests)
