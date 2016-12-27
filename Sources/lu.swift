@@ -98,38 +98,38 @@ fileprivate func _lu(_ A: Matrix) -> (L: Matrix, U: Matrix, ipiv: [Int32])
 		print("Warning: U(\(info),\(info)) is exactly zero. The factorization has been completed, " + 
 			"but the factor U is exactly singular, and division by zero will occur if it is used " +
 			"to solve a system of equations.")
-	}
+	}	
 
 	// separate out lower and upper components
-	var u = [Double](repeating: 0, count: Int(m)*Int(n))
-	var l = [Double](repeating: 0, count: Int(m)*Int(m))
-	for r in 0..<Int(m)
-	{
-		for c in 0..<Int(n)
-		{
-			let i = r*Int(n) + c
+    var u = [Double](repeating: 0, count: Int(m)*Int(n))
+    var l = [Double](repeating: 0, count: Int(m)*Int(m))
+    for r in 0..<Int(m)
+    {
+        for c in 0..<Int(n)
+        {
+            let i = r*Int(n) + c
 
-			if r < c
-			{
-				u[i] = a[i]
-				l[i] = 0
-			}
-			else if r == c
-			{
-				u[i] = a[i]
-				l[i] = 1
-			}
-			else
-			{
-				u[i] = 0
-				l[i] = a[i]
-			}
-		}
-	}
+            if r < c
+            {
+                u[i] = a[i]
+                l[i] = 0
+            }
+            else if r == c
+            {
+                u[i] = a[i]
+                l[i] = 1
+            }
+            else
+            {
+                u[i] = 0
+                l[i] = a[i]
+            }
+        }
+    }
 
-	var L = Matrix(Int(m), Int(m), data: l)
-	var U = Matrix(Int(m), Int(n), data: u)
-
+    var L = Matrix(Int(m), Int(m), data: l)
+    var U = Matrix(Int(m), Int(n), data: u)
+    
 	if let nameA = A.name
 	{
 		L.name = "lu(\(nameA)).L"

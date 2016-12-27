@@ -50,7 +50,7 @@ implemented.
 | atand              | Complete        | None           |                                                                                         |
 | atanh              | Complete        | None           |                                                                                         |
 | ceil               | Complete        | None           |                                                                                         |
-| chol               | Unimplemented   | None           |                                                                                         |
+| chol               | Mostly complete | Incomplete     |                                                                                         |
 | cond               | Unimplemented   | None           |                                                                                         |
 | Constants          | Incomplete      | None           |                                                                                         |
 | cos                | Complete        | None           |                                                                                         |
@@ -148,6 +148,8 @@ implemented.
 | toc                | Mostly Complete | None           |                                                                                         |
 | trace              | Complete        | None           |                                                                                         |
 | transpose          | Complete        | None           |                                                                                         |
+| tril               | Incomplete      | None           |                                                                                         |
+| triu               | Incomplete      | None           |                                                                                         |
 | var                | Unimplemented   | None           |                                                                                         |
 | Vector             | Incomplete      | None           |                                                                                         |
 | zeros              | Complete        | None           |                                                                                         |

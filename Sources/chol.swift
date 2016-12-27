@@ -19,43 +19,66 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// TODO: MATLAB provides a lot more return options than just the one R = chol(A). Add as necessary.
+// TODO: MATLAB provides a lot more return options than just the two R or L = chol(A). Add more?
 
 import CLapacke
-
-public func chol(_ A: Matrix, _ opt: CholeskyOption = .upper) -> Matrix
-{
-	let uplo: Int8
-	switch opt
-	{
-		case .upper:
-			uplo = 85 // ascii 'U'
-		case .lower:
-			uplo = 76 // ascii 'L'
-	}
-
-	precondition(A.rows == A.columns, "Matrix must be square")
-	let n = A.rows
-
-	var a = A.data
-
-	// The leading dimension equals the number of elements in the major dimension. In this case,
-	// we are doing row-major so lda is the number of columns in A.
-	let lda = Int32(A.columns)
-
-	let info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, uplo, Int32(n), &a, lda)
-	precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
-	precondition(info == 0, "The leading minor of order \(info) is not positive definite, and the " +
-		"factorization could not be completed")
-
-	// FIXME: a contains both the upper and lower... need to split them apart
-
-	return Matrix(n, n, data: a)
-}
 
 /// Enumerate options for Cholesky decomposition
 public enum CholeskyOption
 {
-	case upper
-	case lower
+    case upper
+    case lower
 }
+
+/// Computes the Cholesky decomposition of a real symmetric positive definite matrix.
+///
+/// By default, produces an upper triangular matrix R such that transpose(R)*R=A. If requested, a
+/// lower triangular matrix L is produced instead, such that L*transpose(L)=A.
+///
+/// - Parameters:
+///     - A: matrix to decompose
+///     - option: request upper or lower triangular result    
+/// - Returns: requested triangular matrix
+public func chol(_ A: Matrix, _ option: CholeskyOption = .upper) -> Matrix
+{
+    let uplo: Int8
+    switch option
+    {
+        case .upper:
+            uplo = 85 // ascii 'U'
+        case .lower:
+            uplo = 76 // ascii 'L'
+    }
+
+    precondition(A.rows == A.columns, "Matrix must be square")
+    let n = A.rows
+
+    var a = A.data
+
+    // The leading dimension equals the number of elements in the major dimension. In this case,
+    // we are doing row-major so lda is the number of columns in A.
+    let lda = Int32(A.columns)
+
+    let info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, uplo, Int32(n), &a, lda)
+    precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
+    precondition(info == 0, "The leading minor of order \(info) is not positive definite, and the " +
+        "factorization could not be completed")
+
+    switch option
+    {
+        case .upper:
+            var R = triu(Matrix(n, n, data: a))
+            R.name = A.name != nil ? "chol(\(A.name!), .upper)" : nil
+            R.showName = A.showName
+
+            return R
+
+        case .lower:
+            var L = tril(Matrix(n, n, data: a))
+            L.name = A.name != nil ? "chol(\(A.name!), .lower)" : nil
+            L.showName = A.showName
+
+            return L
+    }
+}
+

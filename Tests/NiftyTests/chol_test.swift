@@ -24,11 +24,14 @@ class chol_test: XCTestCase
          [1, 2,  3,  4,  5],
          [1, 3,  6, 10, 15],
          [1, 4, 10, 20, 35],
-         [1, 5, 15, 35, 70]], name: "X")
+         [1, 5, 15, 35, 70]], name: "X", showName: true)      
+
+        print(X, terminator: "\n\n")
 
         let R = chol(X)
-        let L = chol(X, .lower)
         print(R, terminator: "\n\n")
+
+        let L = chol(X, .lower)        
         print(L, terminator: "\n\n")
 
         print("\n\n")
