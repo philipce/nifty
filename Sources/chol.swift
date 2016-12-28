@@ -67,14 +67,14 @@ public func chol(_ A: Matrix<Double>, _ option: CholeskyOption = .upper) -> Matr
     switch option
     {
         case .upper:
-            var R = triu(Matrix(n, n, data: a))
+            var R = triu(Matrix(n, n, a))
             R.name = A.name != nil ? "chol(\(A.name!), .upper)" : nil
             R.showName = A.showName
 
             return R
 
         case .lower:
-            var L = tril(Matrix(n, n, data: a))
+            var L = tril(Matrix(n, n, a))
             L.name = A.name != nil ? "chol(\(A.name!), .lower)" : nil
             L.showName = A.showName
 

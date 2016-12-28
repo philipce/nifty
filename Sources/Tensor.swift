@@ -162,7 +162,7 @@ public struct Tensor<T>: CustomStringConvertible
     public init(copy: Vector<T>, rename: String? = nil, showName: Bool? = nil)
     {
         self.count = copy.count
-        self.size = copy.size // FIXME: isn't the vector size just a single number, e.g. [5] instead of [1,5]?
+        self.size = [1, copy.count]
         self.data = copy.data
         self.name = rename
         
@@ -276,7 +276,14 @@ public struct Tensor<T>: CustomStringConvertible
     /// - Returns: string representation of tensor
     public var description: String
     {
-       // FIXME: implement properly
-       return "\(self.data)"
+        // FIXME: implement properly
+
+        // FIXME: Improve printing for non double types
+        // Instead of treating them separately, use the formatter just to round/shorten doubles;
+        // append all elements as strings to the list, then go through the list and pad with spaces
+        // appropriately. Also, could formatter be used for types other than doubles? If not, should
+        // it be set to nil for non double structs?
+
+        return "\(self.data)"
     }    
 }

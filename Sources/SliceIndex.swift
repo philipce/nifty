@@ -25,3 +25,34 @@ public protocol SliceIndex {}
 extension Int: SliceIndex {}
 extension CountableRange: SliceIndex {}
 extension CountableClosedRange: SliceIndex {}
+
+/// Convert a collection of SliceIndex elements to countable closed ranges.
+///
+/// - Parameters: 
+///     - s: collection of SliceIndex elements to convert
+/// - Returns: collection of countable closed ranges
+internal func _convertToCountableClosedRanges(_ s: [SliceIndex]) -> [CountableClosedRange<Int>]
+{
+    var ranges = [CountableClosedRange<Int>]()
+    for el in s
+    {
+        switch el
+        {
+            case let el as Int:
+                ranges.append(el...el)
+            case let el as CountableRange<Int>:
+                ranges.append(CountableClosedRange<Int>(el))
+            case let el as CountableClosedRange<Int>:
+                ranges.append(el)
+            default:
+                fatalError("Unknown type of SliceIndex: \(el) \(type(of: el))")
+        }
+    }
+
+    return ranges
+}
+
+internal func _convertToCountableClosedRange(_ s: SliceIndex) -> CountableClosedRange<Int>
+{
+    return (_convertToCountableClosedRanges([s]))[0]
+}

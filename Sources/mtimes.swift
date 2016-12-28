@@ -68,7 +68,7 @@ func mtimes(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
         newName = "\(nameA)*\(nameB)"
     }
 
-    return Matrix(m, n, data: c, name: newName, showName: A.showName)
+    return Matrix(m, n, c, name: newName, showName: A.showName)
 }
 
 // TODO: determine where this stuff goes, here or times:

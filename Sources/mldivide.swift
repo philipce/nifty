@@ -67,7 +67,7 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
         precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
         precondition(info == 0, "Cannot solve singularity")
 
-        return Matrix(n, nrhs, data: b, name: newName, showName: A.showName || B.showName)
+        return Matrix(n, nrhs, b, name: newName, showName: A.showName || B.showName)
     }
 
     // otherwise return least-squares solution
@@ -97,7 +97,7 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
 
             let x = Array(b[0..<(n*nrhs)])  
 
-            return Matrix(n, nrhs, data: x, name: newName, showName: A.showName || B.showName)          
+            return Matrix(n, nrhs, x, name: newName, showName: A.showName || B.showName)          
         }
 
         // underdetermined system
@@ -123,7 +123,7 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
 
             let x = Array(b[0..<(n*nrhs)])          
 
-            return Matrix(n, nrhs, data: x, name: newName, showName: A.showName || B.showName)  
+            return Matrix(n, nrhs, x, name: newName, showName: A.showName || B.showName)  
         }
     }
 }

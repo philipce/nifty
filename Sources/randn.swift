@@ -134,7 +134,7 @@ public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double =
         randomData.append(curRandGen.doub())
     }
 
-    return Matrix(rows, columns, data: randomData)
+    return Matrix(rows, columns, randomData)
 }
 
 public func randn(_ elements: Int, mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil, 

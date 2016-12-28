@@ -202,7 +202,7 @@ public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int3
                 randomData.append(shiftedValue)
                 if randomData.count == totalSize
                 {
-                    return Matrix(rows, columns, data: randomData)
+                    return Matrix(rows, columns, randomData)
                 }
             }
         }

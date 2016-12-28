@@ -96,7 +96,7 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
         randomData.append(scaledShiftedValue)
         if randomData.count == totalSize
         {
-            return Matrix(rows, columns, data: randomData)
+            return Matrix(rows, columns, randomData)
         }
     }
 }

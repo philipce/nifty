@@ -40,7 +40,7 @@ func times(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
         newData.append(A[i] * B[i])
     }
 
-    return Matrix(A.rows, A.columns, data: newData)
+    return Matrix(A.rows, A.columns, newData)
 }
 
 // TODO: determine where this stuff goes, here or mtimes:

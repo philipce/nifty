@@ -1,7 +1,7 @@
 /***************************************************************************************************
  *  swap.swift
  *
- *  This file provides functionality for swapping elements of vectors, atrices, or tensors.
+ *  This file provides functionality for swapping elements of vectors, matrices, or tensors.
  *
  *  Author: Philip Erickson
  *  Creation Date: 25 Dec 2016
@@ -28,11 +28,13 @@ import CBlas
 ///
 /// - Parameters:
 ///		- rows: exactly two numbers, corresponding to the zero-indexed rows to swap
-///		- matrix A: the matrix in which to swap rows
+///		- A: the matrix in which to swap rows
 public func swap<T>(rows: Int..., in A: Matrix<T>) -> Matrix<T>
 {
 	// FIXME: do this faster using BLAS DSWAP
 	// see https://software.intel.com/en-us/node/520744 for better doc
+
+	precondition(rows.count == 2, "Swap requires exactly 2 rows to be specified")
 
 	var Aswap = A
 
@@ -42,7 +44,7 @@ public func swap<T>(rows: Int..., in A: Matrix<T>) -> Matrix<T>
 
 	if let nameA = A.name
 	{
-		Aswap.name = "\(nameA)[R\(rows[0])~R\(rows[1])]"
+		Aswap.name = "swap(rows: \(rows[0]), \(rows[1]), in: \(nameA))"
 	}
 
 	return Aswap

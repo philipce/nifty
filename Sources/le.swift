@@ -43,7 +43,7 @@ public func le<T>(_ A: Matrix<T>, _ B: Matrix<T>) -> Matrix<Double>
         m.append(A[i] <= B[i] ? 1 : 0)
     }
 
-    return Matrix(A.size, data: m)
+    return Matrix(A.size, m)
 }
 
 /// Determine less than or equal to inequality.
@@ -61,7 +61,7 @@ public func le<T>(_ A: Matrix<T>, _ b: T) -> Matrix<Double>
         m.append(A[i] <= b ? 1 : 0)
     }
 
-    return Matrix(A.size, data: m)
+    return Matrix(A.size, m)
 }
 
 /// Determine less than or equal to inequality.
@@ -79,5 +79,5 @@ public func le<T>(_ a: T, _ B: Matrix<T>) -> Matrix<Double>
         m.append(a <= B[i] ? 1 : 0)
     }
 
-    return Matrix(B.size, data: m)
+    return Matrix(B.size, m)
 }

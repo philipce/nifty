@@ -54,7 +54,7 @@ public func lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>, P:
 	// dimensionality, "(min(M,N))" from LAPACK doc...
 	let m = Int32(A.size[0])
 	let n = Int32(A.size[1])
-	var P = ipiv2p(ipiv: ipiv, m: m, n: n)
+	var P = _ipiv2p(ipiv: ipiv, m: m, n: n)
 
 	if let nameA = A.name
 	{
@@ -127,8 +127,8 @@ fileprivate func _lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Doubl
         }
     }
 
-    var L = Matrix(Int(m), Int(m), data: l)
-    var U = Matrix(Int(m), Int(n), data: u)
+    var L = Matrix(Int(m), Int(m), l)
+    var U = Matrix(Int(m), Int(n), u)
     
 	if let nameA = A.name
 	{

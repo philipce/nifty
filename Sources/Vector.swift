@@ -27,9 +27,6 @@ public struct Vector<T>: CustomStringConvertible
     /// Number of elements in vector.
     public let count: Int
 
-    /// Size of vector (same as number of elements).
-    public let size: [Int]
-
     /// Data contained in vector.
     public var data: [T]
 
@@ -42,7 +39,7 @@ public struct Vector<T>: CustomStringConvertible
     /// Formatter to be used in displaying matrix elements.
     public var format: NumberFormatter
 
-    /// Initialize a new vector.
+    /// Initialize a new vector from a list of data.
     ///
     /// - Parameters:
     ///    - data: ordered vector elements
@@ -54,7 +51,6 @@ public struct Vector<T>: CustomStringConvertible
         precondition(data.count > 0, "Vector have at least 1 element")
 
         self.count = data.count
-        self.size = [data.count]
         self.data = data
         self.name = name
         
@@ -77,7 +73,7 @@ public struct Vector<T>: CustomStringConvertible
         self.format = fmt                  
     }
 
-    /// Initialize a new vector.
+    /// Initialize a new vector with a repeated value.
     ///
     /// - Parameters:
     ///    - count: number of elements in vector
@@ -92,42 +88,43 @@ public struct Vector<T>: CustomStringConvertible
         self.init(Array<T>(repeating: value, count: count), name: name, showName: showName)
     }    
 
-    /// Initialize a new vector, copying given vector and possibly renaming.
+    /// Initialize a new vector from the data in a given vector.
     ///
     /// - Parameters:
-    ///    - copy: vector to copy
-    ///    - rename: optional name of new vector
+    ///    - vector: vector to copy
+    ///    - name: optional name of new vector
     ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        being renamed, otherwise to false
-    public init(copy: Vector, rename: String? = nil, showName: Bool? = nil)
+    ///        given a name, otherwise to false
+    public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
     {
-        self.count = copy.count
-        self.size = copy.size
-        self.data = copy.data
-        self.name = rename
-
-        if let show = showName
-        {
-            self.showName = show
-        }
-        else
-        {
-            self.showName = rename != nil
-        }
-
-        self.format = copy.format
+        self.init(vector.data, name: name, showName: showName)
+        self.format = vector.format
     }
 
-    /// Vectorize a given matrix to form a new vector.
+    /// Initialize a new vector from the data in a given matrix.
     ///
     /// - Parameters:
     ///    - matrix: matrix to vectorize
-    ///    - rename: optional name of new vector
+    ///    - name: optional name of new vector
     ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        being renamed, otherwise to false
-    public init(_ matrix: Matrix<T>, rename: String? = nil, showName: Bool? = nil)
+    ///        given a name, otherwise to false
+    public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
     {
-        self.init(matrix.data, name: rename, showName: showName)
+        self.init(matrix.data, name: name, showName: showName)
+        self.format = matrix.format
+    }
+
+    /// Initialize a new vector from the data in a given tensor.
+    ///
+    /// - Parameters:
+    ///    - tensor: tensor to vectorize
+    ///    - name: optional name of new vector
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        given a name, otherwise to false
+    public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
+    {
+        self.init(tensor.data, name: name, showName: showName)
+        self.format = tensor.format
     }
 
     /// Access a single element of the vector.
@@ -159,17 +156,17 @@ public struct Vector<T>: CustomStringConvertible
     {
         get 
         {
-            let range = (_convertToCountableClosedRanges([s]))[0]
+            let range = _convertToCountableClosedRange(s)
 
             // inherit name, add slice info
             var sliceName = self.name
-            if sliceName != nil { sliceName! += "[\(s)]" }
+            if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(s)]" }
 
             return Vector(Array(self.data[range]), name: sliceName, showName: self.showName)
         }
         set(newVal) 
         { 
-            let range = (_convertToCountableClosedRanges([s]))[0]            
+            let range = _convertToCountableClosedRange(s)
             self.data[range] = ArraySlice(newVal.data)
 
             return
@@ -177,7 +174,6 @@ public struct Vector<T>: CustomStringConvertible
     }
 
     // TODO: add setter that can take a matrix or tensor too
-
 
     // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
     // surrounding brackets, extra space, etc.)
@@ -198,6 +194,12 @@ public struct Vector<T>: CustomStringConvertible
         {
             title = (self.name ?? "\(self.count)D vector") + ": "
         }
+
+        // FIXME: Improve printing for non double types
+        // Instead of treating them separately, use the formatter just to round/shorten doubles;
+        // append all elements as strings to the list, then go through the list and pad with spaces
+        // appropriately. Also, could formatter be used for types other than doubles? If not, should
+        // it be set to nil for non double structs?
 
         // create string representation of each vector element
         for i in 0..<self.count
@@ -225,8 +227,7 @@ public struct Vector<T>: CustomStringConvertible
                 elements.append(s)
             }
             else
-            {
-                // FIXME: Improve printing for non double types
+            {                
                 elements.append("\(self[i])")
             }
         }
