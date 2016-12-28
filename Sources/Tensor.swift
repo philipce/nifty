@@ -264,6 +264,10 @@ public struct Tensor<T>: CustomStringConvertible
 
     // TODO: add setter that can take a matrix or vector too
 
+
+    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
+    // row headers, extra space, etc.)
+
     /// Return tensor contents in an easily readable grid format.
     ///
     /// - Note: The formatter associated with this tensor is used as a suggestion; elements may be

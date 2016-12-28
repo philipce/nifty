@@ -178,6 +178,10 @@ public struct Vector<T>: CustomStringConvertible
 
     // TODO: add setter that can take a matrix or tensor too
 
+
+    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
+    // surrounding brackets, extra space, etc.)
+
     /// Return vector contents in an easily readable format.
     ///
     /// - Note: The formatter associated with this vector is used as a suggestion; elements may be

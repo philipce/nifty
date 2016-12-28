@@ -340,6 +340,10 @@ public struct Matrix<T>: CustomStringConvertible
 
     // TODO: add setter that can take a tensor or vector too
 
+
+    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
+    // row headers, extra space, etc.)
+
 	/// Return matrix contents in an easily readable grid format.
 	///
 	/// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
