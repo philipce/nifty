@@ -2,17 +2,17 @@
 
 [![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
 
-Nifty is a Swift numerical computing library designed to provide a wide range of performant and easy-to-use mathematical tools.
+Nifty is a general-purpose numerical computing library for the Swift programming language. It provides a wide range of mathematical and algorithmic tools that are easy enough to use in prototyping and fast enough to use in production.
 
 Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, [consider contributing](#contributing)!
 
 ## Getting Started
 
+_Xcode users: The plan is to soon have an Xcode project available so you can skip the rest of the install steps... for now you'll have to roll your own if you want it in Xcode!_
+
 ##### System Requirements
 
 Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built on a Mac) but there's no reason it shouldn't work anywhere Swift does. Future efforts will be made to get Nifty on embedded platforms, like the Raspberry Pi!
-
-_Note to Mac users: The plan is to soon have an Xcode project available so you can skip the rest of the install steps... for now you'll have to roll your own if you want it in Xcode!_
 
 ##### Install Swift
 
@@ -52,7 +52,7 @@ If you're having troubles, you may find the following helpful:
 
 The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
  
-Also, if you decide to use a different system library for one of the system modules (e.g. [ATLAS](http://math-atlas.sourceforge.net/)), you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
+Also, if you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
 ## Nifty Features
 
@@ -63,13 +63,13 @@ We are currently working on getting the core set of general math and linear alge
 - wrappers on glibc/math.h
 - basic functions related to statistics and probability
 
-See our [status page](Documents/Status.md) for details.
+See our [status page](Documents/Status.md) for details on the implementation status of all features.
 
 ## Tests and Benchmarks
 
-The goal is for Nifty to provide correctness and performance similar to other numerical computing standards. We'll be testing and benchmarking against MATLAB and NumPy.
+The goal is for Nifty to provide correctness and performance similar to other numerical computing standards. We'll be testing and benchmarking mainly against MATLAB and NumPy. Check out the [status page](Documents/Status.md) to see where the test coverage is currently at.
 
-We will be experimenting with using the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework as it progresses.
+Nifty uses the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework to manage unit tests. Once you've cloned this repository, running the unit tests for Nifty is as easy as running `swift test` in the repository root directory.
 
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
