@@ -19,19 +19,21 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-public func >= (left: Matrix, right: Matrix)   -> Matrix { return ge(left, right) }
-public func >= (left: Matrix, right: Double)   -> Matrix { return ge(left, right) }
-public func >= (left: Matrix, right: Int)      -> Matrix { return ge(left, right) }
-public func >= (left: Double, right: Matrix)   -> Matrix { return ge(left, right) }
-public func >= (left: Int, right: Matrix)      -> Matrix { return ge(left, right) }
+public func >= <T>(left: Matrix<T>, right: Matrix<T>) -> Matrix<Double> 
+    where T: Comparable { return ge(left, right) }
+public func >= <T>(left: Matrix<T>, right: T)         -> Matrix<Double> 
+    where T: Comparable { return ge(left, right) }
+public func >= <T>(left: T, right: Matrix<T>)         -> Matrix<Double> 
+    where T: Comparable { return ge(left, right) }
 
 /// Determine greater than or equal to inequality.
 ///
 /// - Paramters:
-///     - A: First matrix to compare
-///     - B: Second matrix to compare
+///     - A: Matrix to compare
+///     - B: Matrix to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func ge(_ A: Matrix, _ B: Matrix) -> Matrix
+public func ge<T>(_ A: Matrix<T>, _ B: Matrix<T>) -> Matrix<Double>
+    where T: Comparable
 {
     precondition(A.size == B.size, "Matrices must be same size")
 
@@ -48,9 +50,10 @@ public func ge(_ A: Matrix, _ B: Matrix) -> Matrix
 ///
 /// - Paramters:
 ///     - A: Matrix to compare
-///     - b: Number to compare against
+///     - b: Value to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func ge(_ A: Matrix, _ b: Double) -> Matrix
+public func ge<T>(_ A: Matrix<T>, _ b: T) -> Matrix<Double>
+    where T: Comparable
 {
     var m = [Double]()
     for i in 0..<A.count
@@ -64,38 +67,11 @@ public func ge(_ A: Matrix, _ b: Double) -> Matrix
 /// Determine greater than or equal to inequality.
 ///
 /// - Paramters:
-///     - A: Matrix to compare
-///     - b: Number to compare against
-/// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func ge(_ A: Matrix, _ b: Int) -> Matrix
-{
-    return ge(A, Double(b))
-}
-
-/// Determine greater than or equal to inequality.
-///
-/// - Paramters:
-///     - a: Number to compare
+///     - a: Value to compare
 ///     - B: Matrix to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func ge(_ a: Double, _ B: Matrix) -> Matrix
+public func ge<T>(_ a: T, _ B: Matrix<T>) -> Matrix<Double>
+    where T: Comparable
 {
-    var m = [Double]()
-    for i in 0..<B.count
-    {        
-        m.append(a >= B[i] ? 1 : 0)
-    }
-
-    return Matrix(B.size, data: m)
-}
-
-/// Determine greater than or equal to inequality.
-///
-/// - Paramters:
-///     - a: Number to compare
-///     - B: Matrix to compare against
-/// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func ge(_ a: Int, _ B: Matrix) -> Matrix
-{
-    return ge(Double(a), B)
+    return ge(B, a)
 }

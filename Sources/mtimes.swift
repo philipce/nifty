@@ -21,7 +21,7 @@
 
 import CBlas
 
-public func * (left: Matrix, right: Matrix) -> Matrix
+public func * (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
 {
     return mtimes(left, right)
 }
@@ -34,7 +34,7 @@ public func * (left: Matrix, right: Matrix) -> Matrix
 ///     - A: left matrix
 ///     - B: right matrix
 /// - Returns: matrix product of A and B
-func mtimes(_ A: Matrix, _ B: Matrix) -> Matrix
+func mtimes(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
 {
     // TODO check size
 

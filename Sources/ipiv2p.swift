@@ -34,7 +34,7 @@
 ///		- m: number of rows in matrix to permute
 ///		- n: number of columns in matrix to permute
 /// - Returns: permutation matrix
-internal func ipiv2p(ipiv: [Int32], m: Int32, n: Int32) -> Matrix
+internal func ipiv2p(ipiv: [Int32], m: Int32, n: Int32) -> Matrix<Double>
 {
 	// FIXME: revisit this for 1) correctness and 2) efficiency
 	// 1) currently just assuming the permutation matrix starts out as an mxn identity. Is that ok?

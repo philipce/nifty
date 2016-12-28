@@ -24,7 +24,7 @@
 /// - Parameters
 ///     - A: Matrix to count elements in
 /// - Returns: number of elements in matrix
-public func numel(_ A: Matrix) -> Int
+public func numel<T>(_ A: Matrix<T>) -> Int
 {    
     return A.count
 }

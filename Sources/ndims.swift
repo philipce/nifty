@@ -24,7 +24,7 @@
 /// - Parameters
 ///     - A: given matrix
 /// - Returns: dimensionality of the given matrix
-public func ndims(_ A: Matrix) -> Int
+public func ndims<T>(_ A: Matrix<T>) -> Int
 {
     return A.size.count
 }

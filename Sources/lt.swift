@@ -19,19 +19,21 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-public func < (left: Matrix, right: Matrix)    -> Matrix { return lt(left, right) }
-public func < (left: Matrix, right: Double)    -> Matrix { return lt(left, right) }
-public func < (left: Matrix, right: Int)       -> Matrix { return lt(left, right) }
-public func < (left: Double, right: Matrix)    -> Matrix { return lt(left, right) }
-public func < (left: Int, right: Matrix)       -> Matrix { return lt(left, right) }
+public func < <T>(left: Matrix<T>, right: Matrix<T>) -> Matrix<Double> 
+    where T: Comparable { return lt(left, right) }
+public func < <T>(left: Matrix<T>, right: T)         -> Matrix<Double> 
+    where T: Comparable { return lt(left, right) }
+public func < <T>(left: T, right: Matrix<T>)         -> Matrix<Double> 
+    where T: Comparable { return lt(left, right) }
 
 /// Determine less than inequality.
 ///
 /// - Paramters:
-///     - A: First matrix to compare
-///     - B: Second matrix to compare
+///     - A: Matrix to compare
+///     - B: Matrix to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func lt(_ A: Matrix, _ B: Matrix) -> Matrix
+public func lt<T>(_ A: Matrix<T>, _ B: Matrix<T>) -> Matrix<Double>
+    where T: Comparable 
 {
     precondition(A.size == B.size, "Matrices must be same size")
 
@@ -48,9 +50,10 @@ public func lt(_ A: Matrix, _ B: Matrix) -> Matrix
 ///
 /// - Paramters:
 ///     - A: Matrix to compare
-///     - b: Number to compare against
+///     - b: Value to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func lt(_ A: Matrix, _ b: Double) -> Matrix
+public func lt<T>(_ A: Matrix<T>, _ b: T) -> Matrix<Double>
+    where T: Comparable 
 {
     var m = [Double]()
     for i in 0..<A.count
@@ -64,21 +67,11 @@ public func lt(_ A: Matrix, _ b: Double) -> Matrix
 /// Determine less than inequality.
 ///
 /// - Paramters:
-///     - A: Matrix to compare
-///     - b: Number to compare against
-/// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func lt(_ A: Matrix, _ b: Int) -> Matrix
-{
-    return lt(A, Double(b))
-}
-
-/// Determine less than inequality.
-///
-/// - Paramters:
-///     - a: Number to compare
+///     - a: Value to compare
 ///     - B: Matrix to compare against
 /// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func lt(_ a: Double, _ B: Matrix) -> Matrix
+public func lt<T>(_ a: T, _ B: Matrix<T>) -> Matrix<Double>
+    where T: Comparable 
 {
     var m = [Double]()
     for i in 0..<B.count
@@ -87,15 +80,4 @@ public func lt(_ a: Double, _ B: Matrix) -> Matrix
     }
 
     return Matrix(B.size, data: m)
-}
-
-/// Determine less than inequality.
-///
-/// - Paramters:
-///     - a: Number to compare
-///     - B: Matrix to compare against
-/// - Returns: matrix with ones where comparison is true and zeros elsewhere
-public func lt(_ a: Int, _ B: Matrix) -> Matrix
-{
-    return lt(Double(a), B)
 }

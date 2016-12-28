@@ -40,7 +40,7 @@ import Foundation
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
 public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1.0, 
-    seed: UInt64? = nil, threadSafe: Bool = false) -> Matrix
+    seed: UInt64? = nil, threadSafe: Bool = false) -> Matrix<Double>
 {
     let totalSize = rows * columns
 
@@ -102,7 +102,7 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
 }
 
 public func rand(_ elements: Int, min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Vector
+    threadSafe: Bool = false) -> Vector<Double>
 {
     let m = rand(1, elements, min: min, max: max, seed: seed, threadSafe: threadSafe)
     return Vector(m)

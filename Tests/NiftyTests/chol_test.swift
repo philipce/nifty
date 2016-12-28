@@ -19,7 +19,7 @@ class chol_test: XCTestCase
 
         print("\n\n")
 
-        let X = Matrix(
+        let X = Matrix<Double>(
         [[1, 1,  1,  1,  1],
          [1, 2,  3,  4,  5],
          [1, 3,  6, 10, 15],

@@ -21,7 +21,7 @@
 
 import CLapacke
 
-public func / (left: Matrix, right: Matrix) -> Matrix
+public func / (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
 {
     return mrdivide(left, right)
 }
@@ -36,7 +36,7 @@ public func / (left: Matrix, right: Matrix) -> Matrix
 ///     - A: matrix A in the equation Ax = B
 ///     - B: matrix B in the equation Ax = B
 /// - Returns: matrix x in the equation Ax = B
-public func mrdivide(_ B: Matrix, _ A: Matrix) -> Matrix
+public func mrdivide(_ B: Matrix<Double>, _ A: Matrix<Double>) -> Matrix<Double>
 {
     // Note: xA = B can be re-written transpose(A)*transpose(x) = transpose(B). This second form is 
     // more conducive to solving as Ax=B is the standard form expected by LAPACK.

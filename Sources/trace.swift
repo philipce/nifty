@@ -24,9 +24,8 @@
 /// - Parameters:
 ///     - A: matrix to compute trace of
 /// - Returns: sum of the elements on the main diagonal
-public func trace(_ A: Matrix) -> Double
+public func trace(_ A: Matrix<Double>) -> Double
 {
-    precondition(ndims(A) == 2, "Trace only applies to 2D matrix")
     precondition(size(A,0) == size(A,1), "Trace only applies to square matrix")
 
     var tr = 0.0

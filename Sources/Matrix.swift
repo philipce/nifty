@@ -22,7 +22,7 @@
 import Foundation
 
 /// Data structure for a 2-D, row-major order matrix.
-public struct Matrix: CustomStringConvertible
+public struct Matrix<T>: CustomStringConvertible
 {
 	/// Number of elements in the matrix.
 	public let count: Int
@@ -33,7 +33,7 @@ public struct Matrix: CustomStringConvertible
     public var columns: Int { return self.size[1] }
 
 	/// Data contained in matrix in row-major order.
-	public var data: [Double]
+	public var data: [T]
 
 	/// Optional name of matrix (e.g., for use in display).
 	public var name: String?
@@ -55,7 +55,7 @@ public struct Matrix: CustomStringConvertible
 	///	   - data: matrix data in row-major order
 	///	   - name: optional name of matrix
 	///	   - showName: determine whether to print the matrix name; false by default
-	public init(_ rows: Int, _ columns: Int? = nil, data: [Double], name: String? = nil, showName: Bool = false)
+	public init(_ rows: Int, _ columns: Int? = nil, data: [T], name: String? = nil, showName: Bool = false)
 	{       
         let newSize: [Int]
         let newCount: Int 
@@ -96,7 +96,7 @@ public struct Matrix: CustomStringConvertible
     ///    - data: matrix data in row-major order
     ///    - name: optional name of matrix
     ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ size: [Int], data: [Double], name: String? = nil, showName: Bool = false)
+    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool = false)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
         self.init(size[0], size[1], data: data, name: name, showName: showName)
@@ -110,9 +110,11 @@ public struct Matrix: CustomStringConvertible
 	///	   - value: single value repeated throughout matrix
 	///	   - name: optional name of matrix
 	///	   - showName: determine whether to print the matrix name; false by default
-	public init(_ rows: Int, _ columns: Int? = nil, value: Double, name: String? = nil, showName: Bool = false)
+	public init(_ rows: Int, _ columns: Int? = nil, value: T, name: String? = nil, showName: Bool = false)
 	{
-		let data = Array<Double>(repeating: value, count: abs(rows * (columns ?? rows)))
+        let count = rows * (columns ?? rows)
+        precondition(count > 0, "Matrix must have at least one element")
+		let data = Array<T>(repeating: value, count: count)
 		self.init(rows, columns, data: data, name: name, showName: showName)
 	}
 
@@ -123,7 +125,7 @@ public struct Matrix: CustomStringConvertible
     ///    - value: single value repeated throughout matrix
     ///    - name: optional name of matrix
     ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ size: [Int], value: Double, name: String? = nil, showName: Bool = false)
+    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool = false)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
         self.init(size[0], size[1], value: value, name: name, showName: showName)
@@ -135,9 +137,9 @@ public struct Matrix: CustomStringConvertible
     ///    - data: matrix data where each inner array represents an entire row
     ///    - name: optional name of matrix
     ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ data: [[Double]], name: String? = nil, showName: Bool = false)
+    public init(_ data: [[T]], name: String? = nil, showName: Bool = false)
     {        
-        // TODO: add in check to make sure all rows are same length; the delegate constructor will 
+        // FIXME: add in check to make sure all rows are same length; the delegate constructor will 
         // catch most cases of mismatch row size when it checks that the dimensions match the data,
         // but if e.g. it was a 2x2 matrix, and one row had 1 element and the other had 4, it 
         // wouldn't flag it as an error.
@@ -152,7 +154,7 @@ public struct Matrix: CustomStringConvertible
 	///    - copy: matrix to copy
 	///    - rename: optional name of new matrix
 	///    - showName: determine whether to print the matrix name; false by default
-	public init(copy: Matrix, rename: String? = nil, showName: Bool = false)
+	public init(copy: Matrix<T>, rename: String? = nil, showName: Bool = false)
 	{
 		self.count = copy.count
 		self.size = copy.size
@@ -168,7 +170,7 @@ public struct Matrix: CustomStringConvertible
     ///    - row: row subscript
     ///    - column: column subscript
     /// - Returns: single value at subscript
-	public subscript(_ row: Int, _ column: Int) -> Double
+	public subscript(_ row: Int, _ column: Int) -> T
 	{
 		get
 		{
@@ -190,7 +192,7 @@ public struct Matrix: CustomStringConvertible
     /// - Parameters:
     ///    - index: linear index into matrix
     /// - Returns: single value at index
-    public subscript(_ index: Int) -> Double
+    public subscript(_ index: Int) -> T
     {
         get
         {
@@ -212,7 +214,7 @@ public struct Matrix: CustomStringConvertible
     ///    - rows: row range; or if columns is omitted, linear index range
     ///    - columns: column range; if omitted, use linear index range instead
 	/// - Returns: new matrix composed of slice
-	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix
+	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix<T>
 	{
 		get 
 		{ 
@@ -230,7 +232,7 @@ public struct Matrix: CustomStringConvertible
 			}			
 
 			// start reading from matrix, rolling over each dimension
-			var newData = [Double]()
+			var newData = [T]()
 			var curSub = startSub
 			while true
 			{
@@ -290,7 +292,7 @@ public struct Matrix: CustomStringConvertible
     /// - Parameters:
     ///    - index: linear index range 
     /// - Returns: new matrix composed of slice
-    public subscript(_ index: SliceIndex) -> Matrix
+    public subscript(_ index: SliceIndex) -> Matrix<T>
     {
         get
         {
@@ -344,23 +346,30 @@ public struct Matrix: CustomStringConvertible
 			var row = "R\(r): "
 			for c in 0..<self.size[1]
 			{				
-				let el = self[r, c]			
-				var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+				if let el = self[r, c] as? Double
+                {    
+                    var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
 
-				// if element doesn't fit in desired width, format in minimal notation
-				if s.characters.count > self.format.formatWidth
-				{	
-					let oldMaxSigDig = self.format.maximumSignificantDigits
-					let oldNumberStyle = self.format.numberStyle
-					self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
-					self.format.numberStyle = .scientific
-					s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-					self.format.maximumSignificantDigits = oldMaxSigDig
-					self.format.numberStyle = oldNumberStyle
-				}
-				
-				let sign = el < 0 ? "-" : " "
-				row += sign + s + "  "
+                    // if element doesn't fit in desired width, format in minimal notation
+                    if s.characters.count > self.format.formatWidth
+                    {    
+                        let oldMaxSigDig = self.format.maximumSignificantDigits
+                        let oldNumberStyle = self.format.numberStyle
+                        self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
+                        self.format.numberStyle = .scientific
+                        s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+                        self.format.maximumSignificantDigits = oldMaxSigDig
+                        self.format.numberStyle = oldNumberStyle
+                    }
+                    
+                    let sign = el < 0 ? "-" : " "
+                    row += sign + s + "  "
+                }
+                else
+                {
+                    // FIXME: Improve printing for non double types
+                    row += "\(self[r, c])   "
+                }
 			}			
 			lines.append(row)
 		}

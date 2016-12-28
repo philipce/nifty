@@ -21,6 +21,10 @@
 
 import CBlas
 
+// TODO: transpose only operates on double matrices... extend to int, float, string, etc.
+// It's specific to doubles because of the use of BLAS function. Can use BLAS on ints/floats, but
+// for strings or Any we'll have to do something custom (which will be slower).
+
 // TODO: there must be a faster way to transpose... 
 // LAPACKE states that it transposes row-major matrices on input (since fortran is column-major), 
 // and that seems to barely be noticeable in inverting large (5000x5000) matrices (both row and 
@@ -30,7 +34,7 @@ import CBlas
 // TODO: decide on operator, add it to documentation. Maybe A^ to transpose? A* should be conjugate.
 // A~ maybe. A` is invalid I believe. Maybe unicode symbols? Aᵀ
 postfix operator ^
-public postfix func ^ (A: Matrix) -> Matrix
+public postfix func ^ (A: Matrix<Double>) -> Matrix<Double>
 {
 	return transpose(A)
 }
@@ -42,7 +46,7 @@ public postfix func ^ (A: Matrix) -> Matrix
 /// - Parameters:
 ///		- A: the matrix to transpose
 ///	- Returns: transposed matrix
-public func transpose(_ A: Matrix) -> Matrix
+public func transpose(_ A: Matrix<Double>) -> Matrix<Double>
 {
 	let transA = CblasTrans
 	let transB = CblasTrans

@@ -22,7 +22,7 @@
 import Foundation
 
 /// Data structure for an N-D, row-major order array.
-public struct Tensor: CustomStringConvertible
+public struct Tensor<T>: CustomStringConvertible
 {
     /// Number of elements in the tensor.
     public let count: Int
@@ -31,7 +31,7 @@ public struct Tensor: CustomStringConvertible
     public var size: [Int]
 
     /// Data contained in tensor in row-major order.
-    public var data: [Double]
+    public var data: [T]
 
     /// Optional name of tensor (e.g., for use in display).
     public var name: String?
@@ -49,7 +49,7 @@ public struct Tensor: CustomStringConvertible
     ///    - data: tensor data in row-major order
     ///    - name: optional name of tensor
     ///    - showName: determine whether to print the tensor name; false by default
-    public init(_ size: [Int], data: [Double], name: String? = nil, showName: Bool = false)
+    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool = false)
     {       
         let n = size.reduce(1, *)
 
@@ -88,10 +88,11 @@ public struct Tensor: CustomStringConvertible
     ///    - value: single value repeated throughout tensor
     ///    - name: optional name of tensor
     ///    - showName: determine whether to print the tensor name; false by default
-    public init(_ size: [Int], value: Double, name: String? = nil, showName: Bool = false)
+    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool = false)
     {
         let n = size.reduce(1, *)
-        let data = Array<Double>(repeating: value, count: abs(n))
+        precondition(n > 0, "Tensor must contain at least one element")
+        let data = Array<T>(repeating: value, count: n)
         self.init(size, data: data, name: name, showName: showName)
     }
     
@@ -119,7 +120,7 @@ public struct Tensor: CustomStringConvertible
         self.format = copy.format
     }
 
-    public init(copy: Matrix, rename: String? = nil, showName: Bool = false)
+    public init(copy: Matrix<T>, rename: String? = nil, showName: Bool = false)
     {
         self.count = copy.count
         self.size = copy.size
@@ -129,10 +130,10 @@ public struct Tensor: CustomStringConvertible
         self.format = copy.format
     }
 
-    public init(copy: Vector, rename: String? = nil, showName: Bool = false)
+    public init(copy: Vector<T>, rename: String? = nil, showName: Bool = false)
     {
         self.count = copy.count
-        self.size = copy.size
+        self.size = copy.size // FIXME: isn't the vector size just a single number, e.g. [5] instead of [1,5]?
         self.data = copy.data
         self.name = rename
         self.showName = copy.showName
@@ -144,7 +145,7 @@ public struct Tensor: CustomStringConvertible
     /// - Parameters:
     ///    - s: n-dimensional subscript
     /// - Returns: single value at subscript
-    public subscript(_ s: Int...) -> Double
+    public subscript(_ s: Int...) -> T
     {
         get
         {
@@ -162,7 +163,7 @@ public struct Tensor: CustomStringConvertible
     /// - Parameters:
     ///    - index: linear index into matrix
     /// - Returns: single value at index
-    public subscript(_ index: Int) -> Double
+    public subscript(_ index: Int) -> T
     {
         get
         {
@@ -183,7 +184,7 @@ public struct Tensor: CustomStringConvertible
     /// - Parameters:
     ///    - s: subscript range
     /// - Returns: new matrix composed of slice
-    public subscript(_ s: SliceIndex...) -> Tensor
+    public subscript(_ s: SliceIndex...) -> Tensor<T>
     {
         get 
         { 
@@ -201,7 +202,7 @@ public struct Tensor: CustomStringConvertible
     /// - Parameters:
     ///    - index: linear index range 
     /// - Returns: new tensor composed of slice
-    public subscript(_ index: SliceIndex) -> Tensor
+    public subscript(_ index: SliceIndex) -> Tensor<T>
     {
         get
         {

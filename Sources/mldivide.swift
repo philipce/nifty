@@ -22,7 +22,7 @@
 import CLapacke
 
 infix operator -/ : MultiplicationPrecedence
-public func -/ (left: Matrix, right: Matrix) -> Matrix
+public func -/ (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
 {
     return mldivide(left, right)
 }
@@ -37,7 +37,7 @@ public func -/ (left: Matrix, right: Matrix) -> Matrix
 ///     - A: matrix A in the equation Ax = B
 ///     - B: matrix B in the equation Ax = B
 /// - Returns: matrix x in the equation Ax = B
-public func mldivide(_ A: Matrix, _ B: Matrix) -> Matrix
+public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
 {   
     // inherit name
     var newName: String? = nil

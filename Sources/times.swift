@@ -30,7 +30,7 @@
 ///     - A: left matrix
 ///     - B: right matrix
 /// - Returns: element wise matrix product of A and B
-func times(_ A: Matrix, _ B: Matrix) -> Matrix
+func times(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
 {
     assert(A.size == B.size, "Matrices must have the same size")
 

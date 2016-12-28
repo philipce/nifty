@@ -25,12 +25,18 @@
 
 // TODO: provide a triul function that splits one matrix into two?
 
+// TODO: how to make this generic? For a double matrix, I can set non-selected entries to 0. But
+// if the matrix is of Strings, what do I set them to, ""? What about unknown types, like a user's
+// custom data structure? Set non-selected to nil? That means returning a matrix of optionals, which
+// might be okay... maybe force the user to supply a zero value for non Double/Int matricies, e.g.
+// tril(Matrix<MyStruct>(3, 5, data: myStructList), zero: MyStruct())
+
 /// Return the upper triangular part of a given matrix.
 ///
 /// - Parameters:
 ///      - A: given matrix
 /// - Returns: upper triangular part
-public func triu(_ A: Matrix) -> Matrix
+public func triu(_ A: Matrix<Double>) -> Matrix<Double>
 {
     var U = A
     for r in 0..<U.rows

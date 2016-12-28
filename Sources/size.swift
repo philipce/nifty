@@ -27,7 +27,7 @@
 /// - Parameters
 ///     - A: given matrix
 /// - Returns: size of the given matrix
-public func size(_ A: Matrix) -> [Int]
+public func size<T>(_ A: Matrix<T>) -> [Int]
 {
     return A.size
 }
@@ -38,7 +38,7 @@ public func size(_ A: Matrix) -> [Int]
 ///     - A: given matrix
 ///     - dim: dimension of interest
 /// - Returns: size of the given matrix dimension
-public func size(_ A: Matrix, _ dim: Int) -> Int
+public func size<T>(_ A: Matrix<T>, _ dim: Int) -> Int
 {
     return A.size[dim]
 }

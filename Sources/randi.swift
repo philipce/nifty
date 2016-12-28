@@ -88,7 +88,7 @@ internal var g_UniformRandGen: UniformRandomGenerator? = nil
 
 import Foundation
 
-/// Return a matrix of random integers in the specified range.
+/// Return a matrix of random whole numbers in the specified range.
 ///
 /// - Note: If large amounts of random numbers are needed, it's more efficient to request one large 
 ///    matrix rather than many individual numbers.
@@ -105,8 +105,9 @@ import Foundation
 ///        not be applied to global generator, but to the temporary generator instance
 ///    - threadSafe: if set to true, a new random generator instance will be created that will be 
 ///        be used and exist only for the duration of this call. Otherwise, global instance is used.
+/// - Returns: matrix of whole numbers 
 public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Matrix
+    threadSafe: Bool = false) -> Matrix<Double>
 {
     let totalSize = rows * columns
 
@@ -209,7 +210,7 @@ public func randi(_ rows: Int, _ columns: Int, min: Int = 0, max: Int = Int(Int3
 }
 
 public func randi(_ elements: Int, min: Int = 0, max: Int = Int(Int32.max), seed: UInt64? = nil, 
-    threadSafe: Bool = false) -> Vector
+    threadSafe: Bool = false) -> Vector<Double>
 {
     let m = randi(1, elements, min: min, max: max, seed: seed, threadSafe: threadSafe)
     return Vector(m)

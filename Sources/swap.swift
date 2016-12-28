@@ -29,7 +29,7 @@ import CBlas
 /// - Parameters:
 ///		- rows: exactly two numbers, corresponding to the zero-indexed rows to swap
 ///		- matrix A: the matrix in which to swap rows
-public func swap(rows: Int..., in A: Matrix) -> Matrix
+public func swap<T>(rows: Int..., in A: Matrix<T>) -> Matrix<T>
 {
 	// FIXME: do this faster using BLAS DSWAP
 	// see https://software.intel.com/en-us/node/520744 for better doc

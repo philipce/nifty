@@ -19,9 +19,10 @@ class lu_test: XCTestCase
 
         print("\n\n")
 
-        let A = Matrix([[1,2,3],
-                [4,5,6],
-                [7,8,0]], name: "A", showName: true)
+        let A = Matrix<Double>(
+        [[1,2,3],
+         [4,5,6],
+         [7,8,0]], name: "A", showName: true)
 
         print("Calling lu(A) = (L,U,P):")
         let (L, U, P) = lu(A)        

@@ -39,7 +39,7 @@ public enum CholeskyOption
 ///     - A: matrix to decompose
 ///     - option: request upper or lower triangular result    
 /// - Returns: requested triangular matrix
-public func chol(_ A: Matrix, _ option: CholeskyOption = .upper) -> Matrix
+public func chol(_ A: Matrix<Double>, _ option: CholeskyOption = .upper) -> Matrix<Double>
 {
     let uplo: Int8
     switch option
@@ -81,4 +81,3 @@ public func chol(_ A: Matrix, _ option: CholeskyOption = .upper) -> Matrix
             return L
     }
 }
-

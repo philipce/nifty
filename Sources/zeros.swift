@@ -25,11 +25,11 @@
 ///    - rows: number of rows in zero matrix
 ///    - columns: number of columns in zero matrix
 /// - Returns: zero matrix
-public func zeros(_ rows: Int, _ columns: Int) -> Matrix
+public func zeros(_ rows: Int, _ columns: Int) -> Matrix<Double>
 {
     precondition(rows > 0 && columns > 0, "Matrix dimensions must both be at least 1")
 
-    return Matrix(rows, columns, value: 0)
+    return Matrix(rows, columns, value: 0.0)
 }
 
 

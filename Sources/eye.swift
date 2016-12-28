@@ -27,7 +27,7 @@
 ///    - rows: number of rows; or edge length in square matrix if columns is nil
 ///    - columns: number of columns; if nil, return square identity matrix
 /// - Returns: identity matrix of specified size
-public func eye(_ rows: Int, _ columns: Int? = nil) -> Matrix
+public func eye(_ rows: Int, _ columns: Int? = nil) -> Matrix<Double>
 {   
     let cols = columns ?? rows
 
@@ -42,7 +42,7 @@ public func eye(_ rows: Int, _ columns: Int? = nil) -> Matrix
     return M
 }
 
-public func eye(_ size: [Int]) -> Matrix
+public func eye(_ size: [Int]) -> Matrix<Double>
 {
     precondition(size.count == 2, "Matrix size must be 2 dimensional")
     return eye(size[0], size[1])

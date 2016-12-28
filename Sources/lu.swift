@@ -30,7 +30,7 @@ import CLapacke
 /// - Parameters:
 ///     - A: matrix to decompose
 /// - Returns: lower triangular matrix L and the upper triangular matrix U
-public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix)
+public func lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>)
 {
 	let (L, U, _) = _lu(A)
 
@@ -45,7 +45,7 @@ public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix)
 ///     - A: matrix to decompose
 /// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the permutation
 ///		matrix P (indicating how the rows of L were permuted), such that P*A=L*U
-public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
+public func lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>, P: Matrix<Double>)
 {
 	let (L, U, ipiv) = _lu(A)
 
@@ -78,7 +78,7 @@ public func lu(_ A: Matrix) -> (L: Matrix, U: Matrix, P: Matrix)
 /// - Parameters:
 ///     - A: matrix to decompose
 /// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the pivot indices
-fileprivate func _lu(_ A: Matrix) -> (L: Matrix, U: Matrix, ipiv: [Int32])
+fileprivate func _lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>, ipiv: [Int32])
 {
 	let m = Int32(A.size[0])
 	let n = Int32(A.size[1])	

@@ -22,7 +22,7 @@
 import Foundation
 
 /// Data structure for a vector.
-public struct Vector: CustomStringConvertible
+public struct Vector<T>: CustomStringConvertible
 {
     /// Number of elements in vector.
     public let count: Int
@@ -31,7 +31,7 @@ public struct Vector: CustomStringConvertible
     public let size: [Int]
 
     /// Data contained in vector.
-    public var data: [Double]
+    public var data: [T]
 
     /// Optional name of vector for use in display
     public var name: String?
@@ -48,7 +48,7 @@ public struct Vector: CustomStringConvertible
     ///    - data: ordered vector elements
     ///    - name: optional name of vector
     ///    - showName: determine whether to print the matrix showName; false by default
-    public init(_ data: [Double], name: String? = nil, showName: Bool = false)
+    public init(_ data: [T], name: String? = nil, showName: Bool = false)
     {
         precondition(data.count > 0, "Vector have at least 1 element")
 
@@ -75,11 +75,11 @@ public struct Vector: CustomStringConvertible
     ///    - value: single value repeated throughout vector
     ///    - name: optional name of vector
     ///    - showName: determine whether to print the matrix showName; false by default
-    public init(_ count: Int, value: Double, name: String? = nil, showName: Bool = false)
+    public init(_ count: Int, value: T, name: String? = nil, showName: Bool = false)
     {
         precondition(count > 0, "Vector have at least 1 element")
 
-        self.init(Array<Double>(repeating: value, count: count), name: name, showName: showName)
+        self.init(Array<T>(repeating: value, count: count), name: name, showName: showName)
     }    
 
     /// Initialize a new vector, copying given vector and possibly renaming.
@@ -104,7 +104,7 @@ public struct Vector: CustomStringConvertible
     ///    - matrix: matrix to vectorize
     ///    - rename: optional name of new vector
     ///    - showName: determine whether to print the vector name; false by default
-    public init(_ matrix: Matrix, rename: String? = nil, showName: Bool = false)
+    public init(_ matrix: Matrix<T>, rename: String? = nil, showName: Bool = false)
     {
         self.init(matrix.data, name: rename, showName: showName)
     }
@@ -114,7 +114,7 @@ public struct Vector: CustomStringConvertible
     /// - Parameters:
     ///     - s: index into vector
     /// - Returns: single value at index/subscript for get
-    public subscript(_ s: Int) -> Double
+    public subscript(_ s: Int) -> T
     {
         get
         {
@@ -134,7 +134,7 @@ public struct Vector: CustomStringConvertible
     /// - Parameters:
     ///     - s: range defining the vector slice
     /// - Returns: new vector composed of slice
-    public subscript(_ s: SliceIndex) -> Vector
+    public subscript(_ s: SliceIndex) -> Vector<T>
     {
         get 
         {
@@ -177,26 +177,33 @@ public struct Vector: CustomStringConvertible
         // create string representation of each vector element
         for i in 0..<self.count
         {
-            let el = self[i]
-            var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-
-            // if element doesn't fit in desired width, format in minimal notation
-            if s.characters.count > self.format.formatWidth            
+            if let el = self[i] as? Double
             {
-                let oldMaxSigDig = self.format.maximumSignificantDigits
-                let oldNumberStyle = self.format.numberStyle
-                self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
-                self.format.numberStyle = .scientific
-                s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-                self.format.maximumSignificantDigits = oldMaxSigDig
-                self.format.numberStyle = oldNumberStyle
+                var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+
+                // if element doesn't fit in desired width, format in minimal notation
+                if s.characters.count > self.format.formatWidth            
+                {
+                    let oldMaxSigDig = self.format.maximumSignificantDigits
+                    let oldNumberStyle = self.format.numberStyle
+                    self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
+                    self.format.numberStyle = .scientific
+                    s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+                    self.format.maximumSignificantDigits = oldMaxSigDig
+                    self.format.numberStyle = oldNumberStyle
+                }
+
+                let sign = el < 0 ? "-" : " "
+                s = sign + s
+                s = s.trimmingCharacters(in: .whitespaces)
+
+                elements.append(s)
             }
-
-            let sign = el < 0 ? "-" : " "
-            s = sign + s
-            s = s.trimmingCharacters(in: .whitespaces)
-
-            elements.append(s)
+            else
+            {
+                // FIXME: Improve printing for non double types
+                elements.append("\(self[i])")
+            }
         }
 
         return "\(title)<\(elements.joined(separator: "   "))>"

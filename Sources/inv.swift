@@ -21,7 +21,7 @@
 
 import CLapacke
 
-public prefix func ~ (A: Matrix) -> Matrix
+public prefix func ~ (A: Matrix<Double>) -> Matrix<Double>
 {
 	return inv(A)	
 }
@@ -35,7 +35,7 @@ public prefix func ~ (A: Matrix) -> Matrix
 /// - Parameters:
 ///     - A: square matrix to invert
 /// - Returns: inverse of A matrix
-public func inv(_ A: Matrix) -> Matrix
+public func inv(_ A: Matrix<Double>) -> Matrix<Double>
 {
 	precondition(A.size[0] == A.size[1], "Matrix must be square")
 
