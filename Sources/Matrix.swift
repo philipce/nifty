@@ -54,8 +54,9 @@ public struct Matrix<T>: CustomStringConvertible
 	///    - columns: number of columns in a matrix; if omitted, matrix is square 
 	///	   - data: matrix data in row-major order
 	///	   - name: optional name of matrix
-	///	   - showName: determine whether to print the matrix name; false by default
-	public init(_ rows: Int, _ columns: Int? = nil, data: [T], name: String? = nil, showName: Bool = false)
+	///	   - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+	public init(_ rows: Int, _ columns: Int? = nil, data: [T], name: String? = nil, showName: Bool? = nil)
 	{       
         let newSize: [Int]
         let newCount: Int 
@@ -77,7 +78,15 @@ public struct Matrix<T>: CustomStringConvertible
         self.count = newCount
 		self.data = data	
 		self.name = name	
-		self.showName = showName
+
+        if let show = showName
+        {
+		    self.showName = show
+        }
+        else
+        {
+            self.showName = name != nil
+        }
 
 		// default display settings
 		let fmt = NumberFormatter()
@@ -95,8 +104,9 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - size: size of matrix  
     ///    - data: matrix data in row-major order
     ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool? = nil)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
         self.init(size[0], size[1], data: data, name: name, showName: showName)
@@ -109,8 +119,9 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - columns: number of columns in a matrix; if omitted, matrix is square 
 	///	   - value: single value repeated throughout matrix
 	///	   - name: optional name of matrix
-	///	   - showName: determine whether to print the matrix name; false by default
-	public init(_ rows: Int, _ columns: Int? = nil, value: T, name: String? = nil, showName: Bool = false)
+	///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+	public init(_ rows: Int, _ columns: Int? = nil, value: T, name: String? = nil, showName: Bool? = nil)
 	{
         let count = rows * (columns ?? rows)
         precondition(count > 0, "Matrix must have at least one element")
@@ -124,8 +135,9 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - size: size of matrix
     ///    - value: single value repeated throughout matrix
     ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool? = nil)
     {
         precondition(size.count == 2, "Matrix must be 2 dimensional")
         self.init(size[0], size[1], value: value, name: name, showName: showName)
@@ -136,8 +148,9 @@ public struct Matrix<T>: CustomStringConvertible
     /// - Parameters:
     ///    - data: matrix data where each inner array represents an entire row
     ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; false by default
-    public init(_ data: [[T]], name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ data: [[T]], name: String? = nil, showName: Bool? = nil)
     {        
         // FIXME: add in check to make sure all rows are same length; the delegate constructor will 
         // catch most cases of mismatch row size when it checks that the dimensions match the data,
@@ -152,17 +165,29 @@ public struct Matrix<T>: CustomStringConvertible
 	///
 	/// - Parameters:
 	///    - copy: matrix to copy
-	///    - rename: optional name of new matrix
-	///    - showName: determine whether to print the matrix name; false by default
-	public init(copy: Matrix<T>, rename: String? = nil, showName: Bool = false)
+	///    - rename: optional name of new matrix, defaults to no name
+	///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        being renamed, otherwise to false
+	public init(copy: Matrix<T>, rename: String? = nil, showName: Bool? = nil)
 	{
 		self.count = copy.count
 		self.size = copy.size
 		self.data = copy.data
-		self.name = rename
-		self.showName = copy.showName
+		self.name = rename		
+
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = rename != nil
+        }
+
 		self.format = copy.format
 	}
+
+    // TODO: add a copy constructor that copies a vector into a matrix
 
     /// Access a single element of the matrix with a row, column subscript.
     ///

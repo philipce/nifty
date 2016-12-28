@@ -48,8 +48,9 @@ public struct Tensor<T>: CustomStringConvertible
     ///    - size: number of elements in each dimension of the tensor
     ///    - data: tensor data in row-major order
     ///    - name: optional name of tensor
-    ///    - showName: determine whether to print the tensor name; false by default
-    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        given a name, otherwise to false
+    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool? = nil)
     {       
         let n = size.reduce(1, *)
 
@@ -61,7 +62,15 @@ public struct Tensor<T>: CustomStringConvertible
         self.count = n
         self.data = data    
         self.name = name    
-        self.showName = showName
+
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = name != nil
+        }
 
         // default display settings
         let fmt = NumberFormatter()
@@ -87,8 +96,9 @@ public struct Tensor<T>: CustomStringConvertible
     ///    - size: number of elements in each dimension of the tensor
     ///    - value: single value repeated throughout tensor
     ///    - name: optional name of tensor
-    ///    - showName: determine whether to print the tensor name; false by default
-    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        given a name, otherwise to false
+    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool? = nil)
     {
         let n = size.reduce(1, *)
         precondition(n > 0, "Tensor must contain at least one element")
@@ -109,34 +119,62 @@ public struct Tensor<T>: CustomStringConvertible
     /// - Parameters:
     ///    - copy: data to copy
     ///    - rename: optional name of new tensor
-    ///    - showName: determine whether to print the tensor name; false by default
-    public init(copy: Tensor, rename: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        being renamed, otherwise to false
+    public init(copy: Tensor, rename: String? = nil, showName: Bool? = nil)
     {
         self.count = copy.count
         self.size = copy.size
         self.data = copy.data
         self.name = rename
-        self.showName = copy.showName
+        
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = rename != nil
+        }
+
         self.format = copy.format
     }
 
-    public init(copy: Matrix<T>, rename: String? = nil, showName: Bool = false)
+    public init(copy: Matrix<T>, rename: String? = nil, showName: Bool? = nil)
     {
         self.count = copy.count
         self.size = copy.size
         self.data = copy.data
         self.name = rename
-        self.showName = copy.showName
+
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = rename != nil
+        }
+
         self.format = copy.format
     }
 
-    public init(copy: Vector<T>, rename: String? = nil, showName: Bool = false)
+    public init(copy: Vector<T>, rename: String? = nil, showName: Bool? = nil)
     {
         self.count = copy.count
         self.size = copy.size // FIXME: isn't the vector size just a single number, e.g. [5] instead of [1,5]?
         self.data = copy.data
         self.name = rename
-        self.showName = copy.showName
+        
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = rename != nil
+        }
+
         self.format = copy.format
     }
 

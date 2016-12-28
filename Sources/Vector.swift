@@ -47,8 +47,9 @@ public struct Vector<T>: CustomStringConvertible
     /// - Parameters:
     ///    - data: ordered vector elements
     ///    - name: optional name of vector
-    ///    - showName: determine whether to print the matrix showName; false by default
-    public init(_ data: [T], name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        given a name, otherwise to false
+    public init(_ data: [T], name: String? = nil, showName: Bool? = nil)
     {
         precondition(data.count > 0, "Vector have at least 1 element")
 
@@ -56,7 +57,15 @@ public struct Vector<T>: CustomStringConvertible
         self.size = [data.count]
         self.data = data
         self.name = name
-        self.showName = showName  
+        
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = name != nil
+        }
 
         // default display settings
         let fmt = NumberFormatter()
@@ -74,8 +83,9 @@ public struct Vector<T>: CustomStringConvertible
     ///    - count: number of elements in vector
     ///    - value: single value repeated throughout vector
     ///    - name: optional name of vector
-    ///    - showName: determine whether to print the matrix showName; false by default
-    public init(_ count: Int, value: T, name: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        given a name, otherwise to false
+    public init(_ count: Int, value: T, name: String? = nil, showName: Bool? = nil)
     {
         precondition(count > 0, "Vector have at least 1 element")
 
@@ -87,14 +97,24 @@ public struct Vector<T>: CustomStringConvertible
     /// - Parameters:
     ///    - copy: vector to copy
     ///    - rename: optional name of new vector
-    ///    - showName: determine whether to print the vector name; false by default
-    public init(copy: Vector, rename: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        being renamed, otherwise to false
+    public init(copy: Vector, rename: String? = nil, showName: Bool? = nil)
     {
         self.count = copy.count
         self.size = copy.size
         self.data = copy.data
         self.name = rename
-        self.showName = copy.showName
+
+        if let show = showName
+        {
+            self.showName = show
+        }
+        else
+        {
+            self.showName = rename != nil
+        }
+
         self.format = copy.format
     }
 
@@ -103,8 +123,9 @@ public struct Vector<T>: CustomStringConvertible
     /// - Parameters:
     ///    - matrix: matrix to vectorize
     ///    - rename: optional name of new vector
-    ///    - showName: determine whether to print the vector name; false by default
-    public init(_ matrix: Matrix<T>, rename: String? = nil, showName: Bool = false)
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        being renamed, otherwise to false
+    public init(_ matrix: Matrix<T>, rename: String? = nil, showName: Bool? = nil)
     {
         self.init(matrix.data, name: rename, showName: showName)
     }

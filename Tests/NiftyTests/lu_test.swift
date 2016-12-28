@@ -22,7 +22,7 @@ class lu_test: XCTestCase
         let A = Matrix<Double>(
         [[1,2,3],
          [4,5,6],
-         [7,8,0]], name: "A", showName: true)
+         [7,8,0]], name: "A")
 
         print("Calling lu(A) = (L,U,P):")
         let (L, U, P) = lu(A)        
