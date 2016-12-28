@@ -8,7 +8,7 @@ Nifty is really new and (obviously) not complete. The library is constantly expa
 
 ## Getting Started
 
-_Xcode users: The plan is to soon have an Xcode project available so you can skip the rest of the install steps... for now you'll have to roll your own if you want it in Xcode!_
+_Xcode users: drag the included Xcode project file into your own Xcode project and skip the rest of the install steps! TODO: Xcode project doesn't exist yet--create it_
 
 ##### System Requirements
 
@@ -78,7 +78,7 @@ The goals of Nifty can be summarized as follows:
 - Make exploration of the code as simple as possible, through plain organization and clean, easy-to-read code.
 - Serve as a learning opportunity for those wishing to explore numerical computing.
 
-Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done, so for the time being, we'd rather defer to other projects.
+Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done, so for the time being, we'd rather defer to other projects.
 - Graphical stuff, e.g. matplotlib
 - Time series stuff, e.g. pandas
 - Modeling and simulation stuff, e.g. simulink
