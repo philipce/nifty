@@ -31,7 +31,7 @@
 ///     - size: size of data structure
 ///     - subscripts: subscripts into data structure
 /// - Returns: index into flattened data structure, or -1 if subscript is out of bounds
-public func sub2ind(_ subscripts: Int..., size: [Int]) -> Int
+public func sub2ind(_ subscripts: [Int], size: [Int]) -> Int
 {
     precondition(size.count == subscripts.count, "Size and subscripts must match in dimension")
     
@@ -50,3 +50,8 @@ public func sub2ind(_ subscripts: Int..., size: [Int]) -> Int
 
     return index
 }
+
+// TODO: compiler doesn't like creating an overload: 
+//    func sub2ind(_ subscripts: Int..., size: [Int]) -> Int { ... }
+// It's not clear to me why it has trouble distinguishing in this case and not in others. 
+// Decide if we want this overload, and if so, how to do it.

@@ -7,14 +7,14 @@ class MultikeyDictionary_test: XCTestCase
     {
         let tests = 
         [
-            testCase([("testBasicFunctions", MultikeyDictionary_test.testBasicFunctions)]),
+            testCase([("testBasic", MultikeyDictionary_test.testBasic)]),
             testCase([("testWildcardInsertContains", MultikeyDictionary_test.testWildcardInsertContains)]),
         ]
 
         return tests
     }
 
-    func testBasicFunctions() 
+    func testBasic() 
     {
         // Number of entries to initially put in dictionary
         let initEntries = randi(min: 20, max: 100)

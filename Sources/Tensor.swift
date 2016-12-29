@@ -42,7 +42,7 @@ public struct Tensor<T>: CustomStringConvertible
     /// Formatter to be used in displaying tensor elements.
     public var format: NumberFormatter
 
-    /// Initialize a new tensor.
+    /// Initialize a new tensor of the given size from a row-major ordered array of data.
     ///
     /// - Parameters:
     ///    - size: number of elements in each dimension of the tensor
@@ -50,7 +50,7 @@ public struct Tensor<T>: CustomStringConvertible
     ///    - name: optional name of tensor
     ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
     ///        given a name, otherwise to false
-    public init(_ size: [Int], data: [T], name: String? = nil, showName: Bool? = nil)
+    public init(_ size: [Int], _ data: [T], name: String? = nil, showName: Bool? = nil)
     {       
         let n = size.reduce(1, *)
 
@@ -81,16 +81,8 @@ public struct Tensor<T>: CustomStringConvertible
         fmt.formatWidth = 8
         self.format = fmt
     }
-  
-    // TODO: this constructor causes the compiler grief
-    /*
-    public init(_ size: Int..., data: [Double], name: String? = nil, showName: Bool = false)
-    {    
-        self.init(size, data: data, name: name, showName: showName)
-    }
-    */
 
-    /// Initialize a new tensor.
+    /// Initialize a new tensor of the given size and uniform value.
     ///
     /// - Parameters:
     ///    - size: number of elements in each dimension of the tensor
@@ -103,170 +95,276 @@ public struct Tensor<T>: CustomStringConvertible
         let n = size.reduce(1, *)
         precondition(n > 0, "Tensor must contain at least one element")
         let data = Array<T>(repeating: value, count: n)
-        self.init(size, data: data, name: name, showName: showName)
+        self.init(size, data, name: name, showName: showName)
     }
-    
-    // TODO: this constructor causes the compiler grief
-    /*
-    public init(_ size: Int..., value: Double, name: String? = nil, showName: Bool = false)
-    {
-        self.init(size, value: value, name: name, showName: showName)
-    }
-    */       
-    
-    /// Initialize a new tensor, copying given data structure and possibly renaming.
+   
+    /// Initialize a new tensor from the data in a given vector.
     ///
     /// - Parameters:
-    ///    - copy: data to copy
-    ///    - rename: optional name of new tensor
+    ///    - vector: vector to initialize from
+    ///    - name: optional name of new tensor
     ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        being renamed, otherwise to false
-    public init(copy: Tensor, rename: String? = nil, showName: Bool? = nil)
+    ///        given a name, otherwise to false
+    public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
     {
-        self.count = copy.count
-        self.size = copy.size
-        self.data = copy.data
-        self.name = rename
-        
-        if let show = showName
-        {
-            self.showName = show
-        }
-        else
-        {
-            self.showName = rename != nil
-        }
+        self.init([1, vector.count], vector.data, name: name, showName: showName)
 
-        self.format = copy.format
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(vector.format)
     }
-
-    public init(copy: Matrix<T>, rename: String? = nil, showName: Bool? = nil)
-    {
-        self.count = copy.count
-        self.size = copy.size
-        self.data = copy.data
-        self.name = rename
-
-        if let show = showName
-        {
-            self.showName = show
-        }
-        else
-        {
-            self.showName = rename != nil
-        }
-
-        self.format = copy.format
-    }
-
-    public init(copy: Vector<T>, rename: String? = nil, showName: Bool? = nil)
-    {
-        self.count = copy.count
-        self.size = [1, copy.count]
-        self.data = copy.data
-        self.name = rename
-        
-        if let show = showName
-        {
-            self.showName = show
-        }
-        else
-        {
-            self.showName = rename != nil
-        }
-
-        self.format = copy.format
-    }
-
-    /// Access a single element of the tensor with a n-dimensional subscript.
+    
+    /// Initialize a new tensor from the data in a given matrix.
     ///
     /// - Parameters:
-    ///    - s: n-dimensional subscript
-    /// - Returns: single value at subscript
+    ///    - matrix: matrix to initialize from
+    ///    - name: optional name of new tensor
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        given a name, otherwise to false
+    public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
+    {
+        self.init(matrix.size, matrix.data, name: name, showName: showName)
+
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(matrix.format)
+    }
+
+    /// Initialize a new tensor from the data in a given tensor.
+    ///
+    /// - Parameters:
+    ///    - tensor: tensor to initialize from
+    ///    - name: optional name of new tensor
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        given a name, otherwise to false
+    public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
+    {
+        self.init(tensor.size, tensor.data, name: name, showName: showName)
+
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(tensor.format)
+    }    
+
+    /// Initialize a new tensor from a comma separated string.
+    ///
+    /// The given csv string must be in the format returned by Tensor.csv.
+    ///
+    /// - Parameters:
+    ///    - csv: comma separated string containing tensor data
+    ///    - name: optional name of new tensor
+    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
+    ///        given a name, otherwise to false
+    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
+    {
+        // FIXME: implement
+        fatalError("Not yet implemented")
+    }
+
+    /// Access a single element of the tensor with a subscript.
+    ///
+    /// If only one subscript is given, it is interpretted as a row-major order linear index. 
+    /// Otherwise, the given subscripts are treated as indexes into each dimension.
+    ///
+    /// - Parameters:
+    ///    - s: subscripts
+    /// - Returns: single value at index
     public subscript(_ s: Int...) -> T
     {
         get
         {
-            fatalError("Not yet implemented")
+            assert(s.count > 0)
+
+            if s.count == 1
+            {
+                return self.getValue(index: s[0])
+            }
+            else
+            {
+                return self.getValue(subscripts: s)
+            }
         }
 
-        set(newVal)
-        {
-            fatalError("Not yet implemented")
+        set(newValue)
+        {    
+            assert(s.count > 0)
+
+            if s.count == 1
+            {
+                self.setValue(index: s[0], value: newValue)
+            }
+            else
+            {
+                self.setValue(subscripts: s, value: newValue)
+            }
+
         }
     }
-
-    /// Access a single element of the tensor with a row-major linear index.
-    ///
-    /// - Parameters:
-    ///    - index: linear index into matrix
-    /// - Returns: single value at index
-    public subscript(_ index: Int) -> T
+    
+    private func getValue(index: Int) -> T
     {
-        get
-        {
-            precondition(index >= 0 && index < self.count, "Tensor index \(index) out of bounds")
-            return self.data[index]            
-        }
 
-        set(newVal)
-        {
-            precondition(index >= 0 && index < self.count, "Tensor index \(index) out of bounds")
-            self.data[index] = newVal
-        }
-
+        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
+        return self.data[index]            
     }
 
-    /// Access a slice of the tensor with an n-dimensional subscript range.
+    private mutating func setValue(index: Int, value: T)
+    {
+        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
+        self.data[index] = value
+    }
+
+    private func getValue(subscripts: [Int]) -> T
+    {
+        let index = sub2ind(subscripts, size: self.size)
+        precondition(index >= 0, "Tensor subscript out of bounds")
+        return self.data[index]
+    }
+
+    private mutating func setValue(subscripts: [Int], value: T)
+    {
+        let index = sub2ind(subscripts, size: self.size)
+        precondition(index >= 0, "Tensor subscript out of bounds")
+        self.data[index] = value
+    }   
+
+    /// Access a slice of the tensor with a subscript range.
+    ///
+    /// If only one range is given, it is interpretted as a row-major order linear index. Otherwise,
+    /// the given subscripts are treated as indexes into each dimension.
     ///
     /// - Parameters:
-    ///    - s: subscript range
-    /// - Returns: new matrix composed of slice
+    ///    - s: subscripts 
+    /// - Returns: new tensor composed of slice
     public subscript(_ s: SliceIndex...) -> Tensor<T>
     {
-        get 
-        { 
-            fatalError("Not yet implemented")
-        }
-
-        set(newVal)
-        {
-            fatalError("Not yet implemented")
-        }
-    }
-
-    /// Access a slice of the tensor with a row-major linear index range.
-    ///
-    /// - Parameters:
-    ///    - index: linear index range 
-    /// - Returns: new tensor composed of slice
-    public subscript(_ index: SliceIndex) -> Tensor<T>
-    {
         get
         {
-            let range = (_convertToCountableClosedRanges([index]))[0]
+            assert(s.count > 0)
 
-            // inherit name, add slice info
-            var sliceName = self.name
-            if sliceName != nil { sliceName! += "[\(index)]" }
-
-            let d = Array(self.data[range])
-            return Tensor([1, d.count], data: d, name: sliceName, showName: self.showName)
+            if s.count == 1
+            {
+                return self.getSlice(index: s[0])
+            }
+            else
+            {
+                return self.getSlice(subscripts: s)
+            }
         }
-        set(newVal)
-        {
-            let range = (_convertToCountableClosedRanges([index]))[0]
-            self.data[range] = ArraySlice(newVal.data)
 
-            return
+        set(newValue)
+        {    
+            assert(s.count > 0)
+
+            if s.count == 1
+            {
+                self.setSlice(index: s[0], value: newValue)
+            }
+            else
+            {
+                self.setSlice(subscripts: s, value: newValue)
+            }
+
         }
     }
+    
+    private func getSlice(index: SliceIndex) -> Tensor<T>
+    {
+        let range = _convertToCountableClosedRange(index)
 
-    // TODO: add setter that can take a matrix or vector too
+        // inherit name, add slice info
+        var sliceName = self.name
+        if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(index)]" }
 
+        let d = Array(self.data[range])
+        return Tensor([1, d.count], d, name: sliceName, showName: self.showName)
+    }
 
-    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
-    // row headers, extra space, etc.)
+    private mutating func setSlice(index: SliceIndex, value: Tensor<T>)
+    {
+        let range = _convertToCountableClosedRange(index)
+        self.data[range] = ArraySlice(value.data)
+    } 
+
+    private func getSlice(subscripts: [SliceIndex]) -> Tensor<T>
+    {        
+        let ranges = _convertToCountableClosedRanges(subscripts)
+
+        precondition(ranges.count == self.size.count, "Subscript must match tensor dimension")
+
+        // determine size of resulting tensor slice, and start/end subscripts to read
+        var newSize = [Int](repeating: 0, count: ranges.count)
+        var startSub = [Int](repeating: 0, count: ranges.count)
+        var endSub = [Int](repeating: 0, count: ranges.count)
+        for (i, range) in ranges.enumerated()
+        {
+            newSize[i] = range.count                
+            startSub[i] = range.lowerBound
+            endSub[i] = range.upperBound
+        }    
+
+        // start reading from tensor, rolling over each dimension
+        var newData = [T]()
+        var curSub = startSub
+        while true
+        {
+            newData.append(self.getValue(subscripts: curSub))
+            guard let inc = _cascadeIncrementSubscript(curSub, min: startSub, max: endSub) else
+            {
+                break
+            }
+
+            curSub = inc
+        }        
+
+        // inherit name, add slice info
+        var sliceName = self.name
+        if sliceName != nil 
+        { 
+            // closed countable ranges print with quotes around them, which clutters display
+            let subsDescrip = "\((subscripts.map({"\($0)"})))".replacingOccurrences(of: "\"", with: "")
+            sliceName = "\(_parenthesizeExpression(sliceName!))\(subsDescrip)" 
+        }
+
+        return Tensor(newSize, newData, name: sliceName, showName: self.showName)        
+    }
+
+    private mutating func setSlice(subscripts: [SliceIndex], value: Tensor<T>)
+    {
+        let ranges = _convertToCountableClosedRanges(subscripts)
+
+        precondition(ranges.count == self.size.count, "Subscript must match tensor dimension")
+
+        // determine range of writes in each dimension
+        var startSub = [Int](repeating: 0, count: ranges.count)
+        var endSub = [Int](repeating: 0, count: ranges.count)
+        for (i,range) in ranges.enumerated()
+        {
+            startSub[i] = range.lowerBound
+            endSub[i] = range.upperBound
+        }    
+
+        // ensure that new data size matches size of slice to write to
+        var sliceSize = [Int](repeating: 0, count: ranges.count)
+        for i in 0..<ranges.count
+        {
+            sliceSize[i] = endSub[i]-startSub[i]+1
+        }
+
+        precondition(sliceSize == value.size, "Provided data must match tensor slice size")        
+
+        // start writing to matrix, rolling over each dimension
+        var newData = value.data
+        var curSub = startSub
+        for i in 0..<newData.count
+        {
+            self.setValue(subscripts: curSub, value: newData[i])
+            
+            guard let inc = _cascadeIncrementSubscript(curSub, min: startSub, max: endSub) else
+            {
+                return
+            }
+
+            curSub = inc                
+        }
+    }
 
     /// Return tensor contents in an easily readable grid format.
     ///
@@ -276,14 +374,139 @@ public struct Tensor<T>: CustomStringConvertible
     /// - Returns: string representation of tensor
     public var description: String
     {
-        // FIXME: implement properly
+        // create tensor title
+        var title = ""
+        if self.showName
+        {
+            title = (self.name ?? "\(self.size.map({"\($0)"}).joined(separator: "x")) tensor") + ":\n"
+        }
 
-        // FIXME: Improve printing for non double types
-        // Instead of treating them separately, use the formatter just to round/shorten doubles;
-        // append all elements as strings to the list, then go through the list and pad with spaces
-        // appropriately. Also, could formatter be used for types other than doubles? If not, should
-        // it be set to nil for non double structs?
+        // handle 1D tensor
+        if self.size.count == 1
+        {
+            return "\(Vector(self, name: title, showName: self.showName))"
+        }
 
-        return "\(self.data)"
+        // handle 2D tensor
+        else if self.size.count == 2
+        {
+            return "\(Matrix(self, name: title, showName: self.showName))"                
+        }
+
+        // break 3D+ tensors into 2D tensor chunks
+        else
+        {
+            // The approach here is to increment across only the third and higher dimensions. At
+            // each point, we can slice off the first and second dimensions and print those as a 
+            // matrix. To do this though, we need to increment the lower dimensions faster, rather 
+            // than the higher dimensions as row-major order does. This is because we'd expect to 
+            // see the third dimension slices printed together, then the fourth, etc.
+            var str = title
+
+            // slice of third and higher dimensions
+            let hiDims = self.size[2..<self.size.count]
+
+            // reverse dimensions so cascade increment goes through low dimension fastest
+            let hiDimsRev = Array(hiDims.reversed())
+            let startRev = Array(repeating: 0, count: hiDimsRev.count)
+            let endRev = hiDimsRev.map({$0-1})
+
+            var curSubRev = Array<Int>(repeating: 0, count: hiDimsRev.count)
+            while true
+            {
+                // create a slice over entire dims 1 and 2 for the current spot in dims 3+
+                let curSliceLoSubs: [SliceIndex] = [0..<self.size[0], 0..<self.size[1]] 
+                let curSliceHiSubs: [SliceIndex] = Array(curSubRev.reversed())
+                let curSliceSubs = curSliceLoSubs + curSliceHiSubs
+                let curSlice = self.getSlice(subscripts: curSliceSubs)
+
+                // create a header to identify current matrix location in tensor
+                let mName = "[..., ..., " + curSliceHiSubs.map({"\($0)"}).joined(separator: ", ") + "]"
+
+                // turn slice into matrix for easy printing
+                let m = Matrix(curSlice.size[0], curSlice.size[1], curSlice.data, name: mName, showName: true)
+                str += "\(m)\n\n"
+
+                // increment through higher dimensions until we've reached the end
+                guard let inc = _cascadeIncrementSubscript(curSubRev, min: startRev, max: endRev) else
+                {
+                    return str
+                }
+
+                curSubRev = inc 
+            }
+        }  
     }    
+
+    /// Return tensor representation in unformatted, comma separated list.
+    ///
+    /// Elements of a row are comma separated. Rows are separated by newlines. Higher dimensional 
+    /// slices are separated by a line consisting entirely of semicolons, where the number of
+    /// semicolons indicates the dimension that ended; e.g. ";" comes between matrices in a 3D 
+    /// tensor, ";;" comes between 3D tensors in a 4D tensor, ";;;" between 4D tensors in 5D, etc.
+    public var csv: String
+    {    
+        // handle 1D tensor
+        if self.size.count == 1
+        {
+            return Vector(self, name: nil, showName: false).csv
+        }
+
+        // handle 2D tensor
+        else if self.size.count == 2
+        {
+            return Matrix(self, name: nil, showName: false).csv
+        }
+
+        // break 3D+ tensors into 2D tensor chunks
+        else
+        {
+            var str = [String]()
+
+            // slice of third and higher dimensions
+            let hiDims = self.size[2..<self.size.count]
+
+            // reverse dimensions so cascade increment goes through low dimension fastest
+            let hiDimsRev = Array(hiDims.reversed())
+            let startRev = Array(repeating: 0, count: hiDimsRev.count)
+            let endRev = hiDimsRev.map({$0-1})
+
+            var curSubRev = Array<Int>(repeating: 0, count: hiDimsRev.count)
+            while true
+            {
+                // create a slice over entire dims 1 and 2 for the current spot in dims 3+
+                let curSliceLoSubs: [SliceIndex] = [0..<self.size[0], 0..<self.size[1]] 
+                let curSliceHiSubs: [SliceIndex] = Array(curSubRev.reversed())
+                let curSliceSubs = curSliceLoSubs + curSliceHiSubs
+                let curSlice = self.getSlice(subscripts: curSliceSubs)
+
+                // turn slice into matrix for easy printing
+                let m = Matrix(curSlice.size[0], curSlice.size[1], curSlice.data, name: nil, showName: false)
+                str.append("\(m.csv)")
+
+                // increment through higher dimensions until we've reached the end
+                guard let inc = _cascadeIncrementSubscript(curSubRev, min: startRev, max: endRev) else
+                {
+                    return str.joined(separator: "\n")
+                }
+
+                // find which dimension rolled over to determine how many semicolons to delimit with
+                var numSemicolons = -1
+                for d in 0..<curSubRev.count
+                {
+                    if curSubRev[d] != inc[d]
+                    {
+                        numSemicolons = curSubRev.count-d
+                        break
+                    }                    
+                }
+                assert(numSemicolons > 0, "No semicolon needed implies function should have already returned")
+                let semicolons = String(repeating: ";", count: numSemicolons)
+                str.append(semicolons)
+
+                // move on to next slice
+                curSubRev = inc 
+            }
+        }  
+    }
 }

@@ -98,7 +98,9 @@ public struct Vector<T>: CustomStringConvertible
     public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
     {
         self.init(vector.data, name: name, showName: showName)
-        self.format = vector.format
+        
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(vector.format)
     }
 
     /// Initialize a new vector from the data in a given matrix.
@@ -111,7 +113,9 @@ public struct Vector<T>: CustomStringConvertible
     public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
     {
         self.init(matrix.data, name: name, showName: showName)
-        self.format = matrix.format
+        
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(matrix.format)
     }
 
     /// Initialize a new vector from the data in a given tensor.
@@ -124,7 +128,24 @@ public struct Vector<T>: CustomStringConvertible
     public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
     {
         self.init(tensor.data, name: name, showName: showName)
-        self.format = tensor.format
+        
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(tensor.format)
+    }
+
+    /// Initialize a new vector from a comma separated string.
+    ///
+    /// The given csv string must be in the format returned by Vector.csv.
+    ///
+    /// - Parameters:
+    ///    - csv: comma separated string containing vector data
+    ///    - name: optional name of new vector
+    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
+    ///        given a name, otherwise to false
+    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
+    {
+        // FIXME: implement
+        fatalError("Not yet implemented")
     }
 
     /// Access a single element of the vector.
@@ -132,18 +153,18 @@ public struct Vector<T>: CustomStringConvertible
     /// - Parameters:
     ///     - s: index into vector
     /// - Returns: single value at index/subscript for get
-    public subscript(_ s: Int) -> T
+    public subscript(_ index: Int) -> T
     {
         get
         {
-            precondition(s >= 0 && s < self.count, "Invalid vector index: \(s)")
-            return self.data[s]           
+            precondition(index >= 0 && index < self.count, "Vector subscript out of bounds")
+            return self.data[index]           
         }
 
         set(newVal)
         {
-            precondition(s >= 0 && s < self.count, "Invalid vector index: \(s)")
-            self.data[s] = newVal            
+            precondition(index >= 0 && index < self.count, "Vector subscript out of bounds")
+            self.data[index] = newVal            
         }
     }
 
@@ -173,17 +194,12 @@ public struct Vector<T>: CustomStringConvertible
         }
     }
 
-    // TODO: add setter that can take a matrix or tensor too
-
-    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
-    // surrounding brackets, extra space, etc.)
-
     /// Return vector contents in an easily readable format.
     ///
     /// - Note: The formatter associated with this vector is used as a suggestion; elements may be
     ///    formatted differently to improve readability. Elements that can't be displayed under the 
-    ///    current formatting constraints will be displayed as '#'.    
-    /// - Returns: string representation of vector
+    ///    current formatting constraints will be displayed as '#'; non-numeric elements may be 
+    ///    abbreviated by truncating and appending "...".    
     public var description: String
     {
         var elements = [String]()
@@ -195,43 +211,20 @@ public struct Vector<T>: CustomStringConvertible
             title = (self.name ?? "\(self.count)D vector") + ": "
         }
 
-        // FIXME: Improve printing for non double types
-        // Instead of treating them separately, use the formatter just to round/shorten doubles;
-        // append all elements as strings to the list, then go through the list and pad with spaces
-        // appropriately. Also, could formatter be used for types other than doubles? If not, should
-        // it be set to nil for non double structs?
-
         // create string representation of each vector element
         for i in 0..<self.count
-        {
-            if let el = self[i] as? Double
-            {
-                var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-
-                // if element doesn't fit in desired width, format in minimal notation
-                if s.characters.count > self.format.formatWidth            
-                {
-                    let oldMaxSigDig = self.format.maximumSignificantDigits
-                    let oldNumberStyle = self.format.numberStyle
-                    self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
-                    self.format.numberStyle = .scientific
-                    s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-                    self.format.maximumSignificantDigits = oldMaxSigDig
-                    self.format.numberStyle = oldNumberStyle
-                }
-
-                let sign = el < 0 ? "-" : " "
-                s = sign + s
-                s = s.trimmingCharacters(in: .whitespaces)
-
-                elements.append(s)
-            }
-            else
-            {                
-                elements.append("\(self[i])")
-            }
+        {   
+            let el = self[i]         
+            let s = _formatElement(el, self.format)
+            elements.append(s)
         }
 
         return "\(title)<\(elements.joined(separator: "   "))>"
+    }
+
+    /// Return vector representation in unformatted, comma separated list.
+    public var csv: String
+    {    
+        return (self.data.map({"\($0)"})).joined(separator: ",")
     }
 }

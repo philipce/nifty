@@ -44,7 +44,7 @@ public struct Matrix<T>: CustomStringConvertible
 	/// Formatter to be used in displaying matrix elements.
 	public var format: NumberFormatter    
 
-	/// Initialize a new matrix with the given dimensions from an array of data in row-major order.
+	/// Initialize a new matrix with the given dimensions from a row-major ordered array.
 	///
 	/// - Parameters:
     ///    - rows: number of rows in matrix
@@ -84,8 +84,7 @@ public struct Matrix<T>: CustomStringConvertible
 		self.format = fmt
 	}
 
-    /// Initialize a new square matrix with the given dimensions from an array of data in 
-    /// row-major order.
+    /// Initialize a new square matrix with the given dimensions from a row-major ordered array.
     ///
     /// - Parameters:
     ///    - side: number of elements along one side of square matrix
@@ -98,7 +97,7 @@ public struct Matrix<T>: CustomStringConvertible
         self.init(side, side, data, name: name, showName: showName)
     }
 
-    /// Initialize a new matrix of the given size from an array of data in row-major order.
+    /// Initialize a new matrix of the given size from a row-major ordered array.
     ///
     /// - Parameters:
     ///    - size: size of matrix  
@@ -187,7 +186,9 @@ public struct Matrix<T>: CustomStringConvertible
     public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
     {
         self.init(1, vector.count, vector.data, name: name, showName: showName)
-        self.format = vector.format
+
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(vector.format)
     }
     
 	/// Initialize a new matrix from the data in a given matrix.
@@ -200,7 +201,10 @@ public struct Matrix<T>: CustomStringConvertible
 	public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
 	{
         self.init(matrix.size, matrix.data, name: name, showName: showName)
-        self.format = matrix.format
+
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(matrix.format)
+        
 	}
 
     /// Initialize a new matrix from the data in a given tensor.
@@ -214,7 +218,45 @@ public struct Matrix<T>: CustomStringConvertible
     {
         precondition(tensor.size.count == 2, "Tensor must be 2D to initialize Matrix")
         self.init(tensor.size, tensor.data, name: name, showName: showName)
-        self.format = tensor.format
+        
+        // need to create new formatter instance, copying values
+        self.format = _copyNumberFormatter(tensor.format)
+    }
+
+    /// Initialize a new matrix from a comma separated string.
+    ///
+    /// The given csv string must be in the format returned by Matrix.csv.
+    ///
+    /// - Parameters:
+    ///    - csv: comma separated string containing matrix data
+    ///    - name: optional name of new matrix, defaults to no name
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
+    {
+        // FIXME: implement
+        fatalError("Not yet implemented")
+    }
+
+    /// Access a single element of the matrix with a row-major linear index.
+    ///
+    /// - Parameters:
+    ///    - index: linear index into matrix
+    /// - Returns: single value at index
+    public subscript(_ index: Int) -> T
+    {
+        get
+        {
+            precondition(index >= 0 && index < self.count, "Matrix subscript out of bounds")
+            return self.data[index]            
+        }
+
+        set(newVal)
+        {
+            precondition(index >= 0 && index < self.count, "Matrix subscript out of bounds")
+            self.data[index] = newVal
+        }
+
     }
 
     /// Access a single element of the matrix with a row, column subscript.
@@ -227,45 +269,48 @@ public struct Matrix<T>: CustomStringConvertible
 	{
 		get
 		{
-			let index = sub2ind(row, column, size: self.size)				
-			precondition(index >= 0, "Invalid matrix subscripts: \([row, column])")
+			let index = sub2ind([row, column], size: self.size)				
 			return self.data[index]
 		}
 
 		set(newVal)
 		{
-			let index = sub2ind(row, column, size: self.size)				
-			precondition(index >= 0, "Invalid matrix subscripts: \([row, column])")
+			let index = sub2ind([row, column], size: self.size)				
 			self.data[index] = newVal
 		}
-	}
+	}    
 
-    /// Access a single element of the matrix with a row-major linear index.
+    /// Access a slice of the matrix with a row-major linear index range.
     ///
     /// - Parameters:
-    ///    - index: linear index into matrix
-    /// - Returns: single value at index
-    public subscript(_ index: Int) -> T
+    ///    - index: linear index range 
+    /// - Returns: new matrix composed of slice
+    public subscript(_ index: SliceIndex) -> Matrix<T>
     {
         get
         {
-            precondition(index >= 0 && index < self.count, "Matrix index \(index) out of bounds")
-            return self.data[index]            
-        }
+            let range = _convertToCountableClosedRange(index)
 
+            // inherit name, add slice info
+            var sliceName = self.name
+            if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(index)]" }
+
+            return Matrix([Array(self.data[range])], name: sliceName, showName: self.showName)
+        }
         set(newVal)
         {
-            precondition(index >= 0 && index < self.count, "Matrix index \(index) out of bounds")
-            self.data[index] = newVal
-        }
+            let range = _convertToCountableClosedRange(index)
+            self.data[range] = ArraySlice(newVal.data)
 
+            return
+        }
     }
 
 	/// Access a slice of the matrix with a row, column range subscript.
 	///
     /// - Parameters:
-    ///    - rows: row range; or if columns is omitted, linear index range
-    ///    - columns: column range; if omitted, use linear index range instead
+    ///    - rows: row range
+    ///    - columns: column range
 	/// - Returns: new matrix composed of slice
 	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix<T>
 	{
@@ -298,9 +343,9 @@ public struct Matrix<T>: CustomStringConvertible
 				curSub = inc
 			}
 
-			// inherit name, add slice info
-			var sliceName = self.name
-			if sliceName != nil { sliceName! += "[\(rows), \(columns)]" }
+            // inherit name, add slice info
+            var sliceName = self.name
+            if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(rows), \(columns)]" }
 
 			return Matrix(newSize, newData, name: sliceName, showName: self.showName) 
 		}
@@ -320,7 +365,7 @@ public struct Matrix<T>: CustomStringConvertible
 
             // ensure that new data size matches size of slice to write to
             let sliceSize = [endSub[0]-startSub[0]+1, endSub[1]-startSub[1]+1]
-            precondition(sliceSize == newVal.size, "Supplied data does not match matrix slice size")        
+            precondition(sliceSize == newVal.size, "Provided data must match matrix slice size")        
 
             // start writing to matrix, rolling over each dimension
 			var newData = newVal.data
@@ -328,7 +373,6 @@ public struct Matrix<T>: CustomStringConvertible
 			for i in 0..<newData.count
             {
                 self[curSub[0], curSub[1]] = newData[i]
-
                 
                 guard let inc = _cascadeIncrementSubscript(curSub, min: startSub, max: endSub) else
                 {
@@ -338,148 +382,83 @@ public struct Matrix<T>: CustomStringConvertible
                 curSub = inc                
             }
 		}
-	}
-
-    /// Access a slice of the matrix with a row-major linear index range.
-    ///
-    /// - Parameters:
-    ///    - index: linear index range 
-    /// - Returns: new matrix composed of slice
-    public subscript(_ index: SliceIndex) -> Matrix<T>
-    {
-        get
-        {
-            let range = (_convertToCountableClosedRanges([index]))[0]
-
-            // inherit name, add slice info
-            var sliceName = self.name
-            if sliceName != nil { sliceName! += "[\(index)]" }
-
-            return Matrix([Array(self.data[range])], name: sliceName, showName: self.showName)
-        }
-        set(newVal)
-        {
-            let range = (_convertToCountableClosedRanges([index]))[0]
-            self.data[range] = ArraySlice(newVal.data)
-
-            return
-        }
-    }
-
-    // TODO: add setter that can take a tensor or vector too
-
-
-    // TODO: add CSV option that spits out matrix in easily readable .csv format (i.e. don't print
-    // row headers, extra space, etc.)
+	}    
 
 	/// Return matrix contents in an easily readable grid format.
 	///
-	/// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
-	///	    formatted differently to improve readability. Elements that can't be displayed under the 
-	///     current formatting constraints will be displayed as '#'.	
-	/// - Returns: string representation of matrix
+    /// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
+    ///    formatted differently to improve readability. Elements that can't be displayed under the 
+    ///    current formatting constraints will be displayed as '#'; non-numeric elements may be 
+    ///    abbreviated by truncating and appending "...".    
 	public var description: String
 	{
-		// TODO: entries in a column should be right justified, e.g.
-		//		 506                    506
-		//	   1,048     instead of     1,048 
-
-        // TODO: make the specifed format indicate the max spacing, but make it actually dynamic to
-        // save space; e.g. a matrix of single digit numbers doesn't need more than two spaces
-        // between columns--downsize the format width to what's needed by the largest element
-
-        // FIXME: Improve printing for non double types
-        // Instead of treating them separately, use the formatter just to round/shorten doubles;
-        // append all elements as strings to the list, then go through the list and pad with spaces
-        // appropriately. Also, could formatter be used for types other than doubles? If not, should
-        // it be set to nil for non double structs?
-
-		var lines = [String]()
-
 		// create matrix title
+        var title = ""
 		if self.showName
 		{
-			let title = (self.name ?? "\(self.size[0])-by-\(self.size[1]) matrix") + ":"
-			lines.append(title)
+			title = (self.name ?? "\(self.size[0])x\(self.size[1]) matrix") + ":\n"
 		}
-		       
-		// create string representation of each matrix row		
-		for r in 0..<self.size[0]
+
+        // store length of widest element of each column, including additional column for row header
+		var colWidths = Array<Int>(repeating: 0, count: self.columns+1)
+
+		// create string representation of elements of each matrix row	
+        var lines = [[String]]()	
+		for r in 0..<self.rows
 		{
-			var row = "R\(r): "
-			for c in 0..<self.size[1]
-			{				
-				if let el = self[r, c] as? Double
-                {    
-                    var s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
+			var curRow = [String]()
 
-                    // if element doesn't fit in desired width, format in minimal notation
-                    if s.characters.count > self.format.formatWidth
-                    {    
-                        let oldMaxSigDig = self.format.maximumSignificantDigits
-                        let oldNumberStyle = self.format.numberStyle
-                        self.format.maximumSignificantDigits = self.format.formatWidth-4 // for 'E-99'
-                        self.format.numberStyle = .scientific
-                        s = self.format.string(from: NSNumber(value: abs(el))) ?? "#"
-                        self.format.maximumSignificantDigits = oldMaxSigDig
-                        self.format.numberStyle = oldNumberStyle
-                    }
-                    
-                    let sign = el < 0 ? "-" : " "
-                    row += sign + s + "  "
-                }
-                else
-                {
-                    row += "\(self[r, c])   "
-                }
+            // form row header
+            let header = "R\(r):"
+            curRow.append(header)
+            colWidths[0] = max(colWidths[0], header.characters.count)
+
+			for c in 0..<self.columns
+			{				
+				let el = self[r, c]
+                let s = _formatElement(el, self.format)
+                curRow.append(s)
+
+                // advance index by 1 because element 0 is row header
+                colWidths[c+1] = max(colWidths[c+1], s.characters.count)
 			}			
-			lines.append(row)
+			lines.append(curRow)
 		}
 
-		return lines.joined(separator: "\n")
-	}
-}
+        // pad each column in row to the max width, storing each row as single string
+        var rowStrs = [String]()
+        for rs in 0..<lines.count
+        {
+            var str = [String]() 
+            for cs in 0..<lines[0].count
+            {
+                var s = lines[rs][cs]
 
-//==================================================================================================
-// MARK: HELPER FUNCTIONS
-//==================================================================================================
+                assert(s.characters.count <= colWidths[cs], "Max column width was computed incorrectly")
+                
+                let pad = String(repeating: " ", count: colWidths[cs]-s.characters.count)
 
+                str.append(pad+s)
+            }
+            rowStrs.append(str.joined(separator: "   "))
+        }
 
-/// Increment the first element of a given subscript, cascading carry values into the subsequent 
-/// element if possible.
-///
-/// Note: row-major order is assumed; last dimension increments quickest.
-///
-/// - Parameters: 
-///     - sub: subscript to increment
-///     - min: min values for each element in list
-///     - max: max values for each element in list
-/// - Returns: incremented subscript or nil if list is already at max value
-fileprivate func _cascadeIncrementSubscript(_ sub: [Int], min: [Int], max: [Int]) -> [Int]?
-{	
-	precondition(sub.count == min.count && min.count == max.count)
-
-	let n = sub.count
-	var newSub = sub
-	newSub[n-1] += 1 
-
-	for i in stride(from: n-1, through: 0, by: -1) // 0..<newSub.count
-	{
-	    if newSub[i] > max[i]
-	    {
-	        if i == 0
-	        {
-	            return nil
-	        }
-
-	        newSub[i] = min[i]
-	        newSub[i-1] = newSub[i-1] + 1
-	    }
-	    else
-	    {
-	    	return newSub
-	    }
+		return title + rowStrs.joined(separator: "\n")
 	}
 
-	return nil
+    /// Return matrix representation in unformatted, comma separated list.
+    ///
+    /// Elements of a row are comma separated. Rows are separated by newlines.
+    public var csv: String
+    {   
+        var s = [String]()
+        for r in 0..<self.rows
+        {
+            let row = self[r, 0..<self.columns]
+            let v = Vector(row)
+            s.append(v.csv)
+        }
+
+        return s.joined(separator: "\n")
+    }
 }
