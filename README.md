@@ -8,7 +8,9 @@ Nifty is really new and (obviously) not complete. The library is constantly expa
 
 ## Getting Started
 
-_Xcode users: drag the included Xcode project file into your own Xcode project and skip the rest of the install steps! TODO: Xcode project doesn't exist yet--create it_
+_Xcode users: drag the included Xcode project file into your own project and skip the rest of the install steps!_
+
+TODO: create Xcode project.
 
 ##### System Requirements
 
