@@ -270,9 +270,9 @@ public struct Tensor<T>: CustomStringConvertible
         let range = _convertToCountableClosedRange(index)
 
         // inherit name, add slice info
-        var sliceName = self.name
+        var sliceName = self.name     
         if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(index)]" }
-
+      
         let d = Array(self.data[range])
         return Tensor([1, d.count], d, name: sliceName, showName: self.showName)
     }
