@@ -4,7 +4,7 @@
  *  This file defines vector dot product functionality. 
  *
  *  Author: Philip Erickson
- *  Creation Date: 14 Aug 2016
+ *  Creation Date: 29 Dec 2016
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
