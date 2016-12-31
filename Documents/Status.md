@@ -26,7 +26,7 @@ will add it to the list!
 * _N/A_: This feature is internal or it is a feature for which testing does not make sense
 * _None_: There are no unit tests specific to this feature; even if it is used indirectly in other 
     unit tests, we should have tests targeting this feature in isolation
-* _Incomplete_: Unit tests exist for this feature, but there are critical paths that are untested
+* _Basic_: Unit tests exist for this feature, but there are critical paths that are untested
 * _Substantial_: Most, if not all, of this feature's critical paths are being tested
 * _Benchmarked_: This feature has substantial test coverage for correctness, as well as performance 
     benchmarking
@@ -50,14 +50,16 @@ implemented.
 | atand              | Complete        | None           |                                                                                         |
 | atanh              | Complete        | None           |                                                                                         |
 | ceil               | Complete        | None           |                                                                                         |
-| chol               | Mostly complete | Incomplete     |                                                                                         |
+| chol               | Mostly complete | Basic          |                                                                                         |
 | cond               | Unimplemented   | None           |                                                                                         |
 | Constants          | Incomplete      | None           |                                                                                         |
 | cos                | Complete        | None           |                                                                                         |
 | cosd               | Complete        | None           |                                                                                         |
 | cosh               | Complete        | None           |                                                                                         |
+| cross              | Mostly complete | Basic          |                                                                                         |
 | det                | Unimplemented   | None           |                                                                                         |
 | diag               | Unimplemented   | None           |                                                                                         |
+| dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
 | eig                | Unimplemented   | None           |                                                                                         |
 | eigs               | Unimplemented   | None           |                                                                                         |
 | eq                 | Unimplemented   | None           |                                                                                         |
@@ -87,9 +89,9 @@ implemented.
 | log1p              | Complete        | None           |                                                                                         |
 | lsb                | Unimplemented   | None           |                                                                                         |
 | lt (<)             | Complete        | None           |                                                                                         |
-| lu                 | Mostly Complete | Incomplete     |                                                                                         |
+| lu                 | Mostly Complete | Basic          |                                                                                         |
 | map                | Unimplemented   | None           |                                                                                         |
-| Matrix             | Mostly Complete | None           |                                                                                         |
+| Matrix             | Mostly Complete | Basic          |                                                                                         |
 | max                | Unimplemented   | None           |                                                                                         |
 | mean               | Unimplemented   | None           |                                                                                         |
 | median             | Unimplemented   | None           |                                                                                         |
@@ -137,21 +139,21 @@ implemented.
 | std                | Unimplemented   | None           |                                                                                         |
 | sub2ind            | Mostly Complete | None           |                                                                                         |
 | sum                | Unimplemented   | None           |                                                                                         |
-| svd                | Unimplemented   | None           |                                                                                         |
+| svd                | Mostly Complete | Basic          | Need to resolve ambiguity between function calls requiring specifying output type       |
 | swap               | Incomplete      | None           | Need to add support for vectors, tensors, matrix columns, etc.                          |
 | tan                | Complete        | None           |                                                                                         |
 | tand               | Complete        | None           |                                                                                         |
 | tanh               | Complete        | None           |                                                                                         |
-| Tensor             | Incomplete      | None           |                                                                                         |
+| Tensor             | Mostly complete | Basic          |                                                                                         |
 | tic                | Mostly Complete | None           |                                                                                         |
 | times (*)          | Incomplete      | None           | Need to add overloads                                                                   |
 | toc                | Mostly Complete | None           |                                                                                         |
 | trace              | Complete        | None           |                                                                                         |
-| transpose          | Complete        | None           |                                                                                         |
+| transpose          | Mostly Complete | None           | Need to add overloads for generic types                                                 |
 | tril               | Incomplete      | None           |                                                                                         |
 | triu               | Incomplete      | None           |                                                                                         |
 | var                | Unimplemented   | None           |                                                                                         |
-| Vector             | Incomplete      | None           |                                                                                         |
+| Vector             | Mostly complete | Basic          |                                                                                         |
 | zeros              | Complete        | None           |                                                                                         |
 
 
