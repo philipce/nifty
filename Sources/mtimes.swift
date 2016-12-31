@@ -41,22 +41,24 @@ func mtimes(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
     let transA = CblasNoTrans
     let transB = CblasNoTrans
 
-    let m = A.size[0]
-    let n = B.size[1]
-
-    precondition(A.size[1] == B.size[0], "Inner matrix dimensions must agree")
-    let k = A.size[1]
-    
-
+    // A is m x k
+    let m = A.rows
+    let k = A.columns
     let alpha = 1.0
     let a = A.data
     let lda = k
 
+    // B is k x n
+    precondition(B.rows == k, "Inner matrix dimensions must agree")
+    let n = B.columns
     let b = B.data
     let ldb = n
+
+    // C is m x n
     let beta = 0.0
     var c = Array<Double>(repeating: 0, count: m*n)
-    let ldc = k
+    let ldc = n
+     
 
     cblas_dgemm(CblasRowMajor, transA, transB, Int32(m), Int32(n), Int32(k), alpha, a, Int32(lda), 
         b, Int32(ldb), beta, &c, Int32(ldc))
@@ -65,7 +67,7 @@ func mtimes(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
     var newName: String? = nil
     if let nameA = A.name, let nameB = B.name
     {
-        newName = "\(nameA)*\(nameB)"
+        newName = "\(_parenthesizeExpression(nameA))*\(_parenthesizeExpression(nameB))"
     }
 
     return Matrix(m, n, c, name: newName, showName: A.showName)
