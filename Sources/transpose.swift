@@ -68,7 +68,7 @@ public func transpose(_ A: Matrix<Double>) -> Matrix<Double>
 
 	// inherit name
 	var newName = A.name
-	if newName != nil { newName! += "^"}
+	if newName != nil { newName = "transpose(\(newName!))"}
 
 	return Matrix(k, m, c, name: newName, showName: A.showName)
 }
