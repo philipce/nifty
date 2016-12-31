@@ -44,19 +44,18 @@ internal func _parenthesizeExpression(_ expression: String) -> String
 {
     // TODO: this can be fancier, perhaps use regular expressions when linux and mac converge
 
+    var expressionLiteralCharacters = CharacterSet.alphanumerics
+    expressionLiteralCharacters.insert("_")
+
     // if expression is separated by whitespace, or contains any characters other than alphanumerics
     // or the underscore, enclose in parentheses
     if let _ = expression.rangeOfCharacter(from: expressionLiteralCharacters.inverted)
     {
-        return expression
+        return "(\(expression))"        
     }
-    else
-    {
-        return "(\(expression))"
-    }
+        
+    return expression
 }
-
-fileprivate let expressionLiteralCharacters = CharacterSet(charactersIn: "_").union(CharacterSet.alphanumerics) 
 
 
 
