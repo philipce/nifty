@@ -1,20 +1,21 @@
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
+![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
+![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
+![](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
+
 # Nifty
 
-[![License](https://img.shields.io/hexpm/l/plug.svg)](LICENSE)
+Nifty is a general-purpose numerical computing library for the Swift programming language, made with usability and performance in mind. 
 
-Nifty is a general-purpose numerical computing library for the Swift programming language. It provides a wide range of mathematical and algorithmic tools that are easy enough to use in prototyping and fast enough to use in production.
-
-Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along. Or, [consider contributing](#contributing)!
+Nifty is really new and (obviously) not complete. You can check the [status page](Documents/Status.md) to see where we are currently at. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
 
 ## Getting Started
 
-_Xcode users: drag the included Xcode project file into your own project and skip the rest of the install steps!_
-
-TODO: create Xcode project.
+_Xcode users can just use the included project file (TODO: create xcode project file) and skip the rest of the install steps!_
 
 ##### System Requirements
 
-Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built on a Mac) but there's no reason it shouldn't work anywhere Swift does. Future efforts will be made to get Nifty on embedded platforms, like the Raspberry Pi!
+Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built on macOS) but there's no reason it shouldn't work anywhere Swift does. 
 
 ##### Install Swift
 
@@ -102,7 +103,7 @@ For anything else, feel free to open an issue!
 
 ## Distribution
 
-If you want to statically link Nifty and all its dependencies (e.g. for distribution), an example of how to do that will be forthcoming... For now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that you may find helpful.
+If you want to statically link Nifty and all its dependencies (e.g. for distribution), follow the steps below... TODO: create guide; for now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that may be helpful.
 
 ## License
 
