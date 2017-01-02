@@ -8,15 +8,15 @@
 
 Nifty is a general-purpose numerical computing library for the Swift programming language, made with usability and performance in mind. 
 
-Nifty is really new and (obviously) not complete. You can check the [status page](Documents/Status.md) to see where we are currently at. The library is constantly expanding—if it doesn't yet have what you need, it will soon! Either come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
-
 ## Getting Started
 
-_An Xcode project file will be coming soon, so Xcode users can just use the included project file and skip the rest of the install steps!_
+Not sure if the install instructions are worth reading? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) to help make your mind up.
 
 ##### System Requirements
 
 Currently, Nifty is being developed on Ubuntu 14.04/16.04 and occasionally tested on the latest macOS (continuous testing on macOS coming soon). However, there's no reason Nifty shouldn't work anywhere Swift does. 
+
+_An Xcode project file will be coming soon, so Xcode users can just use the included project file and skip the rest of the install steps!_
 
 ##### Install Swift
 
@@ -48,7 +48,7 @@ Once you've installed the above dependencies, using Nifty in your project simply
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
 
-Check out this [Nifty demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
+Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
 ##### Troubleshooting
 
@@ -59,6 +59,8 @@ The system libraries used by Nifty are provided by the [Nifty-libs](https://gith
 Also, if you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
 ## Nifty Features
+
+Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! Either come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
 
 We are currently working on getting the core set of general math and linear algebra functions finished:
 - general functions and definitions used throughout Nifty
