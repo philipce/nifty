@@ -21,12 +21,16 @@
 
 import CLapacke
 
+
+// TODO: figure out better way to request just the singular values; the way below is ambiguous 
+// unless caller specifies the return type, which is just annoying.
+
 /// Return the singular values of a given matrix.
 ///
 /// - Parameters:
 ///    - A: matrix to find singular values of
 /// - Returns: singular values of A, sorted in descending order
-public func svd(_ A: Matrix<Double>) -> [Double]
+public func svd(_ A: Matrix<Double>) -> Vector<Double>
 {    
 
     let jobz: Int8 = 78 // ascii 'N'
@@ -58,7 +62,7 @@ public func svd(_ A: Matrix<Double>) -> [Double]
         print("Warning: DBDSDC did not converge, updating process failed.")
     }    
 
-    return s
+    return Vector(s)
 }
 
 /// Perform a singular value decomposition of a given matrix.
