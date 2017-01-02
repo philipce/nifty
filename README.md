@@ -1,7 +1,8 @@
-![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 ![](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
+![](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
 
 # Nifty
 
@@ -11,11 +12,11 @@ Nifty is really new and (obviously) not complete. You can check the [status page
 
 ## Getting Started
 
-_Xcode users can just use the included project file (TODO: create xcode project file) and skip the rest of the install steps!_
+_An Xcode project file will be coming soon, so Xcode users can just use the included project file and skip the rest of the install steps!_
 
 ##### System Requirements
 
-Currently, Nifty is only being developed on Ubuntu 16.04 (and occasionally built on macOS) but there's no reason it shouldn't work anywhere Swift does. 
+Currently, Nifty is being developed on Ubuntu 14.04/16.04 and occasionally tested on the latest macOS (continuous testing on macOS coming soon). However, there's no reason Nifty shouldn't work anywhere Swift does. 
 
 ##### Install Swift
 
