@@ -77,7 +77,7 @@ implemented.
 | inf                | Incomplete      | None           |                                                                                         |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
 | ipiv2p             | Incomplete      | None           | Internal only function for converting LAPACK pivot indices... super hacky seeming...    |
-| isequal            | Unimplemented   | None           |                                                                                         |
+| isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                    |
 | isinf              | Unimplemented   | None           |                                                                                         |
 | isnan              | Incomplete      | None           |                                                                                         |
 | ldivide            | Unimplemented   | None           |                                                                                         |
