@@ -8,7 +8,7 @@
 
 Nifty is a general-purpose numerical computing library for the Swift programming language, made with usability and performance in mind. 
 
-Nifty is really new and (obviously) not complete. You can check the [status page](Documents/Status.md) to see where we are currently at. The library is constantly expanding—if it doesn't yet have what you need, it will soon! So come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
+Nifty is really new and (obviously) not complete. You can check the [status page](Documents/Status.md) to see where we are currently at. The library is constantly expanding—if it doesn't yet have what you need, it will soon! Either come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
 
 ## Getting Started
 
