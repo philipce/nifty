@@ -18,21 +18,20 @@ class svd_test: XCTestCase
         // examples from matlab docs on svd
 
         var A = Matrix<Double>([[1,0,1],[-1,-2,0],[0,1,-1]])
-        let s: [Double] = svd(A)
+        let s: Vector<Double> = svd(A)
 
-        print(s)
-
-        XCTAssert(Set(s) == Set([2.4605, 1.6996, 0.2391])) // FIXME: use compare with precision
-
-
+        XCTAssert(isequal(s, Vector([2.4605, 1.6996, 0.2391]), within: 1E-4))
 
         A = Matrix([[1,2],[3,4],[5,6],[7,8]], name: "A")
         let (U,S,V) = svd(A)
+        let USVT = U*S*transpose(V) 
 
         print(A, terminator: "\n\n")
         print(U, terminator: "\n\n")
         print(S, terminator: "\n\n")
         print(V, terminator: "\n\n")  
-        print(U*S*transpose(V), terminator: "\n\n")       
+        print(USVT, terminator: "\n\n")       
+
+        XCTAssert(isequal(A, USVT, within: 1E-10))
     }
 }
