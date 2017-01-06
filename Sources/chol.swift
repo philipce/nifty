@@ -23,11 +23,13 @@
 
 import CLapacke
 
-/// Enumerate options for Cholesky decomposition
-public enum CholeskyOption
+extension Nifty.Options
 {
-    case upper
-    case lower
+    public enum chol
+    {
+        case upper
+        case lower
+    }
 }
 
 /// Computes the Cholesky decomposition of a real symmetric positive definite matrix.
@@ -39,7 +41,7 @@ public enum CholeskyOption
 ///     - A: matrix to decompose
 ///     - option: request upper or lower triangular result    
 /// - Returns: requested triangular matrix
-public func chol(_ A: Matrix<Double>, _ option: CholeskyOption = .upper) -> Matrix<Double>
+public func chol(_ A: Matrix<Double>, _ option: Nifty.Options.chol = .upper) -> Matrix<Double>
 {
     let uplo: Int8
     switch option

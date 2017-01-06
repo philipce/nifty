@@ -1,7 +1,7 @@
 /**************************************************************************************************
- *  NiftyOption.swift
+ *  Nifty.swift
  *
- *  This file provides a structure containing options used throughout Nifty.
+ *  This file provides a class for namespacing options and constants.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 Jan 2017
@@ -19,14 +19,26 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-/// Contains all options used throughout Nifty.
-///
-/// Options are name for the function that uses them, and are either enums, or structs wrapping 
-/// enums to provide another level of hierarchy.
-///
-/// Options that don't clearly belong to a particular source file may be defined here. Or, if there 
-/// is a clear correspondence, and extension to this struct may be made in that file.
-public struct NiftyOption
-{
 
+public class Nifty
+{
+    /// Contains all options used throughout Nifty.
+    ///
+    /// Options are name for the function that uses them, and are either enums, or structs wrapping 
+    /// enums to provide another level of hierarchy.
+    ///
+    /// Options that don't clearly belong to a particular source file may be defined here. Or, if there 
+    /// is a clear correspondence, and extension to this struct may be made in that file.
+    public class Options
+    {
+
+    }
+
+    /// Contains constant definitions used throughout Nifty.
+    public class Constants
+    {
+        public static let e   = 2.718281828459046
+        public static let phi = 1.618033988749895
+        public static let pi  = 3.141592653589793        
+    }
 }

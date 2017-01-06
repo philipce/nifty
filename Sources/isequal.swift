@@ -23,7 +23,7 @@
 // The article "Comparing Floating Point Numbers, 2012 Edition", by Bruce Dawson was useful in this:
 // https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 
-extension NiftyOption
+extension Nifty.Options
 {
     public enum isequal
     {
@@ -46,7 +46,7 @@ extension NiftyOption
 ///        difference between numbers, which is then compared against the given tolerance
 /// - Returns: true if values are equal according to the specified tolerance
 public func isequal(_ a: Double, _ b: Double, within tolerance: Double = eps.single, 
-    comparison: NiftyOption.isequal? = nil) -> Bool
+    comparison: Nifty.Options.isequal? = nil) -> Bool
 {
     switch comparison
     {
@@ -74,7 +74,7 @@ public func isequal(_ a: Double, _ b: Double, within tolerance: Double = eps.sin
 }
 
 public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: Double = eps.single, 
-    comparison: NiftyOption.isequal? = nil) -> Bool
+    comparison: Nifty.Options.isequal? = nil) -> Bool
 {
     if a.count != b.count
     { 
@@ -93,7 +93,7 @@ public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: 
 }
 
 public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: Double = eps.single, 
-    comparison: NiftyOption.isequal? = nil) -> Bool
+    comparison: Nifty.Options.isequal? = nil) -> Bool
 {
     if a.size != b.size
     { 
@@ -112,7 +112,7 @@ public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: 
 }
 
 public func isequal(_ a: Tensor<Double>, _ b: Tensor<Double>, within tolerance: Double = eps.single, 
-    comparison: NiftyOption.isequal? = nil) -> Bool
+    comparison: Nifty.Options.isequal? = nil) -> Bool
 {
     if a.size != b.size
     { 
