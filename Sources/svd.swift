@@ -1,5 +1,5 @@
 /**************************************************************************************************
- *  cross.swift
+ *  svd.swift
  *
  *  This file defines singular value decomposition functionality. 
  *
@@ -25,14 +25,23 @@ import CLapacke
 // TODO: figure out better way to request just the singular values; the way below is ambiguous 
 // unless caller specifies the return type, which is just annoying.
 
+extension NiftyOption
+{
+    public enum svd
+    {
+        case values
+    }
+}
+
 /// Return the singular values of a given matrix.
 ///
 /// - Parameters:
 ///    - A: matrix to find singular values of
+///    - opt: this parameter is unused in the function; its sole purpose is to allow the compiler to 
+///        disambiguate between svd calls with different return types.
 /// - Returns: singular values of A, sorted in descending order
-public func svd(_ A: Matrix<Double>) -> Vector<Double>
+public func svd(_ A: Matrix<Double>, _ opt: NiftyOption.svd) -> Vector<Double>
 {    
-
     let jobz: Int8 = 78 // ascii 'N'
     let m = Int32(A.rows)
     let n = Int32(A.columns)

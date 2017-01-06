@@ -1,7 +1,8 @@
 /**************************************************************************************************
  *  isequal.swift
  *
- *  This file provides functionality for comparing numbers, Vectors, Matrices, and Tensors.
+ *  This file provides functionality for comparing numbers, Vectors, Matrices, and Tensors for 
+ *  equality within given tolerances.
  *
  *  Author: Philip Erickson
  *  Creation Date: 1 Jan 2017
@@ -19,6 +20,8 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
+// The article "Comparing Floating Point Numbers, 2012 Edition", by Bruce Dawson was useful in this:
+// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 
 extension NiftyOption
 {
@@ -29,34 +32,49 @@ extension NiftyOption
     }
 }
 
-// FIXME: decide how to handle defaults... default machine epsilon seems maybe too small for 
-// practical purposes. Maybe shrink default epsilon? Better, make relative difference default?
-
-/// Determine whether 2 numbers are equal, within the given tolerance.
+/// Determine whether two numbers are equal, within the given tolerance.
 ///
-/// Default epsilon is taken from https://en.wikipedia.org/wiki/Machine_epsilon.
+/// The default method of comparison is to use absolute comparisons for small numbers, and relative 
+/// comparisons for large numbers. This default can be overridden by specifying in the function call
+/// which comparison method to use.
 ///
 /// - Parameters:
 ///    - a: first number to compare
 ///    - b: second number to compare
 ///    - within tolerance: tolerance to allow as equal
-///    -epsilon: specify whether given tolerance should be treated as absolute, or relative (what
-///        percent error to allow)
+///    - comparison: optionally override default, specifying whether to compute absolute or relative 
+///        difference between numbers, which is then compared against the given tolerance
 /// - Returns: true if values are equal according to the specified tolerance
-public func isequal(_ a: Double, _ b: Double, within tolerance: Double = 2.22E-16, 
-    epsilon: NiftyOption.isequal = .absolute) -> Bool
+public func isequal(_ a: Double, _ b: Double, within tolerance: Double = eps.single, 
+    comparison: NiftyOption.isequal? = nil) -> Bool
 {
-    switch epsilon
+    switch comparison
     {
-        case .absolute:
+        case .some(.absolute):
             return abs(a-b) < tolerance
-        case .relative:
-            fatalError("Not yet implemented") // FIXME: impl
+
+        case .some(.relative):
+            let diff = abs(a-b)
+            return diff <= max(abs(a), abs(b)) * tolerance
+
+        case .none:
+            // TODO: revisit what should constitute a "small number"
+            // compare small numbers absolutely (relative comparsion against 0 doesn't make sense)
+            if abs(a) < 1 || abs(b) < 1
+            {
+                return abs(a-b) < tolerance
+            }
+            // larger numbers make more sense to compare relatively
+            else
+            {
+                let diff = abs(a-b)
+                return diff <= max(abs(a), abs(b)) * tolerance
+            }
     }
 }
 
-public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: Double = 2.22E-16, 
-    epsilon: NiftyOption.isequal = .absolute) -> Bool
+public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: Double = eps.single, 
+    comparison: NiftyOption.isequal? = nil) -> Bool
 {
     if a.count != b.count
     { 
@@ -65,7 +83,7 @@ public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: 
 
     for i in 0..<a.count
     {
-        if !isequal(a[i], b[i], within: tolerance, epsilon: epsilon)
+        if !isequal(a[i], b[i], within: tolerance, comparison: comparison)
         {
             return false
         }
@@ -74,8 +92,8 @@ public func isequal(_ a: Vector<Double>, _ b: Vector<Double>, within tolerance: 
     return true
 }
 
-public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: Double = 2.22E-16, 
-    epsilon: NiftyOption.isequal = .absolute) -> Bool
+public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: Double = eps.single, 
+    comparison: NiftyOption.isequal? = nil) -> Bool
 {
     if a.size != b.size
     { 
@@ -84,7 +102,7 @@ public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: 
 
     for i in 0..<a.count
     {
-        if !isequal(a[i], b[i], within: tolerance, epsilon: epsilon)
+        if !isequal(a[i], b[i], within: tolerance, comparison: comparison)
         {
             return false
         }
@@ -93,8 +111,8 @@ public func isequal(_ a: Matrix<Double>, _ b: Matrix<Double>, within tolerance: 
     return true
 }
 
-public func isequal(_ a: Tensor<Double>, _ b: Tensor<Double>, within tolerance: Double = 2.22E-16, 
-    epsilon: NiftyOption.isequal = .absolute) -> Bool
+public func isequal(_ a: Tensor<Double>, _ b: Tensor<Double>, within tolerance: Double = eps.single, 
+    comparison: NiftyOption.isequal? = nil) -> Bool
 {
     if a.size != b.size
     { 
@@ -103,7 +121,7 @@ public func isequal(_ a: Tensor<Double>, _ b: Tensor<Double>, within tolerance: 
 
     for i in 0..<a.count
     {
-        if !isequal(a[i], b[i], within: tolerance, epsilon: epsilon)
+        if !isequal(a[i], b[i], within: tolerance, comparison: comparison)
         {
             return false
         }
