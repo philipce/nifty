@@ -79,7 +79,3 @@ original creation date, contributors, license, and, copyright.
  *  Copyright [yyyy] [name of copyright owner]
  ******************************************************************************/
 ```
-
-##### Pull Requests
-
-- Break things down into individual pieces of functionality... a pull request that adds new functionality should probably consist of a single file.
