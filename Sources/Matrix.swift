@@ -19,6 +19,13 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+// FIXME: matrix initializer infers type any on mixed integer/double array...
+// E.g. Matrix([[1,3.5],[2,4]]) creates a Matrix<Any>. This is easily fixed by either 
+// Matrix<Double>([[1,3.5],[2,4]]) or Matrix([[1.0,3.5],[2.0,4.0]]), but the error is kind of 
+// cryptic since it shows up when I try to pass the matrix to something that takes Matrix<Double>...
+// Is there a way to get it to default to a Matrix<Double>? Maybe add overloads for Matrix<Any> to 
+// the functions that convert all elements to Double?
+
 import Foundation
 
 /// Data structure for a 2-D, row-major order matrix.
