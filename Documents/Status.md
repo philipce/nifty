@@ -104,7 +104,7 @@ implemented.
 | msb                | Mostly Complete | None           |                                                                                         |
 | mtimes (*)         | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
 | MultikeyDictionary | Mostly Complete | Substantial    | Currently only have basic insert/find/remove                                            |
-| mvnrand            | Unimplemented   | None           |                                                                                         |
+| mvnrand            | Mostly Complete | Basic          |                                                                                         |
 | nan                | Incomplete      | None           |                                                                                         |
 | ndims              | Complete        | None           |                                                                                         |
 | ne                 | Unimplemented   | None           |                                                                                         |

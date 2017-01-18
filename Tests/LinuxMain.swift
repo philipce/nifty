@@ -10,6 +10,7 @@ tests += isequal_test.allTests
 tests += lu_test.allTests
 tests += Matrix_test.allTests
 tests += MultikeyDictionary_test.allTests
+tests += mvnrnd_test.allTests
 tests += svd_test.allTests
 tests += Tensor_test.allTests
 tests += Vector_test.allTests
