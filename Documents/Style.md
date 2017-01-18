@@ -13,10 +13,11 @@ This document lays out the general conventions and standards for Nifty.
 - Limit visibility as much as possible! This means most helper functions/data in a file ought to be marked `fileprivate`; use `internal` only when it's clear some other file needs to use it.
 - We favor a functional style over a more object-oriented organization, e.g. `inv(A)` computes the inverse of matrix A rather than `A.inv()`
 
-#### Naming
+##### Naming
 
 - Files should be named for the public function it contains, e.g. max.swift contains 
 the `max` function (plus public overloads, internal and private stuff).
+- Test files and classes should be named for the function being tested, plus the `_test` suffix.
 - Since we are following MATLAB naming, function names should match any corresponding MATLAB function names.
 - Functions that don't have a MATLAB counterpart should be named something that feels consistent with MATLAB's naming style.
 - Parameters do not need to be named for what is in the MATLAB documentation.
@@ -31,7 +32,7 @@ the `max` function (plus public overloads, internal and private stuff).
 
 ##### Function Headers
 
-Every public function must have a header comment. Internal and private functions may ommit the header if the usage is obvious. Use the following comment block:
+Every public function must have a header comment. Internal and private functions may ommit the header if the usage is obvious. The header is strictly limited to 100 character line length. Use something like the following comment block:
 
 ```
 /// Brief (one or 2 sentences) description of function, e.g. Compute the 
@@ -41,6 +42,7 @@ Every public function must have a header comment. Internal and private functions
 ///
 /// The above components should be complete sentences with proper punctuation.
 ///
+/// - Note: Here's some really important, complete sentence note.
 /// - Parameters:
 ///     - x: the x component of the vector (no need to be a complete sentence)
 ///     - y: the y component of the vector 
@@ -51,8 +53,7 @@ Every public function must have a header comment. Internal and private functions
 
 ##### File Header
 
-Every file ought to have a header that indicates purpose, original author,
-original creation date, contributors, license, and, copyright. 
+Every file ought to have a header that indicates purpose, original author, original creation date, contributors, license, and, copyright.  The header is strictly limited to 100 character line length.
 
 ```
 /*******************************************************************************
