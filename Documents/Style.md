@@ -2,7 +2,7 @@
 
 This document lays out the general conventions and standards for Nifty. 
 
-Contributions should endeavor to adhere to this style guide and remain consistent with the existing body of code. However, the real goal is to make code as clear as possible so we fully expect that some exceptions will arise.
+*Contributions should endeavor to adhere to this style guide and remain consistent with the existing body of code. However, the real goal is to make code as clear as possible so we fully expect that some exceptions will arise. We also expect this style guide to evolve, so suggestions and improvements to this document are encouraged.*
 
 ##### Organization
 
