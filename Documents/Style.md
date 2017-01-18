@@ -1,41 +1,37 @@
-# Nifty Style Guide
+# Style Guide
 
-This is the style guide for contributions to Nifty... 
+This document lays out the general conventions and standards for Nifty. 
 
-TODO: flesh this out
+Contributions should endeavor to adhere to this style guide and remain consistent with the existing body of code. However, the real goal is to make code as clear as possible so we fully expect that some exceptions will arise.
 
-## Organization
+##### Organization
 
-- keep toolboxes large and general, e.g. don't subdivide. We'd like to end up
-with only a handful of toolboxes
-- keep files small; typically only one function (plus overloads) per file. 
-- The exception to one function/file is when multiple functions access a piece 
-of private data, in this case functions can be combined into one file if it 
-makes more sense to do that then create accessor functions, e.g. time.swift 
-contains both tic() and toc() since the both access a private stopwatch.
-- prefer making data private when feasible
-- lines end at 80 characters, do not extend beyond this
+- One piece of functionality per file. This usually means that a file defines a single public function.
+- Overloads for a function ought to be part of the same file as the function being overloaded.
+- All internal and/or private functionality should be contained in the same file as the public functionality.
+- Internal functionality should only be stuck in a file with a public function if it is obviously most closely tied to that function--if multiple files use the internal functionality (which should be the case, otherwise it ought to be fileprivate) and it isn't clear which file is most closely related, the internal functionality ought to be promoted to its own file.
+- Limit visibility as much as possible! This means most helper functions/data in a file ought to be marked `fileprivate`; use `internal` only when it's clear some other file needs to use it.
+- We favor a functional style over a more object-oriented organization, e.g. `inv(A)` computes the inverse of matrix A rather than `A.inv()`
 
-## Naming Convention
+#### Naming
 
-- File should be named for the function it contains, e.g. max.swift contains 
-the max function overloads.
-- Names should match matlab function names if they do the same thing (parameter
-lists can be different). If the function has no comparable matlab counterpart, 
-name it something that feels similar in style, e.g. we named the function that
-re-maps a number from one range to another rmap() instead of something like 
-mapToRange().
-- private stuff (functions and data) should start with an underscore
-- TODO: decide rules on external parameter names, i.e. when should unnamed
-parameters be allowed, as in simple(p1: Int, _ p2: Int) vs 
-complex(p1: Int, p2: Int, p3: Int)
+- Files should be named for the public function it contains, e.g. max.swift contains 
+the `max` function (plus public overloads, internal and private stuff).
+- Since we are following MATLAB naming, function names should match any corresponding MATLAB function names.
+- Functions that don't have a MATLAB counterpart should be named something that feels consistent with MATLAB's naming style.
+- Parameters do not need to be named for what is in the MATLAB documentation.
+- Most functions should have all parameters named; the exception might be for the first one or two parameters in functions where it's obvious what they do.
 
-## Comments
+##### Code
 
-### Functions Headers
+- Lines should end at 100 characters, but it's flexible if your line is close.
+- Avoid overcommenting code--make code as self-documenting as possible, adding comments only when an needed to explain the motivation, a tricky bit, etc.
+- Prefer putting comments above a line of code rather than at the end.
+- Avoid /* */ comments in favor of commenting each line.
 
-Every public function must have a header comment. Private functions probably
-should all have one too. Use the following comment block:
+##### Function Headers
+
+Every public function must have a header comment. Internal and private functions may ommit the header if the usage is obvious. Use the following comment block:
 
 ```
 /// Brief (one or 2 sentences) description of function, e.g. Compute the 
@@ -46,38 +42,14 @@ should all have one too. Use the following comment block:
 /// The above components should be complete sentences with proper punctuation.
 ///
 /// - Parameters:
-///     - x: The *x* component of the vector (no period)
-///     - y: The *y* component of the vector (no period)
-///     - z: The *z* component of the vector (no period)
-/// - Throws:
-///	- error type: may include a phrase description if desired (no period)
-/// - Returns: describe what is returned in one phrase (no period)
+///     - x: the x component of the vector (no need to be a complete sentence)
+///     - y: the y component of the vector 
+///     - z: the z component of the vector 
+/// - Throws: if some type of error occurs (no need to enumerate specific errors)
+/// - Returns: computed vector magnitude
 ```
 
-Any of the components can be omitted from the comment block if there is
-nothing that should go there. First line (brief description) can not be omitted.
-The first line must be an imperative, e.g. 'Compute the magnitude...' rather 
-than 'Computes the magnitude...'.
-
-### Structs/Classes
-
-### Enums
-
-### Code
-
-Comments on code should be limited--most description ought to be in the 
-function header or the code should be easy enough to read. Some particularly
-tricky bits may require comments. In this case, comments go above the code, not
-at the end of the line. e.g.
-
-```
-// Do something tricky, comment like this
-let myTrickyValue = ...
-
-let myTrickyValue2 = ... // not like this
-```
-
-### File Header
+##### File Header
 
 Every file ought to have a header that indicates purpose, original author,
 original creation date, contributors, license, and, copyright. 
@@ -108,24 +80,6 @@ original creation date, contributors, license, and, copyright.
  ******************************************************************************/
 ```
 
-### Sections
+##### Pull Requests
 
-Major sections of a file can be grouped using MARK, as below.But there should 
-probably only be at most a few of these per file. Section heading must be short
-enough to fit on one line.
-
-```
-//==============================================================================
-// MARK: ALL CAPS SHORT SECTION HEADING
-//==============================================================================
-```
-
-#### Subsections
-You may want to use smaller subdivisions (e.g. set off private functions from
-the others). If desired, the following subsection heading may be used.
-
-```
-//--------------------------------------------------
-// Sub Section Heading Title Case
-//--------------------------------------------------
-```
+- Break things down into individual pieces of functionality... a pull request that adds new functionality should probably consist of a single file.
