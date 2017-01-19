@@ -14,7 +14,7 @@ These benchmarks are not inteded to be rigorous; rather, the intent is to simply
 
 2. Random Numbers
 
-  2.1 Create a random 1,000,0000-dimensional vector, with whole number elements in the range 1-999.
+  2.1 Create a random 1,000,000-dimensional vector, with whole number elements in the range 1-999.
 
 ##### Results
 
