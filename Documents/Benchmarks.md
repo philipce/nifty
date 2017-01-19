@@ -4,9 +4,9 @@ This document describes the various performance benchmarks and shows the times a
 
 These benchmarks are not inteded to be rigorous; rather, the intent is to simply provide a rough estimate of how Nifty performs relative to other packages. All tests are run on the same reference machine, under similar conditions, and results are averaged over multiple trials, but these results are by no means definitive or even necessarily correct.
 
-The code for these benchmarks can be found [here](https://github.com/nifty-swift/Nifty-benchmarks)
+The code for these benchmarks can be found [here](https://github.com/nifty-swift/Nifty-benchmarks).
 
-*Reference machine: Ubuntu 16.04; AMD FX-8350 4.0 GHz, 8 core CPU; 32 GB DDR3 RAM; GeForce GTX 750 Ti; 256 GB SSD*
+*Reference machine: Ubuntu 16.04, 64-bit; AMD FX-8350 4.0 GHz, 8 core CPU; 32 GB DDR3 RAM; GeForce GTX 750 Ti; 256 GB SSD*
 
 ##### Descriptions
 
