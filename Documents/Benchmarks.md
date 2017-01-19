@@ -42,7 +42,6 @@ These benchmarks are not inteded to be rigorous; rather, the intent is to simply
 
   6.2 TODO: K-means
 
-  6.3 TODO: 2D convolution
 
 ##### Results
 
