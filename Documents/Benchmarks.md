@@ -1,6 +1,6 @@
 # Benchmarks
 
-This document describes the various [performance benchmarks](https://github.com/nifty-swift/Nifty-benchmarks) and shows the times achieved by various packages on a [reference machine]( "Specs...").
+This document describes the various [performance benchmarks](https://github.com/nifty-swift/Nifty-benchmarks) and shows the times achieved by various packages on a [reference machine](#Benchmarks "Specs...").
 
 These benchmarks are not inteded to be rigorous; rather, the intent is to simply provide a *rough* estimate of how Nifty performs relative to other packages.
 
