@@ -77,6 +77,8 @@ The goal is for Nifty to provide correctness and performance similar to other nu
 
 Nifty uses the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework to manage unit tests. Once you've cloned this repository, running the unit tests for Nifty is as easy as running `swift test` in the repository root directory.
 
+You can check out the results of some simple benchmarks [here](https://github.com/nifty-swift/Nifty/blob/master/Documents/Benchmarks.md).
+
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
 - Provide a viable alternative to packages such as NumPy and MATLAB for those who wish to develop in Swift.
