@@ -1,12 +1,8 @@
 # Benchmarks
 
-This document describes the various performance benchmarks and shows the times achieved by various packages on a reference machine.
+This document describes the various [performance benchmarks](https://github.com/nifty-swift/Nifty-benchmarks) and shows the times achieved by various packages on a reference* machine.
 
-These benchmarks are not inteded to be rigorous; rather, the intent is to simply provide a rough estimate of how Nifty performs relative to other packages. All tests are run on the same reference machine, under similar conditions, and results are averaged over multiple trials, but these results are by no means definitive or even necessarily correct.
-
-The code for these benchmarks can be found [here](https://github.com/nifty-swift/Nifty-benchmarks).
-
-*Reference machine: Ubuntu 16.04, 64-bit; AMD FX-8350 4.0 GHz, 8 core CPU; 32 GB DDR3 RAM; GeForce GTX 750 Ti; 256 GB SSD*
+These benchmarks are not inteded to be rigorous; rather, the intent is to simply provide a *rough* estimate of how Nifty performs relative to other packages.
 
 ##### Descriptions
 
@@ -16,8 +12,9 @@ The code for these benchmarks can be found [here](https://github.com/nifty-swift
 
 ##### Results
 
-The following results were collected 19 Jan 2017, with Nifty 1.0.0.
+| Benchmark       | Date/Version           | Nifty          | MATLAB          | Python          |
+|-----------------|------------------------|----------------|-----------------|-----------------|
+| 1.1             | 19 Jan 2017 / 1.0.0    | **61.44 ms**   | 84.78 ms        | 103.71 ms       |
 
-| Benchmark       | Nifty           | MATLAB         | Python          |
-|-----------------|-----------------|----------------|-----------------|
-| 1.1             | **61.44 ms**    | 84.78 ms       | 103.71 ms       |
+
+*\*Reference machine: Ubuntu 16.04, 64-bit; AMD FX-8350 4.0 GHz, 8 core CPU; 32 GB DDR3 RAM; GeForce GTX 750 Ti; 256 GB SSD*
