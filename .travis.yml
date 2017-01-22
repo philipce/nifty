@@ -18,6 +18,9 @@ before_install:
     brew install homebrew/science/openblas;
   fi  
 - git clone https://github.com/IBM-Swift/Package-Builder.git
+- ls /usr/local/opt/openblas
+- ls /usr/local/opt/lapack
 - ls /usr/local/opt/openblas/lib
+- ls /usr/local/opt/lapack/lib
 script:
 - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
