@@ -2,8 +2,7 @@ matrix:
   include:
   - os: linux
     dist: trusty
-    sudo: required
-  allow_failures:
+    sudo: required  
   - os: osx
     osx_image: xcode8
     sudo: required
