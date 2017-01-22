@@ -7,9 +7,11 @@ matrix:
     osx_image: xcode8
     sudo: required
 before_install:
-- sudo apt-get update  
-- sudo apt-get install liblapack3 liblapacke liblapacke-dev -y  
-- sudo apt-get install libopenblas-base libopenblas-dev -y
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+    sudo apt-get update;      
+    sudo apt-get install liblapack3 liblapacke liblapacke-dev -y;  
+    sudo apt-get install libopenblas-base libopenblas-dev -y;    
+  fi
 - git clone https://github.com/IBM-Swift/Package-Builder.git
 script:
 - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
