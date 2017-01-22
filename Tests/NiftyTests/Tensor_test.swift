@@ -3,6 +3,7 @@ import XCTest
 
 class Tensor_test: XCTestCase 
 {
+    #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
     {
         let tests = 
@@ -12,6 +13,7 @@ class Tensor_test: XCTestCase
 
         return tests
     }
+    #endif
 
     func testBasic() 
     {        

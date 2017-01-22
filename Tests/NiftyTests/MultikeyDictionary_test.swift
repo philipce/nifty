@@ -3,6 +3,7 @@ import XCTest
 
 class MultikeyDictionary_test: XCTestCase 
 {
+    #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
     {
         let tests = 
@@ -13,6 +14,7 @@ class MultikeyDictionary_test: XCTestCase
 
         return tests
     }
+    #endif
 
     func testBasic() 
     {

@@ -24,6 +24,7 @@ import XCTest
 
 class mvnrnd_test: XCTestCase 
 {
+    #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
     {
         let tests = 
@@ -33,6 +34,7 @@ class mvnrnd_test: XCTestCase
 
         return tests
     }
+    #endif
 
     func testBasic() 
     {       

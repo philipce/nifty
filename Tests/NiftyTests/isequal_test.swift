@@ -3,6 +3,7 @@ import XCTest
 
 class isequal_test: XCTestCase 
 {
+    #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
     {
         let tests = 
@@ -12,6 +13,7 @@ class isequal_test: XCTestCase
 
         return tests
     }
+    #endif
 
     func testBasic() 
     {        
