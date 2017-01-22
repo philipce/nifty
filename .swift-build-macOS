@@ -1,1 +1,1 @@
-swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -Xlinker -llapacke -L/usr/local/opt/openblas/lib -Xlinker -lopenblas
+swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -llapacke -Xlinker -L/usr/local/opt/openblas/lib -Xlinker -lopenblas
