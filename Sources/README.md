@@ -1,0 +1,1 @@
+Note: placeholders for the functions we intend to include in v1.0.0 have been added--files starting with '_' are empty placeholders waiting to be filled out. Corresponding tests have been created and are set to just fail until we implement them. The hope is this will encourage finishing up things quickly.
