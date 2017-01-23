@@ -62,24 +62,29 @@ implemented.
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
 | eig                | Unimplemented   | None           |                                                                                         |
 | eigs               | Unimplemented   | None           |                                                                                         |
+| eps                | Incomplete      | None           |                                                                                         |
 | eq                 | Unimplemented   | None           |                                                                                         |
 | exp                | Complete        | None           |                                                                                         |
 | exp2               | Complete        | None           |                                                                                         |
 | expm1              | Complete        | None           |                                                                                         |
 | eye                | Mostly Complete | None           |                                                                                         |
+| fft                | Unimplemented   | None           |                                                                                         |
 | filter             | Unimplemented   | None           |                                                                                         |
 | find               | Unimplemented   | None           |                                                                                         |
 | floor              | Complete        | None           |                                                                                         |
 | hypot              | Complete        | None           |                                                                                         |
 | ge (>=)            | Complete        | None           |                                                                                         |
 | gt (>)             | Unimplemented   | None           |                                                                                         |
+| hypot              | Mostly Complete | None           |                                                                                         |
+| ifft               | Unimplemented   | None           |                                                                                         |
 | ind2sub            | Mostly Complete | None           |                                                                                         |
 | inf                | Incomplete      | None           |                                                                                         |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
-| ipiv2p             | Incomplete      | None           | Internal only function for converting LAPACK pivot indices... super hacky seeming...    |
 | isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                    |
 | isinf              | Unimplemented   | None           |                                                                                         |
 | isnan              | Incomplete      | None           |                                                                                         |
+| KDTree             | Unimplemented   | None           |                                                                                         |
+| kmeans             | Unimplemented   | None           |                                                                                         |
 | ldivide            | Unimplemented   | None           |                                                                                         |
 | le (<=)            | Complete        | None           |                                                                                         |
 | linspace           | Unimplemented   | None           |                                                                                         |
@@ -104,10 +109,11 @@ implemented.
 | msb                | Mostly Complete | None           |                                                                                         |
 | mtimes (*)         | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
 | MultikeyDictionary | Mostly Complete | Substantial    | Currently only have basic insert/find/remove                                            |
-| mvnrand            | Mostly Complete | Basic          |                                                                                         |
+| mvnrnd             | Mostly Complete | Basic          |                                                                                         |
 | nan                | Incomplete      | None           |                                                                                         |
 | ndims              | Complete        | None           |                                                                                         |
 | ne                 | Unimplemented   | None           |                                                                                         |
+| Nifty              | Incomplete      | None           | Option sets and constants                                                               |
 | norm               | Unimplemented   | None           |                                                                                         |
 | numel              | Complete        | None           |                                                                                         |
 | ones               | Mostly Complete | None           |                                                                                         |
@@ -152,6 +158,7 @@ implemented.
 | transpose          | Mostly Complete | None           | Need to add overloads for generic types                                                 |
 | tril               | Incomplete      | None           |                                                                                         |
 | triu               | Incomplete      | None           |                                                                                         |
+| unique             | Unimplemented   | None           |                                                                                         |
 | var                | Unimplemented   | None           |                                                                                         |
 | Vector             | Mostly complete | Basic          |                                                                                         |
 | zeros              | Complete        | None           |                                                                                         |
@@ -169,16 +176,13 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
 - bayes net
 - decision tree
 - distance metrics: manhattan, euclidean, mahalanobis, etc
-- fft
 - filter2 etc
 - fminsearch... optimization toolbox
 - gaussian process
 - halton sequence
 - image
 - kalman filter
-- kd tree
-- kmeans
-- k nearest neighbor
+- k nearest neighbor classifier
 - gmm
 - mdp/pomdp/hmm
 - errors: mean square error, etc.
