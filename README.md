@@ -10,7 +10,7 @@ Nifty is a general-purpose numerical computing library for the Swift programming
 
 ## Getting Started
 
-Not sure if the install instructions are worth reading? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) to help make your mind up.
+Not sure if Nifty is worth the effort of installing? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](https://github.com/nifty-swift/Nifty/blob/master/Documents/Status.md) to help you decide.
 
 _An Xcode project file will be coming soon, so Xcode users can just use the included project file and skip the rest of the install steps!_
 
@@ -20,7 +20,7 @@ Currently, Nifty is being developed on Ubuntu 14.04/16.04 and occasionally teste
 
 ##### Install Swift
 
-Follow these [instructions to install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release!
+Follow these [instructions to install Swift](https://swift.org/getting-started/). Our goal is to stay current as Swift develops, so use the latest release.
 
 Nifty uses the [Swift Package Manager](https://swift.org/package-manager/) (see the [project repo](https://github.com/apple/swift-package-manager) for more info). It greatly simplifies the build process! It comes included with Swift 3.0 and above.
 
