@@ -29,10 +29,11 @@ the `max` function (plus public overloads, internal and private stuff).
 - Avoid overcommenting code--make code as self-documenting as possible, adding comments only when an needed to explain the motivation, a tricky bit, etc.
 - Prefer putting comments above a line of code rather than at the end.
 - Avoid /* */ comments in favor of commenting each line.
+- Use `throws` sparingly. Having to `try` everything is cumbersome, and most of these functions will only fail in case of an unrecoverable programmer error anyway (think index out of bounds, matrix dimension mismatch, etc.). Instead, consider using `precondition`.
 
 ##### Function Headers
 
-Every public function must have a header comment. Internal and private functions may ommit the header if the usage is obvious. The header is strictly limited to 100 character line length. Use something like the following comment block:
+Every public function/struct/class/variable/etc. must have a header comment (it will be used in auto-generating documentation). Internal and private functions may ommit the header if the usage is obvious. The header is strictly limited to 100 character line length. Use something like the following comment block:
 
 ```
 /// Brief (one or 2 sentences) description of function, e.g. Compute the 
