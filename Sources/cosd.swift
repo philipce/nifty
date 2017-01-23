@@ -26,5 +26,5 @@
 /// - Returns: cosine of x
 public func cosd(_ x: Double) -> Double 
 {
-    return cos(x * Pi/180)
+    return cos(x * Nifty.Constants.pi/180)
 }

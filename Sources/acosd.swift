@@ -26,5 +26,5 @@
 /// - Returns: arc cosine of x
 public func acosd(_ x: Double) -> Double 
 {
-    return acos(x) * 180/Pi
+    return acos(x) * 180/Nifty.Constants.pi
 }

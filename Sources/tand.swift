@@ -26,5 +26,5 @@
 /// - Returns: tangent of x
 public func tand(_ x: Double) -> Double 
 {
-    return tan(x * Pi/180)
+    return tan(x * Nifty.Constants.pi/180)
 }

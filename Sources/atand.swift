@@ -26,5 +26,5 @@
 /// - Returns: arc tangent of x
 public func atand(_ x: Double) -> Double 
 {
-    return atan(Double(x)) * 180/Pi
+    return atan(Double(x)) * 180/Nifty.Constants.pi
 }

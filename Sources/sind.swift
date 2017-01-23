@@ -26,5 +26,5 @@
 /// - Returns: sine of x
 public func sind(_ x: Double) -> Double 
 {
-    return sin(x * Pi/180)
+    return sin(x * Nifty.Constants.pi/180)
 }

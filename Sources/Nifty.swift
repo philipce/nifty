@@ -37,6 +37,24 @@ public class Nifty
     /// Contains constant definitions used throughout Nifty.
     public class Constants
     {
+        /*
+        // TODO: determine better way to do this, e.g. static inside class so Nifty.Pi?
+
+        /// Default tolerance used for comparing decimal values.
+        public let DefaultDecimalTolerance = 1e-12
+
+        /// Special double values
+        public let NaN = Double.nan
+        public let Inf = Double.infinity
+
+        /// Pi
+        public let Pi = 3.141592653589793
+
+        /// Euler's number
+        public let E = 2.718281828459046
+        */
+
+
         public static let e   = 2.718281828459046
         public static let phi = 1.618033988749895
         public static let pi  = 3.141592653589793        

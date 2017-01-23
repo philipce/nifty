@@ -1,10 +1,11 @@
+
 /***************************************************************************************************
- *  Constants.swift
+ *  eigs_test.swift
  *
- *  This file contains constant definitions useful throughout Nifty.
+ *  This file tests the eigs function.
  *
  *  Author: Philip Erickson
- *  Creation Date: 1 May 2016
+ *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -16,20 +17,29 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2016 Philip Erickson
+ *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-// TODO: determine better way to do this, e.g. static inside class so Nifty.Pi?
+import XCTest
+@testable import Nifty
 
-/// Default tolerance used for comparing decimal values.
-public let DefaultDecimalTolerance = 1e-12
+class eigs_test: XCTestCase 
+{
+    #if os(Linux)
+    static var allTests: [XCTestCaseEntry] 
+    {
+        let tests = 
+        [
+            testCase([("testBasic", self.testBasic)]),
+        ]
 
-/// Special double values
-public let NaN = Double.nan
-public let Inf = Double.infinity
+        return tests
+    }
+    #endif
 
-/// Pi
-public let Pi = 3.141592653589793
-
-/// Euler's number
-public let E = 2.718281828459046
+    func testBasic() 
+    {        
+        // TODO: fill me in
+        XCTAssert(false)
+    }
+}
