@@ -1,7 +1,7 @@
 /***************************************************************************************************
  *  minus.swift
  *
- *  This file provides functionality for matrix multiplication.
+ *  This file provides functionality for vector, matrix, and tensor subtraction.
  *
  *  Author: Adam Duracz
  *  Creation Date: 30 Jan 2017
@@ -18,6 +18,8 @@
  *
  *  Copyright 2016 Adam Duracz
  **************************************************************************************************/
+
+// TODO: add overloads for vector and tensor
 
 public func - (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
 {

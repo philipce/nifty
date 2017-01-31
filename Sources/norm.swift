@@ -1,7 +1,7 @@
 /***************************************************************************************************
  *  norm.swift
  *
- *  This file provides functionality for matrix multiplication.
+ *  This file provides vector, matrix, and tensor norm functionality.
  *
  *  Author: Adam Duracz
  *  Creation Date: 30 Jan 2017
@@ -18,6 +18,9 @@
  *
  *  Copyright 2016 Adam Duracz
  **************************************************************************************************/
+
+// TODO: add p-norm and frobenius norm
+// TODO: add overload for vector and tensor
 
 /// Compute vector norm.
 ///
