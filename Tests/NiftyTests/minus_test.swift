@@ -39,7 +39,9 @@ class minus_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        XCTAssert(false)
+        let A = Matrix([4,4], Array<Double>(repeating: 1.0, count: 16))
+        for e in (A - A).data {
+            XCTAssert(e == 0.0)
+        }
     }
 }
