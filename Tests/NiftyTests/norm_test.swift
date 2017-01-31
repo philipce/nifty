@@ -39,7 +39,7 @@ class norm_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        XCTAssert(false)
+        let A = Matrix([4,1], Array<Double>(repeating: 1.0, count: 4))
+        XCTAssert(norm(A) == 2.0)
     }
 }
