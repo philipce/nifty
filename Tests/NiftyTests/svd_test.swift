@@ -27,8 +27,6 @@ class svd_test: XCTestCase
         let (U,S,V) = svd(A)
         let USVT = U*S*transpose(V) 
 
-        print("sdfsdf")
-
         print(A, terminator: "\n\n")
         print(U, terminator: "\n\n")
         print(S, terminator: "\n\n")
