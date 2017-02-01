@@ -43,36 +43,39 @@ public postfix func ^ (A: Matrix<Double>) -> Matrix<Double>
 	return transpose(A)
 }
 
-/// Return the nonconjugate transpose of A, interchanging the row and column index for each element.
+/// Return the nonconjugate transpose of the given matrix.
 ///
-/// Alternatively, `transpose(A)` can be executed with `A^`. 
+/// Alternatively, `transpose(B)` can be executed with `B^`. 
 ///
 /// - Parameters:
-///		- A: the matrix to transpose
+///		- B: the matrix to transpose
 ///	- Returns: transposed matrix
-public func transpose(_ A: Matrix<Double>) -> Matrix<Double>
+public func transpose(_ B: Matrix<Double>) -> Matrix<Double>
 {
-	let transA = CblasTrans
-	let transB = CblasTrans
-	let m = A.size[0]
-	let n = A.size[1]
-	let k = A.size[1]
-	let alpha = 1.0
-	let a = A.data
-	let lda = k
-	let B = eye([k,n])
-	let b = B.data
-	let ldb = n
-	let beta = 0.0
-	var c = Array<Double>(repeating: 0, count: m*n)
-	let ldc = m
-
-	cblas_dgemm(CblasRowMajor, transA, transB, Int32(m), Int32(n), Int32(k), alpha, a, Int32(lda), 
-		b, Int32(ldb), beta, &c, Int32(ldc))
-
-	// inherit name
-	var newName = A.name
-	if newName != nil { newName = "transpose(\(newName!))"}
-
-	return Matrix(k, m, c, name: newName, showName: A.showName)
+    let A = eye(B.columns, B.columns)
+    let transA = CblasNoTrans
+    let m = A.rows
+    let k = A.columns
+    let a = A.data
+    let lda = m
+    let alpha = 1.0	
+    
+    let transB = CblasTrans
+    assert(k == B.columns) // k is rows in transpose(B) and columns in A
+    let n = B.rows         // n is columns in transpose(B) and columns in C
+    let b = B.data
+    let ldb = k            // ldb is rows in transpose(B)
+    
+    var c = Array<Double>(repeating: 0, count: k*n)
+    let ldc = n 		  // for row-major, leading dimension is the number of elements in row 
+    let beta = 0.0
+    
+    cblas_dgemm(CblasRowMajor, transA, transB, Int32(m), Int32(n), Int32(k), alpha, a, Int32(lda), 
+                b, Int32(ldb), beta, &c, Int32(ldc))
+    
+    // inherit name
+    var newName = A.name
+    if newName != nil { newName = "transpose(\(newName!))"}
+    
+    return Matrix(k, n, c, name: newName, showName: A.showName)
 }
