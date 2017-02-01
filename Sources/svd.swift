@@ -102,11 +102,7 @@ public func svd(_ A: Matrix<Double>) -> (U: Matrix<Double>, S: Matrix<Double>, V
 {
     var jobz: Int8 = 65 // ascii 'A'
     var m = Int32(A.rows)
-    var n = Int32(A.columns)
-
-    // The leading dimension equals the number of elements in the major dimension. In this case,
-    // we are doing row-major so lda is the number of columns in A.
-    var lda = n
+    var n = Int32(A.columns)    
 
     var a = A.data
 
@@ -117,25 +113,38 @@ public func svd(_ A: Matrix<Double>) -> (U: Matrix<Double>, S: Matrix<Double>, V
     // U is an m x m matrix; ldu is the leading dimension
     var u = [Double](repeating: 0.0, count: Int(m*m))
     var ldu = m
-
+    
     // VT is an n x n matrix; ldvt is the leading dimension
     var vt = [Double](repeating: 0.0, count: Int(n*n))
-    var ldvt = n    
-
+    var ldvt = n  
+      
     var info = Int32(0)
     
     // TODO: find better way to resolve the difference between clapack used by Accelerate and LAPACKE
     #if NIFTY_XCODE_BUILD
+    
+    // The leading dimension equals the number of elements in the major dimension. In this case,
+    // we are doing column-major so lda is the number of rows in A.
+    var lda = m
+        
     let mx = max(m, n)
     let mn = min(m, n)        
-    var lwork = 3*mn + max(mx, 7*mn) // this computation is unique to jobz='N'
+    var lwork = 4*mn*mn + 6*mn + mx // this computation is unique to jobz='A'
     var iwork = Array<Int32>(repeating: 0, count: 8*Int(mn))
     var work = Array<Double>(repeating: 0, count: Int(lwork))                
     let At = transpose(A)
-    var at = At.data        
+    var at = At.data
+        
     dgesdd_(&jobz, &m, &n, &at, &lda, &s, &u, &ldu, &vt, &ldvt, &work, &lwork, &iwork, &info)
-    a = transpose(Matrix(Int(n), Int(n), at)).data 
+        
+    u = transpose(Matrix(Int(m), u)).data
+    vt = transpose(Matrix(Int(n), vt)).data
     #else
+        
+    // The leading dimension equals the number of elements in the major dimension. In this case,
+    // we are doing row-major so lda is the number of columns in A.
+    var lda = n        
+        
     info = LAPACKE_dgesdd(LAPACK_ROW_MAJOR, jobz, m, n, &a, lda, &s, &u, ldu, &vt, ldvt)
     #endif
         
