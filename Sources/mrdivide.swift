@@ -19,7 +19,9 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if !NIFTY_XCODE_BUILD
 import CLapacke
+#endif
 
 public func / (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
 {

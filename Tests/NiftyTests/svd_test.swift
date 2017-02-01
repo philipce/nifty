@@ -19,8 +19,6 @@ class svd_test: XCTestCase
     {        
         // examples from matlab docs on svd
 
-        print("sdfs")
-
         var A = Matrix<Double>([[1,0,1],[-1,-2,0],[0,1,-1]])
         let s = svd(A, .values)
         XCTAssert(isequal(s, Vector([2.4605, 1.6996, 0.2391]), within: 1E-4))

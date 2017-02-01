@@ -22,7 +22,12 @@
 // TODO: extend this to allow swapping of vector elements, columns of matrices as well as rows, and
 // 2D tensors in 3D tensors, etc.
 
+#if NIFTY_XCODE_BUILD
+import Accelerate
+#else
 import CBlas
+#endif
+
 
 // Swap two rows in a given matrix.
 ///

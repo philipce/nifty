@@ -21,7 +21,11 @@
 
 // TODO: MATLAB provides more info, e.g. (L,U,P,Q,R) = lu(A). Should we provide Q and R?
 
+#if NIFTY_XCODE_BUILD
+import Accelerate
+#else
 import CLapacke
+#endif
 
 /// Compute the LU decomposition of a given square matrix.
 ///
@@ -80,18 +84,28 @@ public func lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>, P:
 /// - Returns: the lower triangular matrix L, the upper triangular matrix U, and the pivot indices
 fileprivate func _lu(_ A: Matrix<Double>) -> (L: Matrix<Double>, U: Matrix<Double>, ipiv: [Int32])
 {
-	let m = Int32(A.size[0])
-	let n = Int32(A.size[1])	
+	var m = Int32(A.size[0])
+	var n = Int32(A.size[1])	
 	var a = A.data
 
 	// The leading dimension equals the number of elements in the major dimension. In this case,
 	// we are doing row-major so lda is the number of columns in A.
-	let lda = n
-	
+	var lda = n
 	var ipiv = Array<Int32>(repeating: 0, count: Int(n))		
-
-	// compute LU factorization
-	let info = LAPACKE_dgetrf(LAPACK_ROW_MAJOR, m, n, &a, lda, &ipiv)
+    var info = Int32(0)
+    
+    // compute LU factorization
+    
+    // TODO: find better way to resolve the difference between clapack used by Accelerate and LAPACKE
+    #if NIFTY_XCODE_BUILD
+    let At = transpose(A)
+    var at = At.data  
+    dgetrf_(&m, &n, &at, &lda, &ipiv, &info)
+    a = transpose(Matrix(Int(n), Int(n), at)).data
+    #else    	
+	info = LAPACKE_dgetrf(LAPACK_ROW_MAJOR, m, n, &a, lda, &ipiv)
+    #endif
+    
 	precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
 	if info > 0
 	{

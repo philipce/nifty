@@ -21,7 +21,11 @@
 
 // TODO: MATLAB provides a lot more return options than just the two R or L = chol(A). Add more?
 
+#if NIFTY_XCODE_BUILD
+import Accelerate
+#else
 import CLapacke
+#endif
 
 extension Nifty.Options
 {
@@ -43,7 +47,7 @@ extension Nifty.Options
 /// - Returns: requested triangular matrix
 public func chol(_ A: Matrix<Double>, _ option: Nifty.Options.chol = .upper) -> Matrix<Double>
 {
-    let uplo: Int8
+    var uplo: Int8
     switch option
     {
         case .upper:
@@ -53,15 +57,25 @@ public func chol(_ A: Matrix<Double>, _ option: Nifty.Options.chol = .upper) -> 
     }
 
     precondition(A.rows == A.columns, "Matrix must be square")
-    let n = A.rows
-
+    var n = Int32(A.rows)
     var a = A.data
 
     // The leading dimension equals the number of elements in the major dimension. In this case,
     // we are doing row-major so lda is the number of columns in A.
-    let lda = Int32(A.columns)
-
-    let info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, uplo, Int32(n), &a, lda)
+    var lda = Int32(A.columns)
+    
+    var info = Int32(0)
+    
+    // TODO: find better way to resolve the difference between clapack used by Accelerate and LAPACKE
+    #if NIFTY_XCODE_BUILD
+    let At = transpose(A)
+    var at = At.data
+    dpotrf_(&uplo, &n, &at, &lda, &info)
+    a = transpose(Matrix(Int(n), Int(n), at)).data
+    #else
+    info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, uplo, n, &a, lda)
+    #endif
+        
     precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
     precondition(info == 0, "The leading minor of order \(info) is not positive definite, and the " +
         "factorization could not be completed")
@@ -69,14 +83,14 @@ public func chol(_ A: Matrix<Double>, _ option: Nifty.Options.chol = .upper) -> 
     switch option
     {
         case .upper:
-            var R = triu(Matrix(n, n, a))
+            var R = triu(Matrix(Int(n), Int(n), a))
             R.name = A.name != nil ? "chol(\(A.name!), .upper)" : nil
             R.showName = A.showName
 
             return R
 
         case .lower:
-            var L = tril(Matrix(n, n, a))
+            var L = tril(Matrix(Int(n), Int(n), a))
             L.name = A.name != nil ? "chol(\(A.name!), .lower)" : nil
             L.showName = A.showName
 

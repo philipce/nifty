@@ -19,7 +19,11 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+#if NIFTY_XCODE_BUILD
+import Accelerate
+#else
 import CBlas
+#endif
 
 // TODO: transpose only operates on double matrices... extend to int, float, string, etc.
 // It's specific to doubles because of the use of BLAS function. Can use BLAS on ints/floats, but
