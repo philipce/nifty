@@ -9,7 +9,7 @@ Nifty is a general-purpose numerical computing library for the Swift programming
 
 ## Getting Started
 
-Not sure if Nifty is worth the effort of installing? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](www.nifty-swift.org) to help you decide.
+Not sure if Nifty is worth the effort of installing? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](http://nifty-swift.org) to help you decide.
 
 Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
@@ -17,13 +17,13 @@ Nifty builds off the following external libraries:
 - [BLAS](http://www.netlib.org/blas/)
 - [LAPACK](http://www.netlib.org/lapack/)
 
-##### Xcode Installation
+#### Xcode Installation
 
 Xcode users can just use the included project file. Simply drag the project file into your own Xcode project and `import Nifty` at the top of any files where you wish to use Nifty!
 
 When built with Xcode, Nifty uses the [Accelerate framework](https://developer.apple.com/reference/accelerate) to get the BLAS/LAPACK libraries, which comes installed by default on macOS.
 
-##### Swift Package Manager Installation
+#### Swift Package Manager Installation
 
 Linux users (and those on macOS who prefer not to use Xcode) can install Nifty using the [Swift Package Manager](https://swift.org/package-manager/).
 
@@ -37,11 +37,11 @@ Install an optimized BLAS library, such as [OpenBLAS](http://www.openblas.net/):
 
 Once you've installed the above dependencies, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
-##### Usage
+#### Usage
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
 
-##### Troubleshooting
+#### Troubleshooting
 
 If you're having troubles, you may find the following helpful:
 

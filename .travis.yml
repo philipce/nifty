@@ -8,9 +8,9 @@ matrix:
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
     sudo apt-get update;      
-    sudo apt-get install liblapack3 liblapacke liblapacke-dev -y;  
-    sudo apt-get install libopenblas-base libopenblas-dev -y; 
-    git clone https://github.com/IBM-Swift/Package-Builder.git   
+    sudo apt-get install liblapack3 liblapacke liblapacke-dev -y;
+    sudo apt-get install libopenblas-base libopenblas-dev -y;
+    git clone https://github.com/IBM-Swift/Package-Builder.git;
   fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
     brew update;
@@ -20,8 +20,8 @@ before_install:
   fi  
 script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-    ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR   
+    ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR;
   fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-    xcodebuild test -scheme Nifty
+    xcodebuild test -scheme Nifty;
   fi   
