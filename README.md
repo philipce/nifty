@@ -1,7 +1,7 @@
-![](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
-![](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
+![status](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
+![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
-![Plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20iOS%20%7C%20WatichOS%20%7C%20tvOS-lightgrey.svg)
+![Plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20-lightgrey.svg)
 
 # Nifty
 
@@ -14,32 +14,31 @@ Not sure if Nifty is worth the effort of installing? Check out a [simple demo pr
 Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
 Nifty builds off the following external libraries:
-- [BLAS](http://www.netlib.org/blas/)
-- [LAPACK](http://www.netlib.org/lapack/)
+- 
+- 
 
 #### Xcode Installation
 
 Xcode users can just use the included project file. Simply drag the project file into your own Xcode project and `import Nifty` at the top of any files where you wish to use Nifty!
 
-When built with Xcode, Nifty uses the [Accelerate framework](https://developer.apple.com/reference/accelerate) to get the BLAS/LAPACK libraries, which comes installed by default on macOS.
+Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with Xcode, these are provided by the [Accelerate](https://developer.apple.com/reference/accelerate) framework. Since Accelerate is installed on macOS by default, no additional installation steps are needed.
 
 #### Swift Package Manager Installation
 
 Linux users (and those on macOS who prefer not to use Xcode) can install Nifty using the [Swift Package Manager](https://swift.org/package-manager/).
 
-Install LAPACK:
-- Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev`
-- Mac: `brew install homebrew/dupes/lapack`
+Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with the Swift Package Manager, Nifty uses the C interface, [LAPACKE](http://www.netlib.org/lapack/lapacke.html) and the optimized library [OpenBLAS](http://www.openblas.net/). These can be installed with the following commands:
+- Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev libopenblas-base libopenblas-dev`
+- Mac: `brew install homebrew/dupes/lapack homebrew/science/openblas`
 
-Install an optimized BLAS library, such as [OpenBLAS](http://www.openblas.net/):
-- Ubuntu: `sudo apt-get install libopenblas-base libopenblas-dev`
-- Mac: `brew install homebrew/science/openblas`
 
-Once you've installed the above dependencies, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
+Once the dependencies are installed, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
 #### Usage
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
+
+The API is documented [here](http://nifty-swift.org).
 
 #### Troubleshooting
 
@@ -47,7 +46,7 @@ If you're having troubles, you may find the following helpful:
 
 The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
  
-Also, if you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
+If you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
 ## Nifty Features
 
@@ -72,12 +71,12 @@ You can check out the results of some simple benchmarks [here](https://github.co
 
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
-- Provide a viable alternative to packages such as NumPy and MATLAB for those who wish to develop in Swift.
-- Do as much in Swift as possible, resorting to external C libraries only when necessary for performance reasons
+- Provide a viable alternative to packages such as NumPy and MATLAB for those who wish to develop in Swift, whether on macOS or Linux.
+- Do as much in Swift as possible, resorting to external libraries only when necessary.
 - Make exploration of the code as simple as possible, through plain organization and clean, easy-to-read code.
 - Serve as a learning opportunity for those wishing to explore numerical computing.
 
-Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done, so for the time being, we'd rather defer to other projects.
+Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done so, for the time being, we'd rather defer to other projects.
 - Graphical stuff, e.g. matplotlib
 - Time series stuff, e.g. pandas
 - Modeling and simulation stuff, e.g. simulink
@@ -91,9 +90,10 @@ To contribute code to this project:
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Check out the [style guide](https://github.com/nifty-swift/Nifty/blob/master/Documents/Style.md)
-4. Commit your changes: `git commit -am 'Add some feature'`
-5. Push to the branch: `git push origin my-new-feature`
-6. Submit a pull request!
+4. Consider including a test, even if it's super basic
+5. Commit your changes: `git commit -am 'Add some feature'`
+6. Push to the branch: `git push origin my-new-feature`
+7. Submit a pull request!
 
 For anything else, feel free to open an issue!
 
