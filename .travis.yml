@@ -19,3 +19,7 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
     xcodebuild test -scheme Nifty;
   fi   
+after_success:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
+    bash <(curl -s https://codecov.io/bash);
+  fi     
