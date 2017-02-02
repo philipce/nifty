@@ -143,7 +143,7 @@ public func svd(_ A: Matrix<Double>) -> (U: Matrix<Double>, S: Matrix<Double>, V
         
     // The leading dimension equals the number of elements in the major dimension. In this case,
     // we are doing row-major so lda is the number of columns in A.
-    var lda = n        
+    let lda = n        
         
     info = LAPACKE_dgesdd(LAPACK_ROW_MAJOR, jobz, m, n, &a, lda, &s, &u, ldu, &vt, ldvt)
     #endif
