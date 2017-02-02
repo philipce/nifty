@@ -101,7 +101,7 @@ implemented.
 | mean               | Unimplemented   | None           |                                                                                         |
 | median             | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
-| minus (-)          | Unimplemented   | None           |                                                                                         |
+| minus (-)          | Mostly Complete | Basic          | Need to add overloads                                                                   |
 | mldivide (-/)      | Complete        | None           |                                                                                         |
 | mode               | Unimplemented   | None           |                                                                                         |
 | mpower (**)        | Unimplemented   | None           |                                                                                         |
@@ -114,11 +114,11 @@ implemented.
 | ndims              | Complete        | None           |                                                                                         |
 | ne                 | Unimplemented   | None           |                                                                                         |
 | Nifty              | Incomplete      | None           | Option sets and constants                                                               |
-| norm               | Unimplemented   | None           |                                                                                         |
+| norm               | Incomplete      | Basic          | L2 norm complete, need L1, frobenius, etc...                                            |
 | numel              | Complete        | None           |                                                                                         |
 | ones               | Mostly Complete | None           |                                                                                         |
 | pinv               | Unimplemented   | None           |                                                                                         |
-| plus (+)           | Unimplemented   | None           |                                                                                         |
+| plus (+)           | Mostly Complete | Basic          | Need to add overloads                                                                   |
 | poly               | Unimplemented   | None           |                                                                                         |
 | pow (**)           | Complete        | None           |                                                                                         |
 | power (.**)        | Unimplemented   | None           |                                                                                         |
