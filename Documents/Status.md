@@ -4,7 +4,7 @@ This document lays out the structure of Nifty and provides the current implement
 function/feature planned for Nifty's initial release.
 
 Nifty's structure is flat, so the code for each feature below can be found in Sources in an 
-identically named file. Nifty's API can be found at [nifty-swift.org](https://nifty-swift.org).
+identically named file. Nifty's API can be found at [nifty-swift.org](http://nifty-swift.org).
 
 Being that Nifty is a work in progress, it's probably true that not all functionality desired in the
 first release is present. The first release will focus on core functionality essential to any useful
