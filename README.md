@@ -1,7 +1,7 @@
-![status](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
-![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
+![](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
-![Plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS%20%7C%20-lightgrey.svg)
+![](https://img.shields.io/badge/swift-3.0.2-orange.svg?style=flat)
+![plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS-lightgrey.svg)
 
 # Nifty
 
@@ -13,13 +13,9 @@ Not sure if Nifty is worth the effort of installing? Check out a [simple demo pr
 
 Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
-Nifty builds off the following external libraries:
-- 
-- 
-
 #### Xcode Installation
 
-Xcode users can just use the included project file. Simply drag the project file into your own Xcode project and `import Nifty` at the top of any files where you wish to use Nifty!
+Xcode users can just use the included project file. Simply drag the project file into your own Xcode project and `import Nifty` at the top of any files in which you wish to use Nifty!
 
 Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with Xcode, these are provided by the [Accelerate](https://developer.apple.com/reference/accelerate) framework. Since Accelerate is installed on macOS by default, no additional installation steps are needed.
 
@@ -27,18 +23,18 @@ Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.or
 
 Linux users (and those on macOS who prefer not to use Xcode) can install Nifty using the [Swift Package Manager](https://swift.org/package-manager/).
 
-Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with the Swift Package Manager, Nifty uses the C interface, [LAPACKE](http://www.netlib.org/lapack/lapacke.html) and the optimized library [OpenBLAS](http://www.openblas.net/). These can be installed with the following commands:
+Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with the Swift Package Manager, Nifty uses the C interface [LAPACKE](http://www.netlib.org/lapack/lapacke.html) and the optimized library [OpenBLAS](http://www.openblas.net/). These can be installed with the following commands:
 - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev libopenblas-base libopenblas-dev`
 - Mac: `brew install homebrew/dupes/lapack homebrew/science/openblas`
 
 
-Once the dependencies are installed, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
+Once the dependencies are installed, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. 
+
+Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
 #### Usage
 
-Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible.
-
-The API is documented [here](http://nifty-swift.org).
+Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org).
 
 #### Troubleshooting
 
