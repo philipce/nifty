@@ -34,7 +34,7 @@ Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-
 
 #### Usage
 
-Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org).
+Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org)!
 
 #### Troubleshooting
 
@@ -55,6 +55,8 @@ We are currently working on getting the core set of general math and linear alge
 - wrappers on glibc/math.h
 - basic functions related to statistics and probability
 
+Once the core set of features is complete, our next focus will be on developing a core set of AI and machine learning functionality.
+
 See our [status page](Documents/Status.md) for details on the implementation status of all features.
 
 ## Tests and Benchmarks
@@ -68,6 +70,7 @@ You can check out the results of some simple benchmarks [here](https://github.co
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
 - Provide a viable alternative to packages such as NumPy and MATLAB for those who wish to develop in Swift, whether on macOS or Linux.
+- Develop fun and interesting code, especially in the areas of artificial intelligence and machine learning.
 - Do as much in Swift as possible, resorting to external libraries only when necessary.
 - Make exploration of the code as simple as possible, through plain organization and clean, easy-to-read code.
 - Serve as a learning opportunity for those wishing to explore numerical computing.
