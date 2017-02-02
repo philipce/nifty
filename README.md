@@ -1,7 +1,7 @@
-![](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
-![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
-![](https://img.shields.io/badge/swift-3.0.2-orange.svg?style=flat)
-![plaforms](https://img.shields.io/badge/Platforms-Linux%20%7C%20macOS-lightgrey.svg)
+![build](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
+![plaforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS-lightgrey.svg)
+![swift](https://img.shields.io/badge/swift-3.0.2-orange.svg?style=flat)
+![license](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 # Nifty
 
