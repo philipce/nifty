@@ -1,4 +1,4 @@
-![](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
+[![status](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)
 [![codecov](https://codecov.io/gh/nifty-swift/Nifty/branch/master/graph/badge.svg)](https://codecov.io/gh/nifty-swift/Nifty)
 ![plaforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS-lightgrey.svg)
 ![swift](https://img.shields.io/badge/swift-3.0-orange.svg?style=flat)
