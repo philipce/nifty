@@ -12,12 +12,6 @@ before_install:
     sudo apt-get install libopenblas-base libopenblas-dev -y;
     git clone https://github.com/IBM-Swift/Package-Builder.git;
   fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then 
-    brew update;
-    brew install homebrew/dupes/lapack;
-    brew install homebrew/science/openblas;
-    ls /usr/local/opt/openblas/lib;
-  fi  
 script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
     ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR;
