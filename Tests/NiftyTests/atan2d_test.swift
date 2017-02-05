@@ -39,7 +39,11 @@ class atan2d_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-4
+        let x = 0.5
+        let y = 0.7
+        let opxy = atan2d(x, y)
+        let ansxy = 35.5377
+        XCTAssert(isequal(opxy, ansxy, within: tol), "\(opxy) != \(ansxy)")        
     }
 }

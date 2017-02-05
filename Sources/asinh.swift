@@ -19,22 +19,31 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
-public let asinh: (Double) -> Double = Glibc.asinh
-
+@_exported import func Glibc.asinh
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the inverse hyperbolic sine of x—value whose hyperbolic sine is x.
-public let asinh: (Double) -> Double = Darwin.asinh
-
+@_exported import func Darwin.asinh
 #endif
+
+public func asinh(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({asinh($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func asinh(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({asinh($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func asinh(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({asinh($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

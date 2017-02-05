@@ -39,7 +39,29 @@ class asin_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-6
+
+        let vals = [0.43, 0.61, 0.13, 0.5]
+        let ans  = [0.444493, 0.656061, 0.130369, 0.523599]
+
+        let x = vals[0]
+        let opx = asin(x)
+        let ansx = ans[0]
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")        
+
+        let v = Vector(vals)
+        let opv = asin(v)
+        let ansv = Vector(ans)    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([2,2], vals)
+        let opm = asin(m)
+        let ansm = Matrix([2,2], ans)    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], vals)
+        let opt = asin(t)
+        let anst = Tensor([1,1,4], ans)    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

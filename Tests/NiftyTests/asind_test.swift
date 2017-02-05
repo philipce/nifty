@@ -39,7 +39,26 @@ class asind_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-4
+
+        let x = 0.43
+        let opx = asind(x)
+        let ansx = 25.4676    
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")
+
+        let v = Vector([0.43, 0.61, 0.13, 0.5])
+        let opv = asind(v)
+        let ansv = Vector([25.4676, 37.5895, 7.46959, 30.0])    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([2,2], [0.43, 0.61, 0.13, 0.5])
+        let opm = asind(m)
+        let ansm = Matrix([2,2], [25.4676, 37.5895, 7.46959, 30.0])    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], [0.43, 0.61, 0.13, 0.5])
+        let opt = asind(t)
+        let anst = Tensor([1,1,4], [25.4676, 37.5895, 7.46959, 30.0])    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

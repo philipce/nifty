@@ -39,7 +39,29 @@ class cosd_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-4
+
+        let vals : [Double] = [43, 61, 13, 5]
+        let ans  : [Double] = [0.731354, 0.48481, 0.97437, 0.996195]
+
+        let x = vals[0]
+        let opx = cosd(x)
+        let ansx = ans[0]
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")        
+
+        let v = Vector(vals)
+        let opv = cosd(v)
+        let ansv = Vector(ans)    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([2,2], vals)
+        let opm = cosd(m)
+        let ansm = Matrix([2,2], ans)    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], vals)
+        let opt = cosd(t)
+        let anst = Tensor([1,1,4], ans)    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

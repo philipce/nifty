@@ -39,7 +39,26 @@ class asinh_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-6
+
+        let x = 0.43
+        let opx = asinh(x)
+        let ansx = 0.417743    
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")
+
+        let v = Vector([0.43, 0.61, 0.13, 0.5])
+        let opv = asinh(v)
+        let ansv = Vector([0.417743, 0.577381, 0.129637, 0.481212])    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([2,2], [0.43, 0.61, 0.13, 0.5])
+        let opm = asinh(m)
+        let ansm = Matrix([2,2], [0.417743, 0.577381, 0.129637, 0.481212])    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], [0.43, 0.61, 0.13, 0.5])
+        let opt = asinh(t)
+        let anst = Tensor([1,1,4], [0.417743, 0.577381, 0.129637, 0.481212])    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

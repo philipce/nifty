@@ -19,25 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the hyperbolic tangent of x, defined mathematically as 
+/// sinh(x)/cosh(x). May signal overflow if x is too large.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///    
-/// Return the hyperbolic tangent of x, defined mathematically as 
-/// sinh(x)/cosh(x). May signal overflow if x is too large.
-public let tanh: (Double) -> Double = Glibc.tanh
-
+@_exported import func Glibc.tanh
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///    
-/// Return the hyperbolic tangent of x, defined mathematically as 
-/// sinh(x)/cosh(x). May signal overflow if x is too large.
-public let tanh: (Double) -> Double = Darwin.tanh
-
+@_exported import func Darwin.tanh
 #endif
 
+public func tanh(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({tanh($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func tanh(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({tanh($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func tanh(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({tanh($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

@@ -28,3 +28,24 @@ public func asind(_ x: Double) -> Double
 {
     return asin(x) * 180/Nifty.Constants.pi
 }
+
+public func asind(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({asind($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func asind(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({asind($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func asind(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({asind($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

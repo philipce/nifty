@@ -20,32 +20,36 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Compute the arc sine of x—that is, the value whose sine is x. The value is in 
+/// units of radians. Mathematically, there are infinitely many such values; the 
+/// one actually returned is the one between -pi/2 and pi/2 (inclusive).
+/// 
+/// The arc sine function is defined mathematically only over the domain -1 to 
+/// 1. If x is outside the domain, asin signals a domain error.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc sine of x—that is, the value whose sine is x. The value is in 
-/// units of radians. Mathematically, there are infinitely many such values; the 
-/// one actually returned is the one between -pi/2 and pi/2 (inclusive).
-/// 
-/// The arc sine function is defined mathematically only over the domain -1 to 
-/// 1. If x is outside the domain, asin signals a domain error.
-public let asin: (Double) -> Double = Glibc.asin
-
+@_exported import func Glibc.asin
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc sine of x—that is, the value whose sine is x. The value is in 
-/// units of radians. Mathematically, there are infinitely many such values; the 
-/// one actually returned is the one between -pi/2 and pi/2 (inclusive).
-/// 
-/// The arc sine function is defined mathematically only over the domain -1 to 
-/// 1. If x is outside the domain, asin signals a domain error.
-public let asin: (Double) -> Double = Darwin.asin
-
+@_exported import func Darwin.asin
 #endif
+
+public func asin(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({asin($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func asin(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({asin($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func asin(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({asin($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

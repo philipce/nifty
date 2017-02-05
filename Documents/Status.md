@@ -37,24 +37,24 @@ implemented.
 
 | Feature            | Status          | Test Coverage  | Notes                                                                                   |
 |--------------------|-----------------|----------------|-----------------------------------------------------------------------------------------|
-| acos               | Complete        | None           |                                                                                         |
-| acosd              | Complete        | None           |                                                                                         |
-| acosh              | Complete        | None           |                                                                                         |
-| asin               | Complete        | None           |                                                                                         |
-| asind              | Complete        | None           |                                                                                         |
-| asinh              | Complete        | None           |                                                                                         |
-| atan               | Complete        | None           |                                                                                         |
-| atan2              | Complete        | None           |                                                                                         |
-| atan2d             | Complete        | None           |                                                                                         |
-| atand              | Complete        | None           |                                                                                         |
-| atanh              | Complete        | None           |                                                                                         |
+| acos               | Complete        | Basic          |                                                                                         |
+| acosd              | Complete        | Basic          |                                                                                         |
+| acosh              | Complete        | Basic          |                                                                                         |
+| asin               | Complete        | Basic          |                                                                                         |
+| asind              | Complete        | Basic          |                                                                                         |
+| asinh              | Complete        | Basic          |                                                                                         |
+| atan               | Complete        | Basic          |                                                                                         |
+| atan2              | Complete        | Basic          |                                                                                         |
+| atan2d             | Complete        | Basic          |                                                                                         |
+| atand              | Complete        | Basic          |                                                                                         |
+| atanh              | Complete        | Basic          |                                                                                         |
 | ceil               | Complete        | None           |                                                                                         |
 | chol               | Mostly complete | Basic          |                                                                                         |
 | cond               | Unimplemented   | None           |                                                                                         |
 | Constants          | Incomplete      | None           |                                                                                         |
-| cos                | Complete        | None           |                                                                                         |
-| cosd               | Complete        | None           |                                                                                         |
-| cosh               | Complete        | None           |                                                                                         |
+| cos                | Complete        | Basic          |                                                                                         |
+| cosd               | Complete        | Basic          |                                                                                         |
+| cosh               | Complete        | Basic          |                                                                                         |
 | cross              | Mostly complete | Basic          |                                                                                         |
 | det                | Unimplemented   | None           |                                                                                         |
 | diag               | Unimplemented   | None           |                                                                                         |
@@ -71,7 +71,6 @@ implemented.
 | filter             | Unimplemented   | None           |                                                                                         |
 | find               | Unimplemented   | None           |                                                                                         |
 | floor              | Complete        | None           |                                                                                         |
-| hypot              | Complete        | None           |                                                                                         |
 | ge (>=)            | Complete        | None           |                                                                                         |
 | gt (>)             | Unimplemented   | None           |                                                                                         |
 | hypot              | Mostly Complete | None           |                                                                                         |
@@ -79,7 +78,7 @@ implemented.
 | ind2sub            | Mostly Complete | None           |                                                                                         |
 | inf                | Incomplete      | None           |                                                                                         |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
-| isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                    |
+| isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                      |
 | isinf              | Unimplemented   | None           |                                                                                         |
 | isnan              | Incomplete      | None           |                                                                                         |
 | KDTree             | Unimplemented   | None           |                                                                                         |
@@ -136,9 +135,9 @@ implemented.
 | rmap               | Complete        | None           |                                                                                         |
 | round              | Complete        | None           |                                                                                         |
 | rref               | Unimplemented   | None           |                                                                                         |
-| sin                | Complete        | None           |                                                                                         |
-| sind               | Complete        | None           |                                                                                         |
-| sinh               | Complete        | None           |                                                                                         |
+| sin                | Complete        | Basic          |                                                                                         |
+| sind               | Complete        | Basic          |                                                                                         |
+| sinh               | Complete        | Basic          |                                                                                         |
 | size               | Complete        | None           |                                                                                         |
 | sqrt               | Complete        | None           |                                                                                         |
 | std                | Unimplemented   | None           |                                                                                         |
@@ -146,9 +145,9 @@ implemented.
 | sum                | Unimplemented   | None           |                                                                                         |
 | svd                | Mostly Complete | Basic          | Need to resolve ambiguity between function calls requiring specifying output type       |
 | swap               | Incomplete      | None           | Need to add support for vectors, tensors, matrix columns, etc.                          |
-| tan                | Complete        | None           |                                                                                         |
-| tand               | Complete        | None           |                                                                                         |
-| tanh               | Complete        | None           |                                                                                         |
+| tan                | Complete        | Basic          |                                                                                         |
+| tand               | Complete        | Basic          |                                                                                         |
+| tanh               | Complete        | Basic          |                                                                                         |
 | Tensor             | Mostly complete | Basic          |                                                                                         |
 | tic                | Mostly Complete | None           |                                                                                         |
 | times (*)          | Incomplete      | None           | Need to add overloads                                                                   |

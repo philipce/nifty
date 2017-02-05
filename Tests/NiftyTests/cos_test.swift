@@ -37,9 +37,28 @@ class cos_test: XCTestCase
     }
     #endif
 
-    func testBasic() 
+    func testBasic()     
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-6
+
+        let x = 1.43
+        let opx = cos(x)
+        let ansx = 0.140332    
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")
+
+        let v = Vector([1.43, 2.61, 0.13, 0.5])
+        let opv = cos(v)
+        let ansv = Vector([0.140332, -0.862001, 0.991562, 0.877583])    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([[1.43, 2.61], [0.13, 0.5]])
+        let opm = cos(m)
+        let ansm = Matrix([[0.140332, -0.862001], [0.991562, 0.877583]])    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], [1.43, 2.61, 0.13, 0.5])
+        let opt = cos(t)
+        let anst = Tensor([1,1,4], [0.140332, -0.862001, 0.991562, 0.877583])    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

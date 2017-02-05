@@ -39,7 +39,29 @@ class atanh_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let tol = 1E-4
+
+        let vals : [Double] = [0.43, 0.61, 0.13, 0.5]
+        let ans  : [Double] = [0.4599, 0.7089, 0.1307, 0.5493]
+
+        let x = vals[0]
+        let opx = atanh(x)
+        let ansx = ans[0]
+        XCTAssert(isequal(opx, ansx, within: tol), "\(opx) != \(ansx)")        
+
+        let v = Vector(vals)
+        let opv = atanh(v)
+        let ansv = Vector(ans)    
+        XCTAssert(isequal(opv, ansv, within: tol), "\(opv) != \(ansv)")
+
+        let m = Matrix([2,2], vals)
+        let opm = atanh(m)
+        let ansm = Matrix([2,2], ans)    
+        XCTAssert(isequal(opm, ansm, within: tol), "\(opm) != \(ansm)")
+
+        let t = Tensor([1,1,4], vals)
+        let opt = atanh(t)
+        let anst = Tensor([1,1,4], ans)    
+        XCTAssert(isequal(opt, anst, within: tol), "\(opt) != \(anst)")
     }
 }

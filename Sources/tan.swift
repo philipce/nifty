@@ -19,30 +19,35 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the tangent of x, where x is given in radians. 
+///
+/// Mathematically, the tangent function has singularities at odd multiples of 
+/// pi/2. If the argument x is too close to one of these singularities, tan 
+/// will signal overflow.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the tangent of x, where x is given in radians. 
-///
-/// Mathematically, the tangent function has singularities at odd multiples of 
-/// pi/2. If the argument x is too close to one of these singularities, tan 
-/// will signal overflow.
-public let tan: (Double) -> Double = Glibc.tan
-
+@_exported import func Glibc.tan
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the tangent of x, where x is given in radians. 
-///
-/// Mathematically, the tangent function has singularities at odd multiples of 
-/// pi/2. If the argument x is too close to one of these singularities, tan 
-/// will signal overflow.
-public let tan: (Double) -> Double = Darwin.tan
-
+@_exported import func Darwin.tan
 #endif
+
+public func tan(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({tan($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func tan(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({tan($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func tan(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({tan($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

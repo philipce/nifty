@@ -28,3 +28,5 @@ public func atan2d(_ x: Double, _ y: Double) -> Double
 {
     return atan2(x, y) * 180/Nifty.Constants.pi
 }
+
+// TODO: how to overload this for vector, matrix, tensor? Take 2 of each and use each as x and y?

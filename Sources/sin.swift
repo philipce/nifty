@@ -19,25 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the sine of x, where x is given in radians and the return value is 
+/// in the range -1 to 1.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the sine of x, where x is given in radians and the return value is 
-/// in the range -1 to 1.
-public let sin: (Double) -> Double = Glibc.sin
-
+@_exported import func Glibc.sin
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the sine of x, where x is given in radians and the return value is 
-/// in the range -1 to 1.
-public let sin: (Double) -> Double = Darwin.sin
-
+@_exported import func Darwin.sin
 #endif
 
+public func sin(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({sin($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func sin(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({sin($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func sin(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({sin($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

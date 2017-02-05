@@ -19,25 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the hyperbolic sine of x, defined mathematically as 
+/// (exp(x)-exp(-x))/2. May signal overflow if x is too large.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the hyperbolic sine of x, defined mathematically as 
-/// (exp(x)-exp(-x))/2. May signal overflow if x is too large.
-public let sinh: (Double) -> Double = Glibc.sinh
-
+@_exported import func Glibc.sinh
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the hyperbolic sine of x, defined mathematically as 
-/// (exp(x)-exp(-x))/2. May signal overflow if x is too large.
-public let sinh: (Double) -> Double = Darwin.sinh
-
+@_exported import func Darwin.sinh
 #endif
 
+public func sinh(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({sinh($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func sinh(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({sinh($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func sinh(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({sinh($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

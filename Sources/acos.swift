@@ -19,32 +19,36 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
+/// is in units of radians. Mathematically, there are infinitely many such 
+/// values; the one actually returned is the one between 0 and pi (inclusive).
+/// 
+/// The arc cosine function is defined mathematically only over the domain -1 
+/// to 1. If x is outside the domain, acos signals a domain error.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
-/// is in units of radians. Mathematically, there are infinitely many such 
-/// values; the one actually returned is the one between 0 and pi (inclusive).
-/// 
-/// The arc cosine function is defined mathematically only over the domain -1 
-/// to 1. If x is outside the domain, acos signals a domain error.
-public let acos: (Double) -> Double = Glibc.acos
-
+@_exported import func Glibc.acos
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc cosine of x—that is, the value whose cosine is x. The value 
-/// is in units of radians. Mathematically, there are infinitely many such 
-/// values; the one actually returned is the one between 0 and pi (inclusive).
-/// 
-/// The arc cosine function is defined mathematically only over the domain -1 
-/// to 1. If x is outside the domain, acos signals a domain error.
-public let acos: (Double) -> Double = Darwin.acos
-
+@_exported import func Darwin.acos
 #endif
+
+public func acos(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({acos($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func acos(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({acos($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func acos(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({acos($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

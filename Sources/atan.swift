@@ -19,28 +19,34 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Compute the arc tangent of x—that is, the value whose tangent is x. The 
+/// value is in units of radians. Mathematically, there are infinitely many 
+/// such values; the one actually returned is the one between -pi/2 and pi/2 
+/// (inclusive).
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc tangent of x—that is, the value whose tangent is x. The 
-/// value is in units of radians. Mathematically, there are infinitely many 
-/// such values; the one actually returned is the one between -pi/2 and pi/2 
-/// (inclusive).
-public let atan: (Double) -> Double = Glibc.atan
-
+@_exported import func Glibc.atan
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the arc tangent of x—that is, the value whose tangent is x. The 
-/// value is in units of radians. Mathematically, there are infinitely many 
-/// such values; the one actually returned is the one between -pi/2 and pi/2 
-/// (inclusive).
-public let atan: (Double) -> Double = Darwin.atan
-
+@_exported import func Darwin.atan
 #endif
+
+public func atan(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({atan($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func atan(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({atan($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func atan(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({atan($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

@@ -28,7 +28,6 @@ Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.or
 - Ubuntu: `sudo apt-get install liblapack3 liblapacke liblapacke-dev libopenblas-base libopenblas-dev`
 - Mac: `brew install homebrew/dupes/lapack homebrew/science/openblas`
 
-
 Once the dependencies are installed, using Nifty in your project simply requires that you create/modify your project manifest file to point to this repository as a dependency, and then `import Nifty` in whatever files you want to use it. Your project can then be built by simply running `swift build`. 
 
 Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!

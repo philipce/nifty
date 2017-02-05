@@ -19,25 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
+/// is x. If x is less than 1, acosh signals a domain error.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
-/// is x. If x is less than 1, acosh signals a domain error.
-public let acosh: (Double) -> Double = Glibc.acosh
-
+@_exported import func Glibc.acosh
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the inverse hyperbolic cosine of x—the value whose hyperbolic cosine
-/// is x. If x is less than 1, acosh signals a domain error.
-public let acosh: (Double) -> Double = Darwin.acosh
-
+@_exported import func Darwin.acosh
 #endif
 
+public func acosh(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({acosh($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func acosh(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({acosh($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func acosh(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({acosh($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}
