@@ -39,7 +39,15 @@ class mldivide_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // least-squares solution of underdetermined system
+        let A = Matrix<Double>([[1, 2, 0], [0, 4, 3]], name: "A")
+        let B = Matrix<Double>([[8], [18]], name: "B")
+        let x = A-/B              
+        let Ax = A*x
+        print(A)
+        print(B)
+        print(x)
+        print(Ax)
+        XCTAssert(isequal(Ax, B, within: 0.1))
     }
 }

@@ -120,7 +120,7 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
             #endif
                 
             precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
-            precondition(info == 0, "Matrix A does not have full rank")
+            if info != 0 { print("Warning: Matrix does not have full rank") }            
 
             let x = Array(b[0..<Int(n*nrhs)])  
 
@@ -158,7 +158,7 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
             #endif
 
             precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
-            precondition(info == 0, "Matrix A does not have full rank")
+            if info != 0 { print("Warning: Matrix does not have full rank") }   
 
             let x = Array(b[0..<Int(n*nrhs)])          
 

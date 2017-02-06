@@ -39,7 +39,17 @@ class mrdivide_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // solve system of equations that has unique solution
+        let A = Matrix<Double>([[1, 1, 3], [2, 0, 4], [-1, 6, -1]])
+        let B = Matrix<Double>([[2, 19, 8]])
+        let x = B/A
+        let ansx = Matrix([[1.0, 2.0, 3.0]])       
+        XCTAssert(isequal(x, ansx), "\(x) != \(ansx)")
+
+        // solve an underdetermined system
+        print("Solving underdetermined system; expect to see rank deficient warning...")
+        let C = Matrix<Double>([[1, 0], [2, 0], [1, 0]])
+        let D = Matrix<Double>([[1, 2]])
+        let _ = mrdivide(D, C)        
     }
 }

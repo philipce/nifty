@@ -100,10 +100,10 @@ implemented.
 | median             | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
 | minus (-)          | Mostly Complete | Basic          | Need to add overloads                                                                   |
-| mldivide (-/)      | Complete        | None           |                                                                                         |
+| mldivide (-/)      | Complete        | Basic          |                                                                                         |
 | mode               | Unimplemented   | None           |                                                                                         |
 | mpower (**)        | Unimplemented   | None           |                                                                                         |
-| mrdivide (/)       | Complete        | None           | Current implementation is less efficient--does more transposes than necessary           |
+| mrdivide (/)       | Complete        | Basic          | Current implementation is less efficient--does more transposes than necessary           |
 | msb                | Mostly Complete | None           |                                                                                         |
 | mtimes (*)         | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
 | MultikeyDictionary | Mostly Complete | Substantial    | Currently only have basic insert/find/remove                                            |
