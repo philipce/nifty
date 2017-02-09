@@ -45,6 +45,7 @@ internal func _convertToCountableClosedRanges(_ s: [SliceIndex]) -> [CountableCl
             case let el as CountableClosedRange<Int>:
                 ranges.append(el)
             default:
+                // FIXME: slicing a matrix with Int32 will hit this default case! 
                 fatalError("Unknown type of SliceIndex: \(el) \(type(of: el))")
         }
     }
