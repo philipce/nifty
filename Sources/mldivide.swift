@@ -100,44 +100,49 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
         // overdetermined system
         if m >= n
         {
-            var nrhs = Int32(B.size[1])
-            var a = A.data
-            var b = B.data
-            var info = Int32(0)
+            
             
             // TODO: find better way to resolve the difference between clapack used by Accelerate and LAPACKE
             #if NIFTY_XCODE_BUILD
+                
+                var nrhs = Int32(B.size[1])
+                var a = A.data
+                var b = B.data
+                var info = Int32(0)
             
                 // Everything is column-major order when using Accelerate 
                 a = transpose(A).data
                 let Bt = transpose(B)
                 b[0..<Bt.count] = Bt.data[0..<Bt.count]                  
                 var lda = Int32(A.size[0])
-                var ldb = max(m,n) // FIXME: seems like this should be Int32(B.size[0]), why is it max(1,m,n) in docs?
+                var ldb = Int32(B.size[0])
                                 
                 // TODO: redo this with 'T' to save an extra transpose
                 var trans: Int8 = 78 // ascii 'n' (ascii 'T' = 84)    
                 let mn = min(m, n) 
                 var lwork = mn + max(mn, nrhs) // TODO: revisit this for optimal performance... see lapack docs 
                 var work = Array<Double>(repeating: 0, count: Int(lwork))
+
                 dgels_(&trans, &m, &n, &nrhs, &a, &lda, &b, &ldb, &work, &lwork, &info)    
                 
-                print("b=\(b)")
-                                    
                 precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
                 if info != 0 { print("Warning: Matrix does not have full rank") }   
                 
-                let x = Array(b[0..<Int(n*nrhs)]) 
-
-                let Xt = Matrix(Int(nrhs), Int(n), x, name: newName, showName: A.showName || B.showName)
-                var X = transpose(Xt)
-                X.name = Xt.name
-                X.showName = Xt.showName
+                // TODO: Bout also contains errors... should we return these as well?
+                let Bout = transpose(Matrix(Int(nrhs), Int(m), b))                
+                var X = Bout[0..<Int(n), 0..<Int(nrhs)]
+                X.name = newName
+                X.showName = A.showName || B.showName
 
                 return X
 
             #else              
 
+                let nrhs = Int32(B.size[1])
+                var a = A.data
+                var b = B.data
+                var info = Int32(0)
+                
                 // The leading dimension equals the number of elements in the major dimension. In this 
                 // case, we are doing row-major so lda is the number of columns in A, e.g.
                 let lda = Int32(A.size[1])
@@ -184,8 +189,6 @@ public func mldivide(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
                 var lwork = mn + max(mn, nrhs) // TODO: revisit this for optimal performance... see lapack docs 
                 var work = Array<Double>(repeating: 0, count: Int(lwork))
                 dgels_(&trans, &m, &n, &nrhs, &a, &lda, &b, &ldb, &work, &lwork, &info)    
-                
-                print("b=\(b)")
                                     
                 precondition(info >= 0, "Illegal value in LAPACK argument \(-1*info)")
                 if info != 0 { print("Warning: Matrix does not have full rank") }   

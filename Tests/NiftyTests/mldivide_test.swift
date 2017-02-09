@@ -58,9 +58,10 @@ class mldivide_test: XCTestCase
         let B2 = Matrix<Double>([[96,    43],
                                  [49,    92],
                                  [81,    80],
-                                 [15,    96]], name: "B2")
+                                 [15,    96]], name: "B2")                
         let x2 = A2-/B2
         let Ax2 = A2*x2
+
         print(A2)
         print(B2)
         print(x2)
