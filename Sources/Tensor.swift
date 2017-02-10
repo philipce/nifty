@@ -279,6 +279,8 @@ public struct Tensor<T>: CustomStringConvertible
 
     private mutating func setSlice(index: SliceIndex, value: Tensor<T>)
     {
+        // FIXME: there's no shape checking here! E.g. a [1,1,4] slice could 
+        // be assigned a [1,2,2] Tensor. How should that be handled?
         let range = _convertToCountableClosedRange(index)
         self.data[range] = ArraySlice(value.data)
     } 
