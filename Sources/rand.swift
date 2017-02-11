@@ -120,5 +120,5 @@ public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil,
 }
 
 // Use this to atomically check and increment seed for thread-safe calls
-// FIXME: add back in: fileprivate var threadLock = DispatchSemaphore(value: 1)
+fileprivate var threadLock = DispatchSemaphore(value: 1)
 var threadSeed = UInt64(Date().timeIntervalSince1970*2000000)
