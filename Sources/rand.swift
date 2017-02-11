@@ -19,10 +19,8 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+import Dispatch
 import Foundation
-
-// TODO: get rid of size parameter in rand that returns matrix... rand(_ size: [Int] ) will return
-// Tensor, not matrix.
 
 /// Return a matrix of random real numbers in the specified range.
 ///
@@ -70,19 +68,25 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
         else
         {
             // Seed random number generator with all significant digits in current time.
-            curRandGen = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*10000))
+            curRandGen = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*1000000))
             g_UniformRandGen = curRandGen
         }
     }
     else
     {
-        // TODO: Foundation currently doesn't provide a way for getting thread ID. As a temporary 
-        // substitue, use the hash of the current thread object representation (I believe the 
-        // address in the thread description is unique to each thread) as a seed, if one wasn't 
-        // given, to ensure different random numbers between threads. Add the time (times 10000 so 
-        // all significant digits are in integer) so the same thread seeds differently on each call.
-        let ts = UInt64(abs("\(Thread.current)".hash)) + UInt64(Date().timeIntervalSince1970*10000)
-        curRandGen = UniformRandomGenerator(seed: seed ?? ts)
+        if let ts = seed
+        {
+            curRandGen = UniformRandomGenerator(seed: ts)
+        }
+        else
+        {
+            // ensure that each thread gets a differently seeded generator
+            threadLock.wait()
+            let ts = threadSeed
+            threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
+            threadLock.signal()
+            curRandGen = UniformRandomGenerator(seed: ts) 
+        }
     }
 
     // Grab random doubles until we've got enough in range
@@ -114,3 +118,7 @@ public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil,
     let m = rand(1, 1, min: min, max: max, seed: seed, threadSafe: threadSafe)
     return m.data[0]
 }
+
+// Use this to atomically check and increment seed for thread-safe calls
+fileprivate var threadLock = DispatchSemaphore(value: 1)
+var threadSeed = UInt64(Date().timeIntervalSince1970*2000000)
