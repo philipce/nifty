@@ -6,7 +6,7 @@
 
 # Nifty
 
-Nifty is a general-purpose numerical computing library for the Swift programming language, made with performance and ease-of-use in mind. 
+[Nifty](https://github.com/nifty-swift/Nifty) is a general-purpose numerical computing library for the Swift programming language, made with performance and ease-of-use in mind. 
 
 ## Getting Started
 
