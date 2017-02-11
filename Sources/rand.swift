@@ -81,10 +81,10 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
         else
         {
             // ensure that each thread gets a differently seeded generator
-            // FIXME: add back in: threadLock.wait()
+            threadLock.wait()
             let ts = threadSeed
             threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
-            // FIXME: add back in: threadLock.signal()
+            threadLock.signal()
             curRandGen = UniformRandomGenerator(seed: ts) 
         }
     }
