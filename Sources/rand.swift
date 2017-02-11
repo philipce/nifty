@@ -19,7 +19,7 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-import Dispatch
+// FIXME: add back in: import Dispatch
 import Foundation
 
 /// Return a matrix of random real numbers in the specified range.
@@ -81,10 +81,10 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
         else
         {
             // ensure that each thread gets a differently seeded generator
-            threadLock.wait()
+            // FIXME: add back in: threadLock.wait()
             let ts = threadSeed
             threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
-            threadLock.signal()
+            // FIXME: add back in: threadLock.signal()
             curRandGen = UniformRandomGenerator(seed: ts) 
         }
     }
@@ -120,5 +120,5 @@ public func rand(min: Double = 0.0, max: Double = 1.0, seed: UInt64? = nil,
 }
 
 // Use this to atomically check and increment seed for thread-safe calls
-fileprivate var threadLock = DispatchSemaphore(value: 1)
+// FIXME: add back in: fileprivate var threadLock = DispatchSemaphore(value: 1)
 var threadSeed = UInt64(Date().timeIntervalSince1970*2000000)
