@@ -19,24 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
+/// exp(x*log(2)).
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
-/// exp(x*log(2)).
-public let exp2: (Double) -> Double = Glibc.exp2
-
+@_exported import func Glibc.exp2
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute 2 raised to the power x. Mathematically, exp2(x) is the same as 
-/// exp(x*log(2)).
-public let exp2: (Double) -> Double = Darwin.exp2
-
+@_exported import func Darwin.exp2
 #endif
+
+public func exp2(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({exp2($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func exp2(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({exp2($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func exp2(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({exp2($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

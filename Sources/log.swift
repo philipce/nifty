@@ -19,30 +19,35 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Compute the natural logarithm of x where exp(log(x)) equals x, exactly in 
+/// mathematics and approximately in C.
+///
+/// If x is negative, log signals a domain error. If x is zero, it returns 
+/// negative infinity; if x is too close to zero, it may signal overflow.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the natural logarithm of x where exp(log(x)) equals x, exactly in 
-/// mathematics and approximately in C.
-///
-/// If x is negative, log signals a domain error. If x is zero, it returns 
-/// negative infinity; if x is too close to zero, it may signal overflow.
-public let log: (Double) -> Double = Glibc.log
-
+@_exported import func Glibc.log
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Compute the natural logarithm of x where exp(log(x)) equals x, exactly in 
-/// mathematics and approximately in C.
-///
-/// If x is negative, log signals a domain error. If x is zero, it returns 
-/// negative infinity; if x is too close to zero, it may signal overflow.
-public let log: (Double) -> Double = Darwin.log
-
+@_exported import func Darwin.log
 #endif
+
+public func log(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({log($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func log(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({log($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func log(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({log($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

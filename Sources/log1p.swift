@@ -19,25 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
+/// zero.
+
 #if os(Linux)
-
-import Glibc
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
-/// zero.
-public let log1p: (Double) -> Double = Glibc.log1p
-
+@_exported import func Glibc.log1p
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Returns a value equivalent to log(1 + x). Computed in a way that is accurate even if x is near 
-/// zero.
-public let log1p: (Double) -> Double = Darwin.log1p
-
+@_exported import func Darwin.log1p
 #endif
 
+public func log1p(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({log1p($0)})
 
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func log1p(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({log1p($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func log1p(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({log1p($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

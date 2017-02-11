@@ -19,27 +19,33 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return a value equivalent to exp (x) - 1. Computed in a way that is 
+/// accurate even if x is near zero—a case where exp (x) - 1 would be 
+/// inaccurate owing to subtraction of two numbers that are nearly equal.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return a value equivalent to exp (x) - 1. Computed in a way that is 
-/// accurate even if x is near zero—a case where exp (x) - 1 would be 
-/// inaccurate owing to subtraction of two numbers that are nearly equal.
-public let expm1: (Double) -> Double = Glibc.expm1
-
+@_exported import func Glibc.expm1
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return a value equivalent to exp (x) - 1. Computed in a way that is 
-/// accurate even if x is near zero—a case where exp (x) - 1 would be 
-/// inaccurate owing to subtraction of two numbers that are nearly equal.
-public let expm1: (Double) -> Double = Darwin.expm1
-
+@_exported import func Darwin.expm1
 #endif
 
+public func expm1(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({expm1($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func expm1(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({expm1($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func expm1(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({expm1($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

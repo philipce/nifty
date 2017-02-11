@@ -19,24 +19,32 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Round x to an integer value, by default to nearest, and round halfway cases 
+/// away from zero.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x to an integer value, by default to nearest, and round halfway cases 
-/// away from zero.
-public let round: (Double) -> Double = Glibc.round
-
+@_exported import func Glibc.round
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x to an integer value, by default to nearest, and round halfway cases 
-/// away from zero.
-public let round: (Double) -> Double = Darwin.round
-
+@_exported import func Darwin.round
 #endif
+
+public func round(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({round($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func round(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({round($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func round(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({round($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

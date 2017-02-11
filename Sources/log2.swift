@@ -19,22 +19,31 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
-public let log2: (Double) -> Double = Glibc.log2
-
+@_exported import func Glibc.log2
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return the base-2 logarithm of x, where log2(x) = log(x)/log(2).
-public let log2: (Double) -> Double = Darwin.log2
-
+@_exported import func Darwin.log2
 #endif
+
+public func log2(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({log2($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func log2(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({log2($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func log2(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({log2($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

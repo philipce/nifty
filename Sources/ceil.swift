@@ -19,23 +19,31 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Round x upwards to the nearest integer, returning that value as a double.
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x upwards to the nearest integer, returning that value as a double.
-public let ceil: (Double) -> Double = Glibc.ceil
-
+@_exported import func Glibc.ceil
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x upwards to the nearest integer, returning that value as a double.
-public let ceil: (Double) -> Double = Darwin.ceil
-
+@_exported import func Darwin.ceil
 #endif
 
+public func ceil(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({ceil($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func ceil(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({ceil($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func ceil(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({ceil($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}

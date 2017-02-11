@@ -19,30 +19,13 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Return sqrt(x*x+y*y). This is the length of the hypotenuse of a right 
+/// triangle with sides of length x and y, or the distance of the point 
+/// (x, y) from the origin. Using this function instead of the direct formula 
+/// is wise, since the error is much smaller. 
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return sqrt(x*x+y*y). This is the length of the hypotenuse of a right 
-/// triangle with sides of length x and y, or the distance of the point 
-/// (x, y) from the origin. Using this function instead of the direct formula 
-/// is wise, since the error is much smaller. 
-public let hypot: (Double, Double) -> Double = Glibc.hypot
-
+@_exported import func Glibc.hypot
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Return sqrt(x*x+y*y). This is the length of the hypotenuse of a right 
-/// triangle with sides of length x and y, or the distance of the point 
-/// (x, y) from the origin. Using this function instead of the direct formula 
-/// is wise, since the error is much smaller. 
-public let hypot: (Double, Double) -> Double = Darwin.hypot
-
+@_exported import func Darwin.hypot
 #endif
-
-

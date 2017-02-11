@@ -19,22 +19,31 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
+/// Round x downwards to the nearest integer, returning that value as a double. 
+
 #if os(Linux)
-
-import Glibc
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x downwards to the nearest integer, returning that value as a double. 
-public let floor: (Double) -> Double = Glibc.floor
-
+@_exported import func Glibc.floor
 #else
-
-import Darwin
-
-/// Convenience wrapper to make glibc implementation available through Nifty.
-///
-/// Round x downwards to the nearest integer, returning that value as a double. 
-public let floor: (Double) -> Double = Darwin.floor
-
+@_exported import func Darwin.floor
 #endif
+
+public func floor(_ v: Vector<Double>) -> Vector<Double>
+{
+    let newData = v.data.map({floor($0)})
+
+    return Vector(newData, name: v.name, showName: v.showName)
+}
+
+public func floor(_ m: Matrix<Double>) -> Matrix<Double>
+{
+    let newData = m.data.map({floor($0)})
+
+    return Matrix(m.size, newData, name: m.name, showName: m.showName)
+}
+
+public func floor(_ t: Tensor<Double>) -> Tensor<Double>
+{
+    let newData = t.data.map({floor($0)})
+
+    return Tensor(t.size, newData, name: t.name, showName: t.showName)
+}
