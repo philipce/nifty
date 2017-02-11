@@ -20,7 +20,7 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-// FIXME: add back in: import Dispatch
+import Dispatch
 import XCTest
 @testable import Nifty
 
@@ -50,13 +50,8 @@ class rand_test: XCTestCase
         XCTAssert(isequal(r1, r3, within: 0.1))
         XCTAssert(!isequal(r1, r2, within: 0.1))
 
-
         // thread safe - ensure each iteration pulls a unique number
-
-        // FIXME: add back in: 
-        /*
         let lock = DispatchSemaphore(value: 1)
-
         var nums = Set<Int>()
         let itr = 100000
         func randBlock(_ i: Int)
@@ -71,8 +66,6 @@ class rand_test: XCTestCase
         {            
             DispatchQueue.concurrentPerform(iterations: itr, execute: randBlock)
         }
-
         XCTAssert(nums.count == itr)
-        */
     }
 }
