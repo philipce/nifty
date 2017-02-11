@@ -19,7 +19,7 @@
  *  Copyright 2016 Philip Erickson
  **************************************************************************************************/
 
-// FIXME: add back in: import Dispatch
+import Dispatch
 import Foundation
 
 /// Return a matrix of random real numbers in the specified range.
