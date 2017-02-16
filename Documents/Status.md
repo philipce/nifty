@@ -51,7 +51,6 @@ implemented.
 | ceil               | Complete        | None           |                                                                                         |
 | chol               | Mostly complete | Basic          |                                                                                         |
 | cond               | Unimplemented   | None           |                                                                                         |
-| Constants          | Incomplete      | None           |                                                                                         |
 | cos                | Complete        | Basic          |                                                                                         |
 | cosd               | Complete        | Basic          |                                                                                         |
 | cosh               | Complete        | Basic          |                                                                                         |
@@ -70,6 +69,8 @@ implemented.
 | fft                | Unimplemented   | None           |                                                                                         |
 | filter             | Unimplemented   | None           |                                                                                         |
 | find               | Unimplemented   | None           |                                                                                         |
+| flipud             | Unimplemented   | None           |                                                                                         |
+| fliplr             | Unimplemented   | None           |                                                                                         |
 | floor              | Complete        | None           |                                                                                         |
 | ge (>=)            | Complete        | None           |                                                                                         |
 | gt (>)             | Unimplemented   | None           |                                                                                         |
@@ -81,8 +82,6 @@ implemented.
 | isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                      |
 | isinf              | Unimplemented   | None           |                                                                                         |
 | isnan              | Incomplete      | None           |                                                                                         |
-| KDTree             | Unimplemented   | None           |                                                                                         |
-| kmeans             | Unimplemented   | None           |                                                                                         |
 | ldivide            | Unimplemented   | None           |                                                                                         |
 | le (<=)            | Complete        | None           |                                                                                         |
 | linspace           | Unimplemented   | None           |                                                                                         |
@@ -98,6 +97,7 @@ implemented.
 | max                | Unimplemented   | None           |                                                                                         |
 | mean               | Unimplemented   | None           |                                                                                         |
 | median             | Unimplemented   | None           |                                                                                         |
+| meshgrid           | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
 | minus (-)          | Mostly Complete | Basic          | Need to add overloads                                                                   |
 | mldivide (-/)      | Complete        | Basic          |                                                                                         |
@@ -171,6 +171,7 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
   (http://www.gnu.org/software/libc/manual/html_node/Mathematics.html)
 - special functions from glibc/math:
   (http://www.gnu.org/software/libc/manual/html_node/Special-Functions.html)
+- look at wrapping stuff from GSL
 - bayes net
 - decision tree
 - distance metrics: manhattan, euclidean, mahalanobis, etc
@@ -178,9 +179,13 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
 - fminsearch... optimization toolbox
 - gaussian process
 - halton sequence
+- shuffle
 - image
 - kalman filter
 - k nearest neighbor classifier
+- kd tree
+- k means
+- pcg random
 - gmm
 - mdp/pomdp/hmm
 - errors: mean square error, etc.
@@ -189,6 +194,5 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
 - particle filter
 - setdiff
 - svm
-- unique
 - viterbi
 

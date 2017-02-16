@@ -82,7 +82,7 @@ Nifty is intended to be broad in scope; almost any generally interesting tool re
 
 ## Contributing
 
-All contributions are welcome—whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. 
+All contributions are welcome—whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. If you'd like to contribute, but aren't sure exactly what, visit the [status page](Documents/Status.md) for ideas--a lot of things that wouldn't require a great deal of time or expertise remain unimplemented or untested!
 
 To contribute code to this project:
 
