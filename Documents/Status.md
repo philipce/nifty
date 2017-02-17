@@ -55,6 +55,8 @@ implemented.
 | cosd               | Complete        | Basic          |                                                                                         |
 | cosh               | Complete        | Basic          |                                                                                         |
 | cross              | Mostly complete | Basic          |                                                                                         |
+| cumprod            | Unimplmented    | None           |                                                                                         |
+| cumsum             | Unimplmented    | None           |                                                                                         |
 | det                | Unimplemented   | None           |                                                                                         |
 | diag               | Unimplemented   | None           |                                                                                         |
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
@@ -93,7 +95,7 @@ implemented.
 | lt (<)             | Complete        | None           |                                                                                         |
 | lu                 | Mostly Complete | Basic          |                                                                                         |
 | map                | Unimplemented   | None           |                                                                                         |
-| Matrix             | Mostly Complete | Basic          |                                                                                         |
+| Matrix             | Mostly Complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | max                | Unimplemented   | None           |                                                                                         |
 | mean               | Unimplemented   | None           |                                                                                         |
 | median             | Unimplemented   | None           |                                                                                         |
@@ -135,10 +137,12 @@ implemented.
 | rmap               | Complete        | None           |                                                                                         |
 | round              | Complete        | None           |                                                                                         |
 | rref               | Unimplemented   | None           |                                                                                         |
+| shuffle            | Unimplemented   | None           |                                                                                         |
 | sin                | Complete        | Basic          |                                                                                         |
 | sind               | Complete        | Basic          |                                                                                         |
 | sinh               | Complete        | Basic          |                                                                                         |
 | size               | Complete        | None           |                                                                                         |
+| sort               | Unimplemented   | None           |                                                                                         |
 | sqrt               | Complete        | None           |                                                                                         |
 | std                | Unimplemented   | None           |                                                                                         |
 | sub2ind            | Mostly Complete | None           |                                                                                         |
@@ -148,7 +152,7 @@ implemented.
 | tan                | Complete        | Basic          |                                                                                         |
 | tand               | Complete        | Basic          |                                                                                         |
 | tanh               | Complete        | Basic          |                                                                                         |
-| Tensor             | Mostly complete | Basic          |                                                                                         |
+| Tensor             | Mostly complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | tic                | Mostly Complete | None           |                                                                                         |
 | times (*)          | Incomplete      | None           | Need to add overloads                                                                   |
 | toc                | Mostly Complete | None           |                                                                                         |
@@ -158,7 +162,7 @@ implemented.
 | triu               | Incomplete      | None           |                                                                                         |
 | unique             | Unimplemented   | None           |                                                                                         |
 | var                | Unimplemented   | None           |                                                                                         |
-| Vector             | Mostly complete | Basic          |                                                                                         |
+| Vector             | Mostly complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | zeros              | Complete        | None           |                                                                                         |
 
 
@@ -167,6 +171,15 @@ implemented.
 This is an unorganized, stream-of-consciousness type list of ideas of things we might want to include with Nifty: 
 - comb through matlab to find relevant functions:
     http://www.mathworks.com/help/matlab/functionlist-alpha.html    
+- matlab cmds: cat, length, logspace, erf, fix, conv, deconv, polyfit, polyval, roots
+- interpolation: interp1, interp2, spline
+- fmin, fmins, fzero
+- quad, quad1, trapz
+- diff, polyder
+- ode solvers
+- predefined input functions: e.g. gensig, sawtooth, square, stepfun
+- laplace, ilaplace
+- transfer functions, series, feedback
 - complex functionality from glibc/math:
   (http://www.gnu.org/software/libc/manual/html_node/Mathematics.html)
 - special functions from glibc/math:
@@ -178,8 +191,7 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
 - filter2 etc
 - fminsearch... optimization toolbox
 - gaussian process
-- halton sequence
-- shuffle
+- halton sequence, sobol, hammersley
 - image
 - kalman filter
 - k nearest neighbor classifier
@@ -188,6 +200,7 @@ This is an unorganized, stream-of-consciousness type list of ideas of things we 
 - pcg random
 - gmm
 - mdp/pomdp/hmm
+- stats: p values, t/z test, etc
 - errors: mean square error, etc.
 - time series
 - neural net
