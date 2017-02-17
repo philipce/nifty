@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A5CC1481E575F2E0087C160 /* _cumprod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1411E575F2E0087C160 /* _cumprod.swift */; };
+		4A5CC1491E575F2E0087C160 /* _cumsum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1421E575F2E0087C160 /* _cumsum.swift */; };
+		4A5CC14A1E575F2E0087C160 /* _fliplr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1431E575F2E0087C160 /* _fliplr.swift */; };
+		4A5CC14B1E575F2E0087C160 /* _flipud.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1441E575F2E0087C160 /* _flipud.swift */; };
+		4A5CC14C1E575F2E0087C160 /* _meshgrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1451E575F2E0087C160 /* _meshgrid.swift */; };
+		4A5CC14D1E575F2E0087C160 /* _shuffle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1461E575F2E0087C160 /* _shuffle.swift */; };
+		4A5CC14E1E575F2E0087C160 /* _sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1471E575F2E0087C160 /* _sort.swift */; };
 		4A7C78081E411C6500B09975 /* Nifty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7C77FE1E411C6500B09975 /* Nifty.framework */; };
 		4A7C78971E411E2900B09975 /* _cond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781D1E411E2900B09975 /* _cond.swift */; };
 		4A7C78981E411E2900B09975 /* _det.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781E1E411E2900B09975 /* _det.swift */; };
@@ -19,8 +26,6 @@
 		4A7C789F1E411E2900B09975 /* _ifft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78251E411E2900B09975 /* _ifft.swift */; };
 		4A7C78A01E411E2900B09975 /* _isinf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78261E411E2900B09975 /* _isinf.swift */; };
 		4A7C78A11E411E2900B09975 /* _isnan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78271E411E2900B09975 /* _isnan.swift */; };
-		4A7C78A21E411E2900B09975 /* _KDTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78281E411E2900B09975 /* _KDTree.swift */; };
-		4A7C78A31E411E2900B09975 /* _kmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78291E411E2900B09975 /* _kmeans.swift */; };
 		4A7C78A41E411E2900B09975 /* _ldivide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C782A1E411E2900B09975 /* _ldivide.swift */; };
 		4A7C78A51E411E2900B09975 /* _linspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C782B1E411E2900B09975 /* _linspace.swift */; };
 		4A7C78A61E411E2900B09975 /* _lsb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C782C1E411E2900B09975 /* _lsb.swift */; };
@@ -262,6 +267,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4A5CC1411E575F2E0087C160 /* _cumprod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _cumprod.swift; path = Sources/_cumprod.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1421E575F2E0087C160 /* _cumsum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _cumsum.swift; path = Sources/_cumsum.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1431E575F2E0087C160 /* _fliplr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _fliplr.swift; path = Sources/_fliplr.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1441E575F2E0087C160 /* _flipud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _flipud.swift; path = Sources/_flipud.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1451E575F2E0087C160 /* _meshgrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _meshgrid.swift; path = Sources/_meshgrid.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1461E575F2E0087C160 /* _shuffle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _shuffle.swift; path = Sources/_shuffle.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC1471E575F2E0087C160 /* _sort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _sort.swift; path = Sources/_sort.swift; sourceTree = SOURCE_ROOT; };
 		4A7C77FE1E411C6500B09975 /* Nifty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nifty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7C78071E411C6500B09975 /* NiftyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NiftyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7C781D1E411E2900B09975 /* _cond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _cond.swift; path = Sources/_cond.swift; sourceTree = SOURCE_ROOT; };
@@ -275,8 +287,6 @@
 		4A7C78251E411E2900B09975 /* _ifft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _ifft.swift; path = Sources/_ifft.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78261E411E2900B09975 /* _isinf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _isinf.swift; path = Sources/_isinf.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78271E411E2900B09975 /* _isnan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _isnan.swift; path = Sources/_isnan.swift; sourceTree = SOURCE_ROOT; };
-		4A7C78281E411E2900B09975 /* _KDTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _KDTree.swift; path = Sources/_KDTree.swift; sourceTree = SOURCE_ROOT; };
-		4A7C78291E411E2900B09975 /* _kmeans.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _kmeans.swift; path = Sources/_kmeans.swift; sourceTree = SOURCE_ROOT; };
 		4A7C782A1E411E2900B09975 /* _ldivide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _ldivide.swift; path = Sources/_ldivide.swift; sourceTree = SOURCE_ROOT; };
 		4A7C782B1E411E2900B09975 /* _linspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _linspace.swift; path = Sources/_linspace.swift; sourceTree = SOURCE_ROOT; };
 		4A7C782C1E411E2900B09975 /* _lsb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _lsb.swift; path = Sources/_lsb.swift; sourceTree = SOURCE_ROOT; };
@@ -549,6 +559,13 @@
 		4A7C78001E411C6500B09975 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				4A5CC1411E575F2E0087C160 /* _cumprod.swift */,
+				4A5CC1421E575F2E0087C160 /* _cumsum.swift */,
+				4A5CC1431E575F2E0087C160 /* _fliplr.swift */,
+				4A5CC1441E575F2E0087C160 /* _flipud.swift */,
+				4A5CC1451E575F2E0087C160 /* _meshgrid.swift */,
+				4A5CC1461E575F2E0087C160 /* _shuffle.swift */,
+				4A5CC1471E575F2E0087C160 /* _sort.swift */,
 				4A7C781D1E411E2900B09975 /* _cond.swift */,
 				4A7C781E1E411E2900B09975 /* _det.swift */,
 				4A7C781F1E411E2900B09975 /* _eig.swift */,
@@ -560,8 +577,6 @@
 				4A7C78251E411E2900B09975 /* _ifft.swift */,
 				4A7C78261E411E2900B09975 /* _isinf.swift */,
 				4A7C78271E411E2900B09975 /* _isnan.swift */,
-				4A7C78281E411E2900B09975 /* _KDTree.swift */,
-				4A7C78291E411E2900B09975 /* _kmeans.swift */,
 				4A7C782A1E411E2900B09975 /* _ldivide.swift */,
 				4A7C782B1E411E2900B09975 /* _linspace.swift */,
 				4A7C782C1E411E2900B09975 /* _lsb.swift */,
@@ -945,11 +960,12 @@
 				4A7C78EA1E411E2900B09975 /* msb.swift in Sources */,
 				4A7C78CD1E411E2900B09975 /* cosh.swift in Sources */,
 				4A7C79021E411E2900B09975 /* sub2ind.swift in Sources */,
+				4A5CC1491E575F2E0087C160 /* _cumsum.swift in Sources */,
 				4A7C78DB1E411E2900B09975 /* internal_helpers.swift in Sources */,
+				4A5CC14E1E575F2E0087C160 /* _sort.swift in Sources */,
 				4A7C78CE1E411E2900B09975 /* cross.swift in Sources */,
 				4A7C79011E411E2900B09975 /* sqrt.swift in Sources */,
 				4A7C78E31E411E2900B09975 /* lt.swift in Sources */,
-				4A7C78A31E411E2900B09975 /* _kmeans.swift in Sources */,
 				4A7C78A81E411E2900B09975 /* _max.swift in Sources */,
 				4A7C78FF1E411E2900B09975 /* size.swift in Sources */,
 				4A7C789E1E411E2900B09975 /* _find.swift in Sources */,
@@ -971,6 +987,7 @@
 				4A7C79071E411E2900B09975 /* tanh.swift in Sources */,
 				4A7C78C41E411E2900B09975 /* atan.swift in Sources */,
 				4A7C78B01E411E2900B09975 /* _poly.swift in Sources */,
+				4A5CC1481E575F2E0087C160 /* _cumprod.swift in Sources */,
 				4A7C78B71E411E2900B09975 /* _repmat.swift in Sources */,
 				4A7C78AD1E411E2900B09975 /* _ne.swift in Sources */,
 				4A7C78BE1E411E2900B09975 /* acos.swift in Sources */,
@@ -987,6 +1004,7 @@
 				4A7C78B51E411E2900B09975 /* _rdivide.swift in Sources */,
 				4A7C78D41E411E2900B09975 /* expm1.swift in Sources */,
 				4A7C78F31E411E2900B09975 /* pow.swift in Sources */,
+				4A5CC14B1E575F2E0087C160 /* _flipud.swift in Sources */,
 				4A7C78FE1E411E2900B09975 /* sinh.swift in Sources */,
 				4A7C78A71E411E2900B09975 /* _map.swift in Sources */,
 				4A7C78F21E411E2900B09975 /* plus.swift in Sources */,
@@ -1005,8 +1023,8 @@
 				4A7C78DA1E411E2900B09975 /* ind2sub.swift in Sources */,
 				4A7C78A11E411E2900B09975 /* _isnan.swift in Sources */,
 				4A7C78D61E411E2900B09975 /* floor.swift in Sources */,
+				4A5CC14D1E575F2E0087C160 /* _shuffle.swift in Sources */,
 				4A7C789F1E411E2900B09975 /* _ifft.swift in Sources */,
-				4A7C78A21E411E2900B09975 /* _KDTree.swift in Sources */,
 				4A7C78D71E411E2900B09975 /* ge.swift in Sources */,
 				4A7C78DC1E411E2900B09975 /* inv.swift in Sources */,
 				4A7C78F51E411E2900B09975 /* rand.swift in Sources */,
@@ -1028,8 +1046,10 @@
 				4A7C79001E411E2900B09975 /* SliceIndex.swift in Sources */,
 				4A7C78A91E411E2900B09975 /* _median.swift in Sources */,
 				4A7C790C1E411E2900B09975 /* transpose.swift in Sources */,
+				4A5CC14A1E575F2E0087C160 /* _fliplr.swift in Sources */,
 				4A7C78F11E411E2900B09975 /* numel.swift in Sources */,
 				4A7C79101E411E2900B09975 /* zeros.swift in Sources */,
+				4A5CC14C1E575F2E0087C160 /* _meshgrid.swift in Sources */,
 				4A7C790B1E411E2900B09975 /* trace.swift in Sources */,
 				4A7C78F61E411E2900B09975 /* randa.swift in Sources */,
 				4A7C78BD1E411E2900B09975 /* _var.swift in Sources */,
