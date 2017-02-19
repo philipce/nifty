@@ -16,7 +16,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2016 Philip Erickson
+ *  Copyright 2016 Philip Erickson, Nicolas Bertagnolli
  **************************************************************************************************/
 
 /// Create a matrix of the given size where all elements are zero.
@@ -35,16 +35,15 @@ public func zeros(_ rows: Int, _ columns: Int) -> Matrix<Double>
 
 // TODO: implement this vector constructor:
 
-/*
+
 /// Creates a vector of the given size where all elements are zero.
 ///
 /// - Parameters:
 ///     - count: number of elements in zero vector
 /// - Returns: zero vector
-public func zeros(_ count: Int) -> Vector
+public func zeros(_ count: Int) -> Vector<Double>
 {
     precondition(count > 0, "Vector must contain at least 1 element")
 
-    return Vector(count, value: 0)
+    return Vector(count, value: 0.0)
 }
-*/
