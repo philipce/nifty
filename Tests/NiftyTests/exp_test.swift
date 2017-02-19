@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson
+ *  Copyright 2017 Philip Erickson, Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -39,7 +39,17 @@ class exp_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // Test Vector for simple double input
+        let v1 = Vector([1.0, 2.0, 3.0])
+        let v1_answer = Vector([2.718281, 7.389056, 20.085536])
+        XCTAssert(isequal(exp(v1), v1_answer, within: 0.0001))
+        
+        // Test matrix as input
+        let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
+        let m1_answer = Matrix([[2.718281, 7.389056], [20.085536, 54.598150]])
+        XCTAssert(isequal(exp(m1), m1_answer, within: 0.0001))
+        
+        // TODO:: Test tensor as input
+        
     }
 }
