@@ -16,7 +16,7 @@ Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is 
 
 #### Xcode Installation
 
-Xcode users can just use the included project file. Simply drag the project file into your own Xcode project and `import Nifty` at the top of any files in which you wish to use Nifty!
+Xcode users can just use the included project file. Simply drag the project file into your own Xcode project, add Nifty to your target's dependencies, and `import Nifty` at the top of any files in which you wish to use Nifty!
 
 Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with Xcode, these are provided by the [Accelerate](https://developer.apple.com/reference/accelerate) framework. Since Accelerate is installed on macOS by default, no additional installation steps are needed.
 
@@ -43,6 +43,10 @@ If you're having troubles, you may find the following helpful:
 The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
  
 If you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
+
+If you're building with Xcode, you need to compile with `-DNIFTY_XCODE_BUILD`. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (in the project settings -> "Build Settings", search for "Swift flags").
+
+Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". The current solution is to simply recreate the Xcode project from scratch. Suggestions for better ways to fix the problem are welcome!
 
 ## Nifty Features
 
