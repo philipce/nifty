@@ -39,7 +39,7 @@ class sqrt_test: XCTestCase
 
     func testBasic() 
     {        
-        // Test Vector for simple double input
+        // Test Vector for simple double input 
         let v1 = Vector([1.0, 2.0, 4.0])
         let v1_answer = Vector([1.0, 1.41421356, 2.0])
         XCTAssert(isequal(sqrt(v1), v1_answer, within: 0.0001))
