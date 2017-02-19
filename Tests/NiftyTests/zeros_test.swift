@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson
+ *  Copyright 2017 Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -39,7 +39,16 @@ class zeros_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // Test n = m Matrix
+        XCTAssert(isequal(zeros(2, 2), Matrix([[0.0, 0.0], [0.0, 0.0]]), within: 0.00001))
+        
+        // Test n > m  Matrix
+        XCTAssert(isequal(zeros(1, 3), Matrix([[0.0, 0.0, 0.0]]), within: 0.00001))
+        
+        // Test n < m Matrix
+        XCTAssert(isequal(zeros(4, 1), Matrix([[0.0], [0.0], [0.0], [0.0]]), within: 0.00001))
+        
+        // Tests Vector
+        XCTAssert(isequal(zeros(4), Vector([0.0, 0.0, 0.0, 0.0]), within: 0.00001))
     }
 }
