@@ -43,7 +43,7 @@ class trace_test: XCTestCase
         XCTAssert(isequal(trace(Matrix([[0.0, 1.1], [1.0, 0.0]])), 0.0, within: 0.00001))
         
         // Test Matrix Trace with negative values on 3x3 Matrix
-        XCTAssert(isequal(trace(Matrix([[1.0, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -1.0, within: 0.00001))
+        XCTAssert(isequal(trace(Matrix([[1.1, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -0.9, within: 0.00001))
         
         // Test Matrix Trace with all positive values 2x2
         XCTAssert(isequal(trace(Matrix([[1.0, 2.0], [3.0, 4.0]])), 5.0, within: 0.00001))
