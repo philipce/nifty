@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson
+ *  Copyright 2017 Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -38,8 +38,14 @@ class trace_test: XCTestCase
     #endif
 
     func testBasic() 
-    {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+    {
+        // Test Matrix Trace with positive elements on off diagonal elements
+        XCTAssert(isequal(trace(Matrix([[0.0, 1.0], [1.0, 0.0]])), 0.0, within: 0.00001))
+        
+        // Test Matrix Trace with negative values on 3x3 Matrix
+        XCTAssert(isequal(trace(Matrix([[1.0, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -1.0, within: 0.00001))
+        
+        // Test Matrix Trace with all positive values 2x2
+        XCTAssert(isequal(trace(Matrix([[1.0, 2.0], [3.0, 4.0]])), 5.0, within: 0.00001))
     }
 }
