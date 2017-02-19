@@ -38,8 +38,17 @@ class ceil_test: XCTestCase
     #endif
 
     func testBasic() 
-    {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+    {
+        // Test generic vector input
+        let v1 = Vector([1.1, 2.0, 3.9])
+        let v1_answer = Vector([2.0, 2.0, 4.0])
+        XCTAssert(isequal(ceil(v1), v1_answer, within: 0.00001))
+        
+        // Test matrix input with negative values
+        let m1 = Matrix([[1.1, 2.0], [3.9, -4.001]])
+        let m1_answer = Matrix([[2.0, 2.0], [4.0, -4.0]])
+        XCTAssert(isequal(ceil(m1), m1_answer, within: 0.00001))
+        
+        // TODO:: Test input for Tensors
     }
 }
