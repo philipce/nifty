@@ -4,7 +4,7 @@
  *
  *  This file tests the exp function.
  *
- *  Author: Philip Erickson
+ *  Author: Nicolas Bertagnolli
  *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson, Nicolas Bertagnolli
+ *  Copyright 2017 Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -44,12 +44,22 @@ class exp_test: XCTestCase
         let v1_answer = Vector([2.718281, 7.389056, 20.085536])
         XCTAssert(isequal(exp(v1), v1_answer, within: 0.0001))
         
+        // Test Vector for negative input
+        let v2 = Vector([-1.0, -2.0, -3.0])
+        let v2_answer = Vector([0.367879, 0.135335, 0.049787])
+        XCTAssert(isequal(exp(v2), v2_answer, within: 0.0001))
+        
         // Test matrix as input
         let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
         let m1_answer = Matrix([[2.718281, 7.389056], [20.085536, 54.598150]])
         XCTAssert(isequal(exp(m1), m1_answer, within: 0.0001))
         
-        // TODO:: Test tensor as input
+        // Test tensor as input mixed positive and negative values
+        let m = Matrix(2,3, [1.0, 2.0, 3.0, -1.0, -2.0, -3.0])
+        let m_answer = Matrix(2,3, [2.718281, 7.389056, 20.085536, 0.367879, 0.135335, 0.049787])
+        let tm = exp(Tensor(m))
+        print(Matrix<Double>(2,3, tm.data))
+        XCTAssert(isequal(m_answer, Matrix<Double>(2,3, tm.data), within: 0.0001))
         
     }
 }

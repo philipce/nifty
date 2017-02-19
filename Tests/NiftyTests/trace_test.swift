@@ -4,7 +4,7 @@
  *
  *  This file tests the trace function.
  *
- *  Author: Philip Erickson
+ *  Author: Nicolas Bertagnolli
  *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
