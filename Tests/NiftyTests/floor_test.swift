@@ -4,7 +4,7 @@
  *
  *  This file tests the floor function.
  *
- *  Author: Philip Erickson
+ *  Author: Nicolas Bertagnolli
  *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson, Nicolas Bertagnolli
+ *  Copyright 2017 Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -49,7 +49,11 @@ class floor_test: XCTestCase
         let m1_answer = Matrix([[1.0, 2.0], [3.0, -5.0]])
         XCTAssert(isequal(floor(m1), m1_answer, within: 0.00001))
         
-        // TODO:: Test Tensor input
+        // Test tensor as input mixed positive and negative values
+        let m = Matrix(2,3, [1.1, 3.2, 5.7, -1.1, -2.5, -3.9])
+        let m_answer = Matrix(2, 3, [1.0, 3.0, 5.0, -2.0, -3.0, -4.0])
+        let tm = floor(Tensor(m))
+        XCTAssert(isequal(m_answer, Matrix<Double>(2,3, tm.data), within: 0.0001))
         
     }
 }

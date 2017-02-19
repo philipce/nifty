@@ -4,7 +4,7 @@
  *
  *  This file tests the trace function.
  *
- *  Author: Philip Erickson
+ *  Author: Nicolas Bertagnolli
  *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -40,10 +40,10 @@ class trace_test: XCTestCase
     func testBasic() 
     {
         // Test Matrix Trace with positive elements on off diagonal elements
-        XCTAssert(isequal(trace(Matrix([[0.0, 1.0], [1.0, 0.0]])), 0.0, within: 0.00001))
+        XCTAssert(isequal(trace(Matrix([[0.0, 1.1], [1.0, 0.0]])), 0.0, within: 0.00001))
         
         // Test Matrix Trace with negative values on 3x3 Matrix
-        XCTAssert(isequal(trace(Matrix([[1.0, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -1.0, within: 0.00001))
+        XCTAssert(isequal(trace(Matrix([[1.1, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -0.9, within: 0.00001))
         
         // Test Matrix Trace with all positive values 2x2
         XCTAssert(isequal(trace(Matrix([[1.0, 2.0], [3.0, 4.0]])), 5.0, within: 0.00001))
