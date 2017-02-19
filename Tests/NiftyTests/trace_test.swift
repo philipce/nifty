@@ -40,7 +40,7 @@ class trace_test: XCTestCase
     func testBasic() 
     {
         // Test Matrix Trace with positive elements on off diagonal elements
-        XCTAssert(isequal(trace(Matrix([[0.0, 1.0], [1.0, 0.0]])), 0.0, within: 0.00001))
+        XCTAssert(isequal(trace(Matrix([[0.0, 1.1], [1.0, 0.0]])), 0.0, within: 0.00001))
         
         // Test Matrix Trace with negative values on 3x3 Matrix
         XCTAssert(isequal(trace(Matrix([[1.0, 0.0, 1.0], [1.0, -3.0, 2.0], [0.0, 0.0, 1.0]])), -1.0, within: 0.00001))
