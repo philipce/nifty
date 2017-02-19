@@ -63,6 +63,7 @@ internal var g_NormalRandGen: NormalRandomGenerator? = nil
 // MARK: PUBLIC RANDN INTERFACE
 //==================================================================================================
 
+import Dispatch
 import Foundation
 
 /// Return a matrix of random numbers drawn from the specified normal distribution.
@@ -109,7 +110,7 @@ public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double =
         else
         {
             // Seed random number generator with all significant digits in current time.
-            let urg = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*10000))
+            let urg = UniformRandomGenerator(seed: UInt64(Date().timeIntervalSince1970*1000000))
             curRandGen = NormalRandomGenerator(mu: mean, sigma: std, ugen: urg)
             g_UniformRandGen = urg 
             g_NormalRandGen = curRandGen
@@ -117,14 +118,20 @@ public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double =
     }
     else
     {
-        // TODO: Foundation currently doesn't provide a way for getting thread ID. As a temporary 
-        // substitue, use the hash of the current thread object representation (I believe the 
-        // address in the thread description is unique to each thread) as a seed, if one wasn't 
-        // given, to ensure different random numbers between threads. Add the time (times 10000 so 
-        // all significant digits are in integer) so the same thread seeds differently on each call.
-        let ts = UInt64(abs("\(Thread.current)".hash)) + UInt64(Date().timeIntervalSince1970*10000)
-        let urg = UniformRandomGenerator(seed: seed ?? ts)
-        curRandGen = NormalRandomGenerator(mu: mean, sigma: std, ugen: urg)
+        if let ts = seed
+        {
+            let urg = UniformRandomGenerator(seed: ts)
+            curRandGen = NormalRandomGenerator(mu: mean, sigma: std, ugen: urg)
+        }
+        else
+        {
+            threadLock.wait()
+            let ts = threadSeed
+            threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
+            threadLock.signal()
+            let urg = UniformRandomGenerator(seed: ts)
+            curRandGen = NormalRandomGenerator(mu: mean, sigma: std, ugen: urg)
+        }
     }
 
     // Grab as many normally distributed doubles as needed
@@ -150,3 +157,7 @@ public func randn(mean: Double = 0.0, std: Double = 1.0, seed: UInt64? = nil,
     let m = randn(1, 1, mean: mean, std: std, seed: seed, threadSafe: threadSafe)
     return m.data[0]
 }
+
+// Use this to atomically check and increment seed for thread-safe calls
+fileprivate var threadLock = DispatchSemaphore(value: 1)
+fileprivate var threadSeed = UInt64(Date().timeIntervalSince1970*2000000)
