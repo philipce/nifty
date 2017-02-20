@@ -4,7 +4,7 @@
  *
  *  This file tests the size function.
  *
- *  Author: Philip Erickson
+ *  Author: Nicolas Bertagnolli
  *  Creation Date: 22 Jan 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson
+ *  Copyright 2017 Nicolas Bertagnolli
  **************************************************************************************************/
 
 import XCTest
@@ -39,7 +39,23 @@ class size_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // Test size of nxn matrix without dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0], [3.0, 4.0]])) == [2, 2])
+        
+        // Test size of n > m matrix without dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])) == [3, 2])
+        
+        // Test size of n < m matrix without dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])) == [2, 3])
+        
+        // Test size of nxn matrix with dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0], [3.0, 4.0]]), 0) == 2)
+        
+        // Test size of n > m matrix with dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]]), 0) == 3)
+        
+        // Test size of n < m matrix with dim argument
+        XCTAssert(size(Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]), 1) == 3)
+        
     }
 }
