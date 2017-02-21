@@ -106,7 +106,7 @@
 		4A7C78F11E411E2900B09975 /* numel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78771E411E2900B09975 /* numel.swift */; };
 		4A7C78F21E411E2900B09975 /* plus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78781E411E2900B09975 /* plus.swift */; };
 		4A7C78F31E411E2900B09975 /* pow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78791E411E2900B09975 /* pow.swift */; };
-		4A7C78F41E411E2900B09975 /* qr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C787A1E411E2900B09975 /* qr.swift */; };
+		4A7C78F41E411E2900B09975 /* _qr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C787A1E411E2900B09975 /* _qr.swift */; };
 		4A7C78F51E411E2900B09975 /* rand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C787B1E411E2900B09975 /* rand.swift */; };
 		4A7C78F61E411E2900B09975 /* randa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C787C1E411E2900B09975 /* randa.swift */; };
 		4A7C78F71E411E2900B09975 /* randi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C787D1E411E2900B09975 /* randi.swift */; };
@@ -177,8 +177,6 @@
 		4A7C7A301E425B7300B09975 /* isequal_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79401E425B2100B09975 /* isequal_test.swift */; };
 		4A7C7A311E425B7300B09975 /* isinf_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79411E425B2100B09975 /* isinf_test.swift */; };
 		4A7C7A321E425B7300B09975 /* isnan_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79421E425B2100B09975 /* isnan_test.swift */; };
-		4A7C7A331E425B7300B09975 /* KDTree_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79431E425B2100B09975 /* KDTree_test.swift */; };
-		4A7C7A341E425B7300B09975 /* kmeans_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79441E425B2100B09975 /* kmeans_test.swift */; };
 		4A7C7A351E425B7300B09975 /* ldivide_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79451E425B2100B09975 /* ldivide_test.swift */; };
 		4A7C7A361E425B7300B09975 /* le_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79461E425B2100B09975 /* le_test.swift */; };
 		4A7C7A371E425B7300B09975 /* linspace_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79471E425B2100B09975 /* linspace_test.swift */; };
@@ -367,7 +365,7 @@
 		4A7C78771E411E2900B09975 /* numel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = numel.swift; path = Sources/numel.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78781E411E2900B09975 /* plus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = plus.swift; path = Sources/plus.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78791E411E2900B09975 /* pow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = pow.swift; path = Sources/pow.swift; sourceTree = SOURCE_ROOT; };
-		4A7C787A1E411E2900B09975 /* qr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = qr.swift; path = Sources/qr.swift; sourceTree = SOURCE_ROOT; };
+		4A7C787A1E411E2900B09975 /* _qr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _qr.swift; path = Sources/_qr.swift; sourceTree = SOURCE_ROOT; };
 		4A7C787B1E411E2900B09975 /* rand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = rand.swift; path = Sources/rand.swift; sourceTree = SOURCE_ROOT; };
 		4A7C787C1E411E2900B09975 /* randa.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = randa.swift; path = Sources/randa.swift; sourceTree = SOURCE_ROOT; };
 		4A7C787D1E411E2900B09975 /* randi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = randi.swift; path = Sources/randi.swift; sourceTree = SOURCE_ROOT; };
@@ -438,8 +436,6 @@
 		4A7C79401E425B2100B09975 /* isequal_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = isequal_test.swift; path = Tests/NiftyTests/isequal_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79411E425B2100B09975 /* isinf_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = isinf_test.swift; path = Tests/NiftyTests/isinf_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79421E425B2100B09975 /* isnan_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = isnan_test.swift; path = Tests/NiftyTests/isnan_test.swift; sourceTree = SOURCE_ROOT; };
-		4A7C79431E425B2100B09975 /* KDTree_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KDTree_test.swift; path = Tests/NiftyTests/KDTree_test.swift; sourceTree = SOURCE_ROOT; };
-		4A7C79441E425B2100B09975 /* kmeans_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = kmeans_test.swift; path = Tests/NiftyTests/kmeans_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79451E425B2100B09975 /* ldivide_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ldivide_test.swift; path = Tests/NiftyTests/ldivide_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79461E425B2100B09975 /* le_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = le_test.swift; path = Tests/NiftyTests/le_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79471E425B2100B09975 /* linspace_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = linspace_test.swift; path = Tests/NiftyTests/linspace_test.swift; sourceTree = SOURCE_ROOT; };
@@ -592,6 +588,7 @@
 				4A7C78361E411E2900B09975 /* _poly.swift */,
 				4A7C78371E411E2900B09975 /* _power.swift */,
 				4A7C78381E411E2900B09975 /* _prod.swift */,
+				4A7C787A1E411E2900B09975 /* _qr.swift */,
 				4A7C78391E411E2900B09975 /* _randperm.swift */,
 				4A7C783A1E411E2900B09975 /* _rank.swift */,
 				4A7C783B1E411E2900B09975 /* _rdivide.swift */,
@@ -657,7 +654,6 @@
 				4A7C78771E411E2900B09975 /* numel.swift */,
 				4A7C78781E411E2900B09975 /* plus.swift */,
 				4A7C78791E411E2900B09975 /* pow.swift */,
-				4A7C787A1E411E2900B09975 /* qr.swift */,
 				4A7C787B1E411E2900B09975 /* rand.swift */,
 				4A7C787C1E411E2900B09975 /* randa.swift */,
 				4A7C787D1E411E2900B09975 /* randi.swift */,
@@ -735,8 +731,6 @@
 				4A7C79401E425B2100B09975 /* isequal_test.swift */,
 				4A7C79411E425B2100B09975 /* isinf_test.swift */,
 				4A7C79421E425B2100B09975 /* isnan_test.swift */,
-				4A7C79431E425B2100B09975 /* KDTree_test.swift */,
-				4A7C79441E425B2100B09975 /* kmeans_test.swift */,
 				4A7C79451E425B2100B09975 /* ldivide_test.swift */,
 				4A7C79461E425B2100B09975 /* le_test.swift */,
 				4A7C79471E425B2100B09975 /* linspace_test.swift */,
@@ -1008,7 +1002,7 @@
 				4A7C78FE1E411E2900B09975 /* sinh.swift in Sources */,
 				4A7C78A71E411E2900B09975 /* _map.swift in Sources */,
 				4A7C78F21E411E2900B09975 /* plus.swift in Sources */,
-				4A7C78F41E411E2900B09975 /* qr.swift in Sources */,
+				4A7C78F41E411E2900B09975 /* _qr.swift in Sources */,
 				4A7C789B1E411E2900B09975 /* _eq.swift in Sources */,
 				4A7C78D51E411E2900B09975 /* eye.swift in Sources */,
 				4A7C78B31E411E2900B09975 /* _randperm.swift in Sources */,
@@ -1099,7 +1093,6 @@
 				4A7C7A421E425B7300B09975 /* mean_test.swift in Sources */,
 				4A7C7A581E425B7300B09975 /* prod_test.swift in Sources */,
 				4A7C7A2D1E425B7300B09975 /* ifft_test.swift in Sources */,
-				4A7C7A341E425B7300B09975 /* kmeans_test.swift in Sources */,
 				4A7C7A381E425B7300B09975 /* log_test.swift in Sources */,
 				4A7C7A691E425B7300B09975 /* sinh_test.swift in Sources */,
 				4A7C7A7A1E425B7300B09975 /* tril_test.swift in Sources */,
@@ -1127,7 +1120,6 @@
 				4A7C7A141E425B7300B09975 /* ceil_test.swift in Sources */,
 				4A7C7A631E425B7300B09975 /* reshape_test.swift in Sources */,
 				4A7C7A391E425B7300B09975 /* log1p_test.swift in Sources */,
-				4A7C7A331E425B7300B09975 /* KDTree_test.swift in Sources */,
 				4A7C7A781E425B7300B09975 /* trace_test.swift in Sources */,
 				4A7C7A151E425B7300B09975 /* chol_test.swift in Sources */,
 				4A7C7A6F1E425B7300B09975 /* sum_test.swift in Sources */,
