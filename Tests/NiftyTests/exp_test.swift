@@ -58,7 +58,6 @@ class exp_test: XCTestCase
         let m = Matrix(2,3, [1.0, 2.0, 3.0, -1.0, -2.0, -3.0])
         let m_answer = Matrix(2,3, [2.718281, 7.389056, 20.085536, 0.367879, 0.135335, 0.049787])
         let tm = exp(Tensor(m))
-        print(Matrix<Double>(2,3, tm.data))
         XCTAssert(isequal(m_answer, Matrix<Double>(2,3, tm.data), within: 0.0001))
         
     }
