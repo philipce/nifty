@@ -63,7 +63,7 @@ implemented.
 | eig                | Unimplemented   | None           |                                                                                         |
 | eigs               | Unimplemented   | None           |                                                                                         |
 | eps                | Incomplete      | None           |                                                                                         |
-| eq                 | Unimplemented   | None           |                                                                                         |
+| eq                 | Completed       | Basi           |                                                                                         |
 | exp                | Complete        | Basic          |                                                                                         |
 | exp2               | Complete        | Basic          |                                                                                         |
 | expm1              | Complete        | Basic          |                                                                                         |
