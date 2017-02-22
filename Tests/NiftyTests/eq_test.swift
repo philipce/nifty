@@ -38,8 +38,17 @@ class eq_test: XCTestCase
     #endif
 
     func testBasic() 
-    {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+    {
+        // Test Matrix eq
+        let m1 = Matrix([[1.0, 2.0, 3.0], [4.4444, 5.1, 6.0], [7.0, 8.0, -9.0]])
+        let m2 = Matrix([[1.0, 2.1, -3.0], [4.4445, 5.1, 0.0], [-7.0, 18.0, -9.0]])
+        let m_answer = Matrix([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+        XCTAssert(isequal(eq(m1, m2), m_answer, within: 0.000001))
+        
+        // Test Vector eq
+        let v1 = Vector([-1.0, 0.0, 1.0, 2.1, 3.5])
+        let v2 = Vector([-1.0, 0.0001, 1.0, 2.1, -3.5])
+        let v_answer = Vector([1.0, 0.0, 1.0, 1.0, 0.0])
+        XCTAssert(isequal(eq(v1, v2), v_answer, within: 0.000001))
     }
 }
