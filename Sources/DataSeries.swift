@@ -82,6 +82,12 @@ public struct Series<T>: CustomStringConvertible
     // MARK: Computed Properties
     //----------------------------------------------------------------------------------------------
     
+    public var count: Int
+    {
+        assert(self.index.count == self.data.count)
+        return self.data.count
+    }
+
     public var description: String
     {
         let (blankInd, padInd) = _columnizeData(
@@ -107,7 +113,12 @@ public struct Series<T>: CustomStringConvertible
         return "\n" + rows.joined(separator: "\n")
     }
     
-    var isEmpty: Bool
+    public var isComplete: Bool
+    {
+        return self.data.reduce(true, { $0 && $1 != nil })
+    }
+
+    public var isEmpty: Bool
     {
         assert(self.data.count == self.index.count)
         return self.index.count < 1
@@ -234,6 +245,8 @@ public struct Series<T>: CustomStringConvertible
     // MARK: Mutating Functions
     //----------------------------------------------------------------------------------------------
     
+    // TODO: should append and insert be able to append and insert nil?
+
     /// Appends the given value to the end of the series, if able.
     ///
     /// See the insert function for information on what consitutes success/failure.
@@ -249,14 +262,14 @@ public struct Series<T>: CustomStringConvertible
         let correctOrder: Bool
         switch self.order
         {
-        case .decreasing: 
+        case .decreasing where !self.isEmpty: 
             correctOrder = self.index[self.index.count-1] > index // FIXME: proper double compare
-        case .increasing:
+        case .increasing where !self.isEmpty:
             correctOrder = self.index[self.index.count-1] < index // FIXME: proper double compare
         default:
             correctOrder = true
         }
-        
+
         return correctOrder && self.insert(x, at: index, verify: verify)
     }
     
@@ -291,10 +304,16 @@ public struct Series<T>: CustomStringConvertible
     ///     - verify: control whether this insertion is verified (default: true)
     /// - Returns: true if insert was successful, false if the insert failed
     public mutating func insert(_ x: T, at index: Double, verify: Bool = true) -> Bool
-    {
-        let (indexList, _, locList) = self.present() // exclude missing values from search    
-        let i = locList[find(in: indexList, nearest: index)]
-        
+    {        
+        if self.isEmpty
+        {
+            self.index.append(index)
+            self.data.append(x)
+            return true
+        }
+
+        let i = find(in: self.index, nearest: index)
+
         switch self.order
         {
         case .decreasing:
@@ -499,10 +518,12 @@ public struct Series<T>: CustomStringConvertible
      return foundList
      }    
      */
-    
+
     /// Return list of the present (i.e. not nil) data in this series and corresponding indexes.
     public func present() -> (index: [Double], data: [T])
     {
+        if self.isEmpty { return ([], []) }
+
         let iDataList = self.data.enumerated().filter({$0.1 != nil})
         let iList = iDataList.map({$0.0})
         let dataList = iDataList.map({$0.1!})
@@ -516,6 +537,8 @@ public struct Series<T>: CustomStringConvertible
     /// well as the locations in the series storage.
     internal func present() -> (index: [Double], data: [T], locs: [Int])
     {
+        if self.isEmpty { return ([], [], []) }
+
         let iDataList = self.data.enumerated().filter({$0.1 != nil})
         let iList = iDataList.map({$0.0})
         let dataList = iDataList.map({$0.1!})

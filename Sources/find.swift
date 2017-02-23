@@ -21,13 +21,15 @@
 
 // TODO: revisit this interface and reconcile with MATLAB!
 
+// FIXME: these all fail if an empty list is queried!
+
 public func find(in x: [Double], nearest: Double) -> Int
 {
     return find(in: x, n: 1, nearest: nearest)[0]
 }
 
 public func find(in x: [Double], n: Int, nearest: Double) -> [Int]
-{
+{    
     var diffs = [(Double, Int)]()
     for i in 0..<x.count { diffs.append((abs(x[i]-nearest), i)) }
     diffs.sort(by: {return $0.0 < $1.0})
