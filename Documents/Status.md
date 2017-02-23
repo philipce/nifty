@@ -57,6 +57,8 @@ implemented.
 | cross              | Mostly complete | Basic          |                                                                                         |
 | cumprod            | Unimplmented    | None           |                                                                                         |
 | cumsum             | Unimplmented    | None           |                                                                                         |
+| DataFrame          | Incomplete      | None           | Basic start to pandas clone                                                             |
+| DataSeries         | Incomplete      | None           | Basic start to pandas clone                                                             |
 | det                | Unimplemented   | None           |                                                                                         |
 | diag               | Unimplemented   | None           |                                                                                         |
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
@@ -70,7 +72,7 @@ implemented.
 | eye                | Mostly Complete | None           |                                                                                         |
 | fft                | Unimplemented   | None           |                                                                                         |
 | filter             | Unimplemented   | None           |                                                                                         |
-| find               | Unimplemented   | None           |                                                                                         |
+| find               | Incomplete      | None           | Interface created for use with DataSeries -- need to reconcile it with MATLAB           |
 | flipud             | Unimplemented   | None           |                                                                                         |
 | fliplr             | Unimplemented   | None           |                                                                                         |
 | floor              | Complete        | Basic          |                                                                                         |
@@ -80,6 +82,7 @@ implemented.
 | ifft               | Unimplemented   | None           |                                                                                         |
 | ind2sub            | Mostly Complete | None           |                                                                                         |
 | inf                | Incomplete      | None           |                                                                                         |
+| interp1            | Incomplete      | None           | Interface created for use with DataSeries -- need to reconcile it with MATLAB           |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
 | isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                      |
 | isinf              | Unimplemented   | None           |                                                                                         |
