@@ -64,7 +64,7 @@ public enum SeriesIndexOrder
 }
 
 
-public struct Series<T>: CustomStringConvertible
+public struct DataSeries<T>: CustomStringConvertible
 {	    
     //----------------------------------------------------------------------------------------------
     // MARK: Stored Properties
@@ -439,7 +439,7 @@ public struct Series<T>: CustomStringConvertible
         // In all other cases the return is not nil so making it an optional seems gross
         precondition(!self.isEmpty, "Cannot find in empty series")
         
-        let (indexList, dataList) = self.present() // exclude missing values from search         
+        let (indexList, dataList, _) = self.present() // exclude missing values from search         
         let fi = find(in: indexList, nearest: index)
         
         return (indexList[fi], dataList[fi])        
@@ -448,7 +448,7 @@ public struct Series<T>: CustomStringConvertible
     public func get(n: Int, nearest index: Double) -> [(index: Double, value: T)]
     {
         if self.isEmpty { return [] }
-        let (indexList, dataList) = self.present() // exclude missing values from search        
+        let (indexList, dataList, _) = self.present() // exclude missing values from search        
         let foundIndices = find(in: indexList, n: n, nearest: index)        
         var foundList = [(index: Double, value: T)]()
         for fi in foundIndices
@@ -519,18 +519,41 @@ public struct Series<T>: CustomStringConvertible
      }    
      */
 
-    /// Return list of the present (i.e. not nil) data in this series and corresponding indexes.
-    public func present() -> (index: [Double], data: [T])
+    /// Subtract the elements in the other series from this series. 
+    ///
+    /// The resulting data series will have the same index as this series, where the other series
+    /// will have values estimated for any index values that it is missing which this series has.
+    /// Indexes contained in the other series that are missing from this series will have no effect
+    /// on this operation.
+    ///
+    /// - Note: this function is only applicable to types that can be subtracted; calling this 
+    ///    function on series of unsupported types will cause an unrecoverable error.
+    /// - Parameters:
+    ///    - other: data series to subtract from this series
+    ///    - method: method for estimating missing index values of other series (default: nearlin)
+    /// - Returns: new series with same index as this series, containing differences
+    public func minus(_ other: DataSeries<T>, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<T>
     {
-        if self.isEmpty { return ([], []) }
+        var newSeries = DataSeries<T>()
+        switch T.self
+        {
+            case is Double.Type:
 
-        let iDataList = self.data.enumerated().filter({$0.1 != nil})
-        let iList = iDataList.map({$0.0})
-        let dataList = iDataList.map({$0.1!})
-        let indexList = iList.map({self.index[$0]})
-        assert(dataList.count == indexList.count)
-        
-        return (indexList, dataList)
+                // FIXME: handle sorting differences more gracefully
+                precondition(self.order == other.order, "Can't difference differently ordered series")
+       
+                for i in 0..<self.count
+                {
+                    let thisVal = self.data[i] as! Double
+                    let otherVal = other.query(self.index[i], method: method) as! Double
+                    let diff = (thisVal - otherVal) as! T
+                    let success = newSeries.append(diff, index: self.index[i])
+                    assert(success, "Unexpectedly failed to append")
+                }
+            default:
+                fatalError("Unsupported series type: \(T.self)")
+        }
+        return newSeries
     }
     
     /// Return list of the present (i.e. not nil) data in this series and corresponding indexes, as 
@@ -584,7 +607,7 @@ public struct Series<T>: CustomStringConvertible
     ///     - name: name for resampled series (optional)
     ///     - method: estimation method used to interpolate and/or extrapolate (default: nearlin)
     /// - Returns: a new series containing the resampled points
-    public func resample(start: Double, step: Double, n: Int, name: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> Series<T>
+    public func resample(start: Double, step: Double, n: Int, name: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<T>
     {
         // TODO: revisit the impact of resampling an unordered/unverified list...
         // Does that cause any problems? It's not clear that it doesn't     
@@ -598,7 +621,7 @@ public struct Series<T>: CustomStringConvertible
         }
         let data = self.query(indexes, method: method)
         
-        return Series(data, index: indexes, order: self.order, name: name, maxColumnWidth: self.maxColumnWidth)        
+        return DataSeries(data, index: indexes, order: self.order, name: name, maxColumnWidth: self.maxColumnWidth)        
     }
 }
 

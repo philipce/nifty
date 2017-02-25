@@ -75,7 +75,7 @@ struct DataFrame: CustomStringConvertible
         self.index  = []
     }
     
-    init<T>(_ series: Series<T>..., columnWidth: Int = 15)
+    init<T>(_ series: DataSeries<T>..., columnWidth: Int = 15)
     {
         self.series = []
         self.names  = []
@@ -85,7 +85,7 @@ struct DataFrame: CustomStringConvertible
         self.add(series)
     }
     
-    func get<T>(_ column: String) -> Series<T>?
+    func get<T>(_ column: String) -> DataSeries<T>?
     {
         if let i = self.names.index(of: column)
         {
@@ -98,23 +98,23 @@ struct DataFrame: CustomStringConvertible
             {
                 if let d = s[j]
                 {
-                    guard let t = d as? T else { fatalError("Can't get Series<\(type(of:d))> as Series<\(T.self)>") }
+                    guard let t = d as? T else { fatalError("Can't get DataSeries<\(type(of:d))> as DataSeries<\(T.self)>") }
                     ind.append(self.index[j])
                     dat.append(t)
                 }
             }
             
-            return Series<T>(dat, index: ind, name: self.names[i], maxColumnWidth: self.widths[i])
+            return DataSeries<T>(dat, index: ind, name: self.names[i], maxColumnWidth: self.widths[i])
         }
         else { return nil }
     }
     
-    mutating func add<T>(_ series: Series<T>...)
+    mutating func add<T>(_ series: DataSeries<T>...)
     {
         self.add(series)
     }
     
-    mutating func add<T>(_ series: [Series<T>])
+    mutating func add<T>(_ series: [DataSeries<T>])
     {
         for s in series
         {
@@ -191,7 +191,7 @@ struct DataFrame: CustomStringConvertible
     {
         for (i, data) in self.series.enumerated()
         {
-            var tempSeries = Series(data, index: self.index)
+            var tempSeries = DataSeries(data, index: self.index)
             tempSeries.fill(method: method)
             
             assert(tempSeries.data.count == self.index.count, "Filled series must match original size")

@@ -59,13 +59,13 @@ class DataSeries_test: XCTestCase
         let a8 = [23.4, 456.2, 545.3, 1423.23] 
         let a9 = [3453.234, 2344.2, 145.3, 45.3, 3.4, 0.4, -1.23, -12.43, -346.3]
 
-        let s1 = Series(a1, name: "s1")
-        let s2 = Series(a2, name: "s2")
-        let s3 = Series(a3)
-        let s4 = Series(a4, name: "s4")
-        let s5 = Series(a5, index: i5)
-        let s6 = Series(a6, name: "s6", maxColumnWidth: 15)
-        var s7 = Series(a7, name: "s7")
+        let s1 = DataSeries(a1, name: "s1")
+        let s2 = DataSeries(a2, name: "s2")
+        let s3 = DataSeries(a3)
+        let s4 = DataSeries(a4, name: "s4")
+        let s5 = DataSeries(a5, index: i5)
+        let s6 = DataSeries(a6, name: "s6", maxColumnWidth: 15)
+        var s7 = DataSeries(a7, name: "s7")
         
         print(s1)       
         print("\ns1[3]: \(s1[3])")
@@ -126,21 +126,21 @@ class DataSeries_test: XCTestCase
         df.fill()
         print("\nFilled data frame:\n\(df)")
         
-        if let S1: Series<Int> = df.get("s1")
+        if let S1: DataSeries<Int> = df.get("s1")
         {
             XCTAssert(S1.data[0] == 2 && S1.data[10] == 3)
             print(S1)
         }
         else { XCTAssert(false) }        
 
-        if let S2: Series<Double> = df.get("s2")
+        if let S2: DataSeries<Double> = df.get("s2")
         {
             XCTAssert(S2.data[0] == 2.35 && S2.data[10] == 4.24)
             print(S2)
         }
         else { XCTAssert(false) }       
 
-        var s8 = Series<Double>()
+        var s8 = DataSeries<Double>()
         for (i,v) in a8.enumerated()
         {
             XCTAssert(s8.append(v, index: Double(i)))
@@ -149,7 +149,7 @@ class DataSeries_test: XCTestCase
         XCTAssert(!s8.append(9.9, index: 1.21))
         print(s8)
 
-        var s9 = Series<Double>(order: .decreasing)
+        var s9 = DataSeries<Double>(order: .decreasing)
         for i in stride(from: a9.count-1, through: 0, by: -1)
         {
             XCTAssert(s9.append(a9[i], index: Double(i)))
@@ -157,6 +157,22 @@ class DataSeries_test: XCTestCase
         XCTAssert(!s9.append(122344.234, index: 123.1))   
 
         print("s9: \(s9)\n")     
+
+        // Minus
+        print("\nMinus function...")
+        let s3_minus_s4 = s3.minus(s4)
+        print("s3-s4:\(s3_minus_s4)\n\n")       
+        XCTAssert([-110.0, -660.0, -10.0164].enumerated()
+            .reduce(0.0, {$0 + ((s3_minus_s4.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)
+
+        let s4_minus_s3 = s4.minus(s3)
+        print("s4-s3:\(s4_minus_s3)\n\n")
+        XCTAssert([110.0, 660.0, 10.0164, 643.003, 28.883].enumerated()
+            .reduce(0.0, {$0 + ((s4_minus_s3.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)
+
+        // Present
+        let (ind1, dat1, loc1) =  s1.present()
+        XCTAssert(ind1.count == 2 && dat1.count == 2 && loc1.count == 2)
 
     }
 }
