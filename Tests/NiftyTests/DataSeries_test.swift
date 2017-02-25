@@ -162,7 +162,7 @@ class DataSeries_test: XCTestCase
         print("\nMinus function...")
         let s3_minus_s4 = s3.minus(s4)
         print("s3-s4:\(s3_minus_s4)\n\n")       
-        XCTAssert([-110.0, -660.0, -10.0164].enumerated()
+        XCTAssert([-110.0, -660.0, -10.0164, -643.003, -28.883].enumerated()
             .reduce(0.0, {$0 + ((s3_minus_s4.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)
 
         let s4_minus_s3 = s4.minus(s3)
@@ -173,6 +173,20 @@ class DataSeries_test: XCTestCase
         // Present
         let (ind1, dat1, loc1) =  s1.present()
         XCTAssert(ind1.count == 2 && dat1.count == 2 && loc1.count == 2)
-
+        
+        // MSE and RMS        
+        let mse22 = s2.mse(s2)
+        XCTAssert(mse22 < 0.000000001)
+        
+        let rms22 = s2.rms(s2)
+        XCTAssert(rms22 < 0.000000001)
+        
+        let mse23 = s2.mse(s3)
+        let mse32 = s3.mse(s2)
+        XCTAssert(mse23 == mse32 && (mse23-700 < 0.000001))
+        
+        let rms23 = s2.rms(s3)
+        let rms32 = s3.rms(s2)
+        XCTAssert(rms23 == rms32 && (rms23-26.4575131106 < 0.0000000001))
     }
 }

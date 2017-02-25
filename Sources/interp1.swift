@@ -40,67 +40,67 @@ public func interp1<T>(x: [Double], y: [T?], query: [Double], method: Nifty.Opti
     var qValues = [T]()    
     switch method
     {
-    case .nearest:
-        
-        for q in query
-        {
-            let i = find(in: xData, nearest: q)
-            assert(i >= 0, "Not possible--conditions were checked so find should not return -1")
-            qValues.append(yData[i])            
-        }
-        
-    case .nearlin:
-        
-        for q in query
-        {
-            let i = find(in: xData, nearest: q)
-            var left: Int? = nil
-            var right: Int? = nil
+        case .nearest:
             
-            // if query point exists in series, just add it and move on
-            if xData[i] == q { qValues.append(yData[i]); continue } // FIXME: proper double compare
+            for q in query
+            {
+                let i = find(in: xData, nearest: q)
+                assert(i >= 0, "Not possible--conditions were checked so find should not return -1")
+                qValues.append(yData[i])            
+            }
+            
+        case .nearlin:
+            
+            for q in query
+            {
+                let i = find(in: xData, nearest: q)
+                var left: Int? = nil
+                var right: Int? = nil
                 
+                // if query point exists in series, just add it and move on
+                if xData[i] == q { qValues.append(yData[i]); continue } // FIXME: proper double compare
+                    
                 // otherwise find points to one (or both) sides for estimation                  
-            else if xData[i] < q // FIXME: proper double compare
-            {
-                left = i            
-                for j in i+1..<xData.count 
+                else if xData[i] < q // FIXME: proper double compare
                 {
-                    if xData[j] > q { right = j; break }                    
+                    left = i            
+                    for j in i+1..<xData.count 
+                    {
+                        if xData[j] > q { right = j; break }                    
+                    }
                 }
-            }
-            else 
-            {
-                right = i
-                for j in stride(from: i-1, through: 0, by: -1)
+                else 
                 {
-                    if xData[j] < q { left = j; break }
+                    right = i
+                    for j in stride(from: i-1, through: 0, by: -1)
+                    {
+                        if xData[j] < q { left = j; break }
+                    }
+                }
+                
+                // if there is data to the left and right and type is a double, linterp is possible
+                if let li = left, let ri = right, T.self == Double.self
+                {
+                    let xFrac = (q-xData[li])/(xData[ri]-xData[li])
+                    assert(xFrac >= 0.0 && xFrac <= 1.0, "Expected q to be above left, below right")
+                    let yDiff = (yData[ri] as! Double)-(yData[li] as! Double)
+                    let qVal = (yData[li] as! Double) + xFrac*yDiff
+                    qValues.append(qVal as! T)
+                    continue
+                }
+                    
+                // otherwise, just use nearest neighbor
+                else                
+                {
+                    let ni: Int
+                    if let li = left, let ri = right { ni = abs(xData[li]-q) <= abs(xData[ri]-q) ? li : ri }
+                    else { ni = left ?? right! }                
+                    qValues.append(yData[ni])
                 }
             }
             
-            // if there is data to the left and right and type is a double, linterp is possible
-            if let li = left, let ri = right, T.self == Double.self
-            {
-                let xFrac = (q-xData[li])/(xData[ri]-xData[li])
-                assert(xFrac >= 0.0 && xFrac <= 1.0, "Expected q to be above left, below right")
-                let yDiff = (yData[ri] as! Double)-(yData[li] as! Double)
-                let qVal = (yData[li] as! Double) + xFrac*yDiff
-                qValues.append(qVal as! T)
-                continue
-            }
-                
-                // otherwise, just use nearest neighbor
-            else                
-            {
-                let ni: Int
-                if let li = left, let ri = right { ni = abs(xData[li]-q) <= abs(xData[ri]-q) ? li : ri }
-                else { ni = left ?? right! }                
-                qValues.append(yData[ni])
-            }
-        }
-        
-    default:
-        fatalError("Interpolation method not supported: \(method)")
+        default:
+            fatalError("Interpolation method not supported: \(method)")
     }
     
     return qValues    

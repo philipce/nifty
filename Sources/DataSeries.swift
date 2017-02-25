@@ -521,10 +521,9 @@ public struct DataSeries<T>: CustomStringConvertible
 
     /// Subtract the elements in the other series from this series. 
     ///
-    /// The resulting data series will have the same index as this series, where the other series
-    /// will have values estimated for any index values that it is missing which this series has.
-    /// Indexes contained in the other series that are missing from this series will have no effect
-    /// on this operation.
+    /// The resulting data series will have as its index the union set of the index of this series 
+    /// and the other series. Missing values in either series will be estimated with the given 
+    /// method so that the difference at every point in either series can be computed.
     ///
     /// - Note: this function is only applicable to types that can be subtracted; calling this 
     ///    function on series of unsupported types will cause an unrecoverable error.
@@ -534,26 +533,82 @@ public struct DataSeries<T>: CustomStringConvertible
     /// - Returns: new series with same index as this series, containing differences
     public func minus(_ other: DataSeries<T>, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<T>
     {
-        var newSeries = DataSeries<T>()
+        var newSeries: DataSeries<T>
         switch T.self
         {
             case is Double.Type:
 
                 // FIXME: handle sorting differences more gracefully
                 precondition(self.order == other.order, "Can't difference differently ordered series")
+                precondition(self.order == .increasing || self.order == .decreasing, 
+                             "Can only difference increasing or decreasing series")    
+                
+                newSeries = DataSeries<T>(order: self.order)
        
-                for i in 0..<self.count
+                // TODO: revisit this for efficiency ...
+                // There's probably a bunch we can do to speed this up. E.g. walking both indexes in
+                // order, alternating between each depending on the sorting rather than just pulling
+                // the entire self.index and appending different values from other.index (this
+                // should remove the need for one query and make the other more efficient)
+                
+                // create the union set of indexes in this series and other
+                var newUnorderedIndex = [Double]()
+                newUnorderedIndex.append(contentsOf: self.index)
+                for i in 0..<other.count
                 {
-                    let thisVal = self.data[i] as! Double
-                    let otherVal = other.query(self.index[i], method: method) as! Double
-                    let diff = (thisVal - otherVal) as! T
-                    let success = newSeries.append(diff, index: self.index[i])
-                    assert(success, "Unexpectedly failed to append")
+                    let ind = other.index[i]
+                    if !newUnorderedIndex.contains(where: {$0 == ind}) { newUnorderedIndex.append(ind) } // FIXME: proper double compare                    
                 }
+                                
+                for ind in newUnorderedIndex
+                {
+                    let thisVal = self.query(ind, method: method) as! Double // self.data[i] as! Double
+                    let otherVal = other.query(ind, method: method) as! Double
+                    let diff = (thisVal - otherVal) as! T                    
+                    let success = newSeries.insert(diff, at: ind)
+                    assert(success, "Unexpectedly failed to insert \(diff) at \(ind)")
+                }
+                
             default:
                 fatalError("Unsupported series type: \(T.self)")
         }
         return newSeries
+    }
+    
+    /// Compute the mean squared error between two series.
+    ///
+    /// The series being compared need not be the same size; for index values that are present in 
+    /// one series but missing in the other, the values will be estimated with the given method so 
+    /// that the difference at every point in either series can be computed and included in the 
+    /// error calculation.
+    ///
+    /// - Note: this function is only applicable to types that can be subtracted; calling this 
+    ///    function on series of unsupported types will cause an unrecoverable error.
+    /// - Parameters:
+    ///    - other: data series to compare to this series
+    ///    - method: method for estimating missing index values of other series (default: nearlin)
+    /// - Returns: mean square error value
+    public func mse(_ other: DataSeries<T>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
+    {
+        let error: Double
+        switch T.self
+        {
+        case is Double.Type:
+            let difference = self.minus(other, method: method)
+            var total = 0.0
+            var n = 0
+            for i in 0..<difference.count
+            {
+                total += (difference.data[i] as! Double) * (difference.data[i] as! Double)
+                n += 1
+            }
+            error = total/Double(n)
+            
+        default:
+            fatalError("Unsupported series type: \(T.self)")
+        }
+        
+        return error        
     }
     
     /// Return list of the present (i.e. not nil) data in this series and corresponding indexes, as 
@@ -622,6 +677,25 @@ public struct DataSeries<T>: CustomStringConvertible
         let data = self.query(indexes, method: method)
         
         return DataSeries(data, index: indexes, order: self.order, name: name, maxColumnWidth: self.maxColumnWidth)        
+    }
+    
+    /// Compute the root-mean-square error between two series.
+    ///
+    /// The series being compared need not be the same size; for index values that are present in 
+    /// one series but missing in the other, the values will be estimated with the given method so 
+    /// that the difference at every point in either series can be computed and included in the 
+    /// error calculation.
+    ///
+    /// - Note: this function is only applicable to types that can be subtracted; calling this 
+    ///    function on series of unsupported types will cause an unrecoverable error.
+    /// - Parameters:
+    ///    - other: data series to compare to this series
+    ///    - method: method for estimating missing index values of other series (default: nearlin)
+    /// - Returns: root-mean-square error value
+    public func rms(_ other: DataSeries<T>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
+    {
+        let error = self.mse(other, method: method)
+        return sqrt(error)
     }
 }
 
