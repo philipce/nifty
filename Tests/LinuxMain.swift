@@ -30,6 +30,7 @@ tests += eig_test.allTests
 tests += eigs_test.allTests
 tests += eps_test.allTests
 tests += eq_test.allTests
+tests += error_test.allTests
 tests += exp2_test.allTests
 tests += exp_test.allTests
 tests += expm1_test.allTests
@@ -122,6 +123,7 @@ tests += triu_test.allTests
 tests += unique_test.allTests
 tests += var_test.allTests
 tests += Vector_test.allTests
+tests += warning_test.allTests
 tests += zeros_test.allTests
 
 XCTMain(tests)

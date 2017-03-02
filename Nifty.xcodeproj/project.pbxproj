@@ -14,6 +14,10 @@
 		4A5CC14C1E575F2E0087C160 /* _meshgrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1451E575F2E0087C160 /* _meshgrid.swift */; };
 		4A5CC14D1E575F2E0087C160 /* _shuffle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1461E575F2E0087C160 /* _shuffle.swift */; };
 		4A5CC14E1E575F2E0087C160 /* _sort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC1471E575F2E0087C160 /* _sort.swift */; };
+		4A5CC2B31E5CA9FB0087C160 /* error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC2B11E5CA9FB0087C160 /* error.swift */; };
+		4A5CC2B41E5CA9FB0087C160 /* warning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC2B21E5CA9FB0087C160 /* warning.swift */; };
+		4A5CC2B91E5CAC040087C160 /* error_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC2B51E5CABFE0087C160 /* error_test.swift */; };
+		4A5CC2BA1E5CAC040087C160 /* warning_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5CC2B61E5CABFE0087C160 /* warning_test.swift */; };
 		4A7C78081E411C6500B09975 /* Nifty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7C77FE1E411C6500B09975 /* Nifty.framework */; };
 		4A7C78971E411E2900B09975 /* _cond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781D1E411E2900B09975 /* _cond.swift */; };
 		4A7C78981E411E2900B09975 /* _det.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781E1E411E2900B09975 /* _det.swift */; };
@@ -278,6 +282,10 @@
 		4A5CC1451E575F2E0087C160 /* _meshgrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _meshgrid.swift; path = Sources/_meshgrid.swift; sourceTree = SOURCE_ROOT; };
 		4A5CC1461E575F2E0087C160 /* _shuffle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _shuffle.swift; path = Sources/_shuffle.swift; sourceTree = SOURCE_ROOT; };
 		4A5CC1471E575F2E0087C160 /* _sort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _sort.swift; path = Sources/_sort.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC2B11E5CA9FB0087C160 /* error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = error.swift; path = Sources/error.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC2B21E5CA9FB0087C160 /* warning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = warning.swift; path = Sources/warning.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC2B51E5CABFE0087C160 /* error_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = error_test.swift; path = Tests/NiftyTests/error_test.swift; sourceTree = SOURCE_ROOT; };
+		4A5CC2B61E5CABFE0087C160 /* warning_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = warning_test.swift; path = Tests/NiftyTests/warning_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C77FE1E411C6500B09975 /* Nifty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nifty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7C78071E411C6500B09975 /* NiftyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NiftyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A7C781D1E411E2900B09975 /* _cond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _cond.swift; path = Sources/_cond.swift; sourceTree = SOURCE_ROOT; };
@@ -632,6 +640,7 @@
 				4A7C78551E411E2900B09975 /* diag.swift */,
 				4A7C78561E411E2900B09975 /* dot.swift */,
 				4A7C78571E411E2900B09975 /* eps.swift */,
+				4A5CC2B11E5CA9FB0087C160 /* error.swift */,
 				4A7C78211E411E2900B09975 /* eq.swift */,
 				4A7C78581E411E2900B09975 /* exp.swift */,
 				4A7C78591E411E2900B09975 /* exp2.swift */,
@@ -695,6 +704,7 @@
 				4A7C78931E411E2900B09975 /* tril.swift */,
 				4A7C78941E411E2900B09975 /* triu.swift */,
 				4A7C78951E411E2900B09975 /* Vector.swift */,
+				4A5CC2B21E5CA9FB0087C160 /* warning.swift */,
 				4A7C78961E411E2900B09975 /* zeros.swift */,
 			);
 			name = Sources;
@@ -731,6 +741,7 @@
 				4A7C792F1E425B2100B09975 /* eigs_test.swift */,
 				4A7C79301E425B2100B09975 /* eps_test.swift */,
 				4A7C79311E425B2100B09975 /* eq_test.swift */,
+				4A5CC2B51E5CABFE0087C160 /* error_test.swift */,
 				4A7C79321E425B2100B09975 /* exp_test.swift */,
 				4A7C79331E425B2100B09975 /* exp2_test.swift */,
 				4A7C79341E425B2100B09975 /* expm1_test.swift */,
@@ -823,6 +834,7 @@
 				4A7C798C1E425B2100B09975 /* unique_test.swift */,
 				4A7C798D1E425B2100B09975 /* var_test.swift */,
 				4A7C798E1E425B2100B09975 /* Vector_test.swift */,
+				4A5CC2B61E5CABFE0087C160 /* warning_test.swift */,
 				4A7C798F1E425B2100B09975 /* zeros_test.swift */,
 			);
 			name = Tests;
@@ -984,6 +996,7 @@
 				4A7C78AE1E411E2900B09975 /* _ones.swift in Sources */,
 				4A7C79091E411E2900B09975 /* tic_toc.swift in Sources */,
 				4A7C78C11E411E2900B09975 /* asin.swift in Sources */,
+				4A5CC2B31E5CA9FB0087C160 /* error.swift in Sources */,
 				4A7C78BB1E411E2900B09975 /* _sum.swift in Sources */,
 				4A7C78E41E411E2900B09975 /* lu.swift in Sources */,
 				4A7C78E81E411E2900B09975 /* mldivide.swift in Sources */,
@@ -1041,6 +1054,7 @@
 				4A7C78D71E411E2900B09975 /* ge.swift in Sources */,
 				4A7C78DC1E411E2900B09975 /* inv.swift in Sources */,
 				4A7C78F51E411E2900B09975 /* rand.swift in Sources */,
+				4A5CC2B41E5CA9FB0087C160 /* warning.swift in Sources */,
 				4A7C78C91E411E2900B09975 /* ceil.swift in Sources */,
 				4A7C789D1E411E2900B09975 /* _filter.swift in Sources */,
 				4A7C78A61E411E2900B09975 /* _lsb.swift in Sources */,
@@ -1089,6 +1103,7 @@
 				4A7C7A701E425B7300B09975 /* svd_test.swift in Sources */,
 				4A7C7A4E1E425B7300B09975 /* ndims_test.swift in Sources */,
 				4A7C7A791E425B7300B09975 /* transpose_test.swift in Sources */,
+				4A5CC2BA1E5CAC040087C160 /* warning_test.swift in Sources */,
 				4A7C7A441E425B7300B09975 /* min_test.swift in Sources */,
 				4A7F8E9B1E5E93B70051C64D /* interp1_test.swift in Sources */,
 				4A7C7A311E425B7300B09975 /* isinf_test.swift in Sources */,
@@ -1142,6 +1157,7 @@
 				4A7C7A141E425B7300B09975 /* ceil_test.swift in Sources */,
 				4A7C7A631E425B7300B09975 /* reshape_test.swift in Sources */,
 				4A7C7A391E425B7300B09975 /* log1p_test.swift in Sources */,
+				4A5CC2B91E5CAC040087C160 /* error_test.swift in Sources */,
 				4A7C7A781E425B7300B09975 /* trace_test.swift in Sources */,
 				4A7C7A151E425B7300B09975 /* chol_test.swift in Sources */,
 				4A7C7A6F1E425B7300B09975 /* sum_test.swift in Sources */,
