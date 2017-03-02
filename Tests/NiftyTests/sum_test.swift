@@ -39,7 +39,40 @@ class sum_test: XCTestCase
 
     func testBasic() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        // List sums
+        let l1 = [1,2,3]        
+        let l2 = [5.5,1.5,2.0]
+        XCTAssert(sum(l1) == 6)
+        XCTAssert(sum(l2) == 9.0)
+
+        // Vector sums
+        let v1 = Vector(l1)
+        let v2 = Vector(l2)
+        XCTAssert(sum(v1) == 6)
+        XCTAssert(sum(v2) == 9.0)        
+
+        // Matrix sums
+        let A = Matrix<Double>([[3,7,3,6,5],[8,34,1,4,56],[8,46,0,23,4]])
+        let Ai = Matrix([[3,7,3,6,5],[8,34,1,4,56],[8,46,0,23,4]])
+        let rsum = sum(A, axis: 0)        
+        let csum = sum(A, axis: 1)
+        XCTAssert(sum(A) == 208.0)
+        XCTAssert(sum(Ai) == 208)
+        XCTAssert(rsum.size == [1,5] && rsum.data == [19,87,4,33,65])
+        XCTAssert(csum.size == [3,1] && csum.data == [24,103,81])
+        
+        // Tensor sums
+        let T = Tensor([2,3,4,2], value: 1.0)
+        let Ti = Tensor([2,3,4,2], value: 1)        
+        let sum0 = sum(T, axis: 0)
+        let sum1 = sum(T, axis: 1)
+        let sum2 = sum(T, axis: 2)
+        let sum3 = sum(T, axis: 3)
+        XCTAssert(sum(T) == 2.0*3.0*4.0*2.0)
+        XCTAssert(sum(Ti) == 2*3*4*2)
+        XCTAssert(sum0.size == [1,3,4,2] && sum(sum0) == 2.0*3.0*4.0*2.0)
+        XCTAssert(sum1.size == [2,1,4,2] && sum(sum1) == 2.0*3.0*4.0*2.0)
+        XCTAssert(sum2.size == [2,3,1,2] && sum(sum2) == 2.0*3.0*4.0*2.0)
+        XCTAssert(sum3.size == [2,3,4,1] && sum(sum3) == 2.0*3.0*4.0*2.0)
     }
 }

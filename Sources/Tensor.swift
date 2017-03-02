@@ -166,7 +166,7 @@ public struct Tensor<T>: CustomStringConvertible
     /// - Parameters:
     ///    - s: subscripts
     /// - Returns: single value at index
-    public subscript(_ s: Int...) -> T
+    public subscript(_ s: [Int]) -> T
     {
         get
         {
@@ -196,6 +196,12 @@ public struct Tensor<T>: CustomStringConvertible
             }
 
         }
+    }
+
+    public subscript(_ s: Int...) -> T
+    {
+        get { return self[s] }
+        set(newValue) { self[s] = newValue }
     }
     
     private func getValue(index: Int) -> T
