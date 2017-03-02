@@ -48,7 +48,7 @@ implemented.
 | atan2d             | Complete        | Basic          |                                                                                         |
 | atand              | Complete        | Basic          |                                                                                         |
 | atanh              | Complete        | Basic          |                                                                                         |
-| ceil               | Complete        | None           |                                                                                         |
+| ceil               | Complete        | Basic          |                                                                                         |
 | chol               | Mostly complete | Basic          |                                                                                         |
 | cond               | Unimplemented   | None           |                                                                                         |
 | cos                | Complete        | Basic          |                                                                                         |
@@ -57,29 +57,32 @@ implemented.
 | cross              | Mostly complete | Basic          |                                                                                         |
 | cumprod            | Unimplmented    | None           |                                                                                         |
 | cumsum             | Unimplmented    | None           |                                                                                         |
+| DataFrame          | Incomplete      | None           | Basic start to pandas clone                                                             |
+| DataSeries         | Incomplete      | None           | Basic start to pandas clone                                                             |
 | det                | Unimplemented   | None           |                                                                                         |
 | diag               | Unimplemented   | None           |                                                                                         |
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
 | eig                | Unimplemented   | None           |                                                                                         |
 | eigs               | Unimplemented   | None           |                                                                                         |
 | eps                | Incomplete      | None           |                                                                                         |
-| eq                 | Unimplemented   | None           |                                                                                         |
-| exp                | Complete        | None           |                                                                                         |
-| exp2               | Complete        | None           |                                                                                         |
-| expm1              | Complete        | None           |                                                                                         |
+| eq                 | Completed       | Basi           |                                                                                         |
+| exp                | Complete        | Basic          |                                                                                         |
+| exp2               | Complete        | Basic          |                                                                                         |
+| expm1              | Complete        | Basic          |                                                                                         |
 | eye                | Mostly Complete | None           |                                                                                         |
 | fft                | Unimplemented   | None           |                                                                                         |
 | filter             | Unimplemented   | None           |                                                                                         |
-| find               | Unimplemented   | None           |                                                                                         |
+| find               | Incomplete      | None           | Interface created for use with DataSeries -- need to reconcile it with MATLAB           |
 | flipud             | Unimplemented   | None           |                                                                                         |
 | fliplr             | Unimplemented   | None           |                                                                                         |
-| floor              | Complete        | None           |                                                                                         |
+| floor              | Complete        | Basic          |                                                                                         |
 | ge (>=)            | Complete        | None           |                                                                                         |
 | gt (>)             | Unimplemented   | None           |                                                                                         |
 | hypot              | Mostly Complete | None           |                                                                                         |
 | ifft               | Unimplemented   | None           |                                                                                         |
 | ind2sub            | Mostly Complete | None           |                                                                                         |
 | inf                | Incomplete      | None           |                                                                                         |
+| interp1            | Incomplete      | None           | Interface created for use with DataSeries -- need to reconcile it with MATLAB           |
 | inv (~)            | Mostly Complete | None           |                                                                                         |
 | isequal            | Mostly Complete | None           | Need to add overloads and improve default behavior                                      |
 | isinf              | Unimplemented   | None           |                                                                                         |
@@ -87,17 +90,17 @@ implemented.
 | ldivide            | Unimplemented   | None           |                                                                                         |
 | le (<=)            | Complete        | None           |                                                                                         |
 | linspace           | Unimplemented   | None           |                                                                                         |
-| log                | Complete        | None           |                                                                                         |
-| log10              | Complete        | None           |                                                                                         |
-| log2               | Complete        | None           |                                                                                         |
-| log1p              | Complete        | None           |                                                                                         |
+| log                | Complete        | Basic          |                                                                                         |
+| log10              | Complete        | Basic          |                                                                                         |
+| log2               | Complete        | Basic          |                                                                                         |
+| log1p              | Complete        | Basic          |                                                                                         |
 | lsb                | Unimplemented   | None           |                                                                                         |
 | lt (<)             | Complete        | None           |                                                                                         |
 | lu                 | Mostly Complete | Basic          |                                                                                         |
 | map                | Unimplemented   | None           |                                                                                         |
 | Matrix             | Mostly Complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | max                | Unimplemented   | None           |                                                                                         |
-| mean               | Unimplemented   | None           |                                                                                         |
+| mean               | Complete        | Basic          |                                                                                         |
 | median             | Unimplemented   | None           |                                                                                         |
 | meshgrid           | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
@@ -135,15 +138,15 @@ implemented.
 | repmat             | Unimplemented   | None           |                                                                                         |
 | reshape            | Unimplemented   | None           |                                                                                         |
 | rmap               | Complete        | None           |                                                                                         |
-| round              | Complete        | None           |                                                                                         |
+| round              | Complete        | Basic          |                                                                                         |
 | rref               | Unimplemented   | None           |                                                                                         |
 | shuffle            | Unimplemented   | None           |                                                                                         |
 | sin                | Complete        | Basic          |                                                                                         |
 | sind               | Complete        | Basic          |                                                                                         |
 | sinh               | Complete        | Basic          |                                                                                         |
-| size               | Complete        | None           |                                                                                         |
+| size               | Complete        | Basic          |                                                                                         |
 | sort               | Unimplemented   | None           |                                                                                         |
-| sqrt               | Complete        | None           |                                                                                         |
+| sqrt               | Complete        | Basic          |                                                                                         |
 | std                | Unimplemented   | None           |                                                                                         |
 | sub2ind            | Mostly Complete | None           |                                                                                         |
 | sum                | Unimplemented   | None           |                                                                                         |
@@ -156,14 +159,14 @@ implemented.
 | tic                | Mostly Complete | None           |                                                                                         |
 | times (*)          | Incomplete      | None           | Need to add overloads                                                                   |
 | toc                | Mostly Complete | None           |                                                                                         |
-| trace              | Complete        | None           |                                                                                         |
+| trace              | Complete        | Basic          |                                                                                         |
 | transpose          | Mostly Complete | None           | Need to add overloads for generic types                                                 |
 | tril               | Incomplete      | None           |                                                                                         |
 | triu               | Incomplete      | None           |                                                                                         |
 | unique             | Unimplemented   | None           |                                                                                         |
 | var                | Unimplemented   | None           |                                                                                         |
 | Vector             | Mostly complete | Basic          | Need to add reshaping inits; make iterable                                              |
-| zeros              | Complete        | None           |                                                                                         |
+| zeros              | Complete        | Basic          |                                                                                         |
 
 
 ### Future Work

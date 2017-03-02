@@ -31,7 +31,20 @@ public class Nifty
     /// is a clear correspondence, and extension to this struct may be made in that file.
     public class Options
     {
-
+        ///
+        /// - nearlin: use linear interpolation where possible, elsewhere use nearest neighbor
+        public enum EstimationMethod
+        {    
+            case gaussproc
+            case linreg
+            case linterp    
+            case nearest
+            case nearlin
+            case next
+            case previous
+            case spline
+        }
+        
     }
 
     /// Contains constant definitions used throughout Nifty.
