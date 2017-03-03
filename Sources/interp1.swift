@@ -78,8 +78,12 @@ public func interp1<T>(x: [Double], y: [T?], query: [Double], method: Nifty.Opti
                     }
                 }
                 
+                // check if data type can be downcast to double
+                var isDouble = T.self == Double.self
+                if let _ = yData[0] as? Double { isDouble = true }
+
                 // if there is data to the left and right and type is a double, linterp is possible
-                if let li = left, let ri = right, T.self == Double.self
+                if let li = left, let ri = right, isDouble
                 {
                     let xFrac = (q-xData[li])/(xData[ri]-xData[li])
                     assert(xFrac >= 0.0 && xFrac <= 1.0, "Expected q to be above left, below right")

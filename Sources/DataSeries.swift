@@ -70,7 +70,7 @@ public struct DataSeries<T>: CustomStringConvertible
     // MARK: Stored Properties
     //----------------------------------------------------------------------------------------------
     
-    public var order: SeriesIndexOrder
+    public var order: SeriesIndexOrder    
     public let name: String?
     public let type = T.self	
     public let maxColumnWidth: Int?
@@ -173,6 +173,8 @@ public struct DataSeries<T>: CustomStringConvertible
     // MARK: Subscripts
     //----------------------------------------------------------------------------------------------
     
+    // TODO: add setters
+
     public subscript(_ index: Double) -> T?
     {
         // TODO: how to handle duplicate values? 
@@ -303,7 +305,7 @@ public struct DataSeries<T>: CustomStringConvertible
     ///     - at i: index at which to insert
     ///     - verify: control whether this insertion is verified (default: true)
     /// - Returns: true if insert was successful, false if the insert failed
-    public mutating func insert(_ x: T, at index: Double, verify: Bool = true) -> Bool
+    public mutating func insert(_ x: T?, at index: Double, verify: Bool = true) -> Bool
     {        
         if self.isEmpty
         {
@@ -419,8 +421,7 @@ public struct DataSeries<T>: CustomStringConvertible
             return true
         }   
     }
-    
-    
+
     //----------------------------------------------------------------------------------------------
     // MARK: Non-Mutating Functions
     //----------------------------------------------------------------------------------------------

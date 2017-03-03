@@ -21,15 +21,27 @@
 
 struct DataFrame: CustomStringConvertible
 {
-    var series : [[Any?]]	
-    var names  : [String] 
-    var widths : [Int?]
-    var index  : [Double]
+    //----------------------------------------------------------------------------------------------
+    // MARK: Stored Properties
+    //----------------------------------------------------------------------------------------------
     
-    var description: String
+    internal var series : [DataSeries<Any>]	   
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Computed Properties
+    //----------------------------------------------------------------------------------------------
+    
+    public var count: Int
     {
+        return self.series.count
+    }
+
+    public var description: String
+    {
+        if self.series.isEmpty { return "Empty DataSeries" }
+
         let (blankInd, padInd) = _columnizeData(
-            list: self.index, 
+            list: self.series[0].index, 
             name: "",
             maxWidth: nil, 
             padLeft: false)	
@@ -39,9 +51,9 @@ struct DataFrame: CustomStringConvertible
         for i in 0..<self.series.count
         {			
             let (padName, padData) = _columnizeData(
-                list: self.series[i], 
-                name: self.names[i], 
-                maxWidth: self.widths[i], 
+                list: self.series[i].data, 
+                name: self.series[i].name ?? "n/a", 
+                maxWidth: self.series[i].maxColumnWidth, 
                 padLeft: true)
             padNames.append(padName!)
             padSeries.append(padData)
@@ -51,7 +63,7 @@ struct DataFrame: CustomStringConvertible
                 "All series must have same number of indexes as data points" )
         
         var rows = [String]()
-        let nameRow = blankInd! + " " + "  " + padNames.joined(separator: "  ")
+        let nameRow = blankInd! + " " + "   " + padNames.joined(separator: "   ")
         if !nameRow.isEmpty { rows.append(nameRow) }
         for r in 0..<padSeries[0].count
         {
@@ -61,141 +73,195 @@ struct DataFrame: CustomStringConvertible
                 if c == -1 { curRow.append(padInd[r] + ":") }
                 else { curRow.append(padSeries[c][r]) }	
             }
-            rows.append(curRow.joined(separator: "  "))
+            rows.append(curRow.joined(separator: "   "))
         }
         
         return rows.joined(separator: "\n")
     }		
+
+    public var isComplete: Bool
+    {
+        return self.series.reduce(true, { $0 && $1.isComplete })
+    }
+
+    public var isEmpty: Bool
+    {
+        return self.series.isEmpty
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Initializers
+    //----------------------------------------------------------------------------------------------    
     
-    init()
+    public init()
     {
         self.series = []
-        self.names  = []
-        self.widths = []
-        self.index  = []
     }
     
-    init<T>(_ series: DataSeries<T>..., columnWidth: Int = 15)
+    public init(_ series: DataSeries<Any>..., columnWidth: Int = 15)
     {
-        self.series = []
-        self.names  = []
-        self.widths = []
-        self.index  = []
-        
+        self.series = []        
         self.add(series)
     }
+
+    // TODO: add init that reads csv string
+    public init(_ csv: String)
+    {
+        fatalError("Not yet impl")
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Non-Mutating Functions
+    //----------------------------------------------------------------------------------------------    
     
+    func contains(_ column: String) -> Bool
+    {
+        // TODO: add case insensitive option
+
+        for i in 0..<self.count
+        {
+            if self.series[i].name == column { return true }
+        }
+
+        return false
+    }
+
     func get<T>(_ column: String) -> DataSeries<T>?
     {
-        if let i = self.names.index(of: column)
+        var matches = [Int]()
+        for i in 0..<self.count
         {
-            let s = self.series[i]
-            
-            assert(self.index.count == s.count)            
-            var ind = [Double]()
-            var dat = [T]()
-            for j in 0..<self.index.count
-            {
-                if let d = s[j]
-                {
-                    guard let t = d as? T else { fatalError("Can't get DataSeries<\(type(of:d))> as DataSeries<\(T.self)>") }
-                    ind.append(self.index[j])
-                    dat.append(t)
-                }
-            }
-            
-            return DataSeries<T>(dat, index: ind, name: self.names[i], maxColumnWidth: self.widths[i])
+            if self.series[i].name == column { matches.append(i) }
         }
-        else { return nil }
-    }
-    
-    mutating func add<T>(_ series: DataSeries<T>...)
-    {
-        self.add(series)
-    }
-    
-    mutating func add<T>(_ series: [DataSeries<T>])
-    {
-        for s in series
-        {
-            let rootName = s.name ?? "col\(self.series.count+1)"
-            var name = rootName
-            var dupe = 1
-            while self.names.contains(where: {$0 == name})
+
+        if matches.isEmpty { return nil }
+        precondition(matches.count == 1, "Duplicate column '\(column)'")
+        
+        let s = self.series[matches[0]]      
+
+        var ind = [Double]()
+        var dat = [T?]()
+        for j in 0..<s.count
+        {                    
+            var newData: T? = nil    
+            if let d = s.data[j]
             {
-                name = rootName + "_\(dupe)"
-                dupe += 1
+                guard let t = d as? T else 
+                { 
+                    print("Warning: Can't get DataSeries<\(type(of:d))> as DataSeries<\(T.self)>")
+                    return nil
+                } 
+                newData = t
             }
-            
-            // Reconcile the frame index with the index of the series to append
-            // TODO: ensure the indexes are in sorted ascending order
-            var newIndex = s.index  
-            var newSeries: [Any?] = s.data
-            var i = 0
-            var j = 0
-            while true            
-            {                
-                // if frame index has no values left to traverse, add remaining rows from new series index
-                if i > self.index.count-1
+            ind.append(s.index[j])
+            dat.append(newData)
+        }
+        
+        return DataSeries<T>(dat, index: ind, name: s.name, maxColumnWidth: s.maxColumnWidth) 
+    }
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Mutating Functions
+    //----------------------------------------------------------------------------------------------    
+
+    // TODO: mutating func set<T>(_ column: String,                  to series: DataSeries<T>) 
+    // TODO: mutating func set<T>(_ column: Int,                     to series: DataSeries<T>)
+    // TODO: mutating func set<T>(_ column: String, _ index: Double, to element: T)
+    // TODO: mutating func set<T>(_ column: Int,    _ index: Double, to element: T)
+    
+    mutating func add<T>(_ addSeries: [DataSeries<T>])
+    {
+        // FIXME: the following code assumes the series are ascending...
+        // We should add support for any series ordering, but this will take some thinking for how
+        // to handle reconciliation of indexes when there may be duplicate values. Also, we will
+        // need to decide how to handle a frame with each series sorted differently (if at all--this
+        // seems like it should perhaps be disallowed)
+        assert(self.series.reduce(true, {$0 && $1.order == .increasing}), 
+            "Only increasing series currently supported")        
+
+        for si in 0..<addSeries.count
+        {
+            var s = addSeries[si]
+            let origIndex = s.index
+
+            // ensure each series has a unique name
+            let rootName = s.name ?? "column_\(self.series.count+1)"
+            var uniqueName = rootName
+            var uniqueID = 1
+            while self.contains(uniqueName)
+            {
+                uniqueName = rootName + "_\(uniqueID)"
+                uniqueID += 1
+            }
+
+            // add indexes from DataFrame to s
+            if !self.series.isEmpty
+            {
+                for dfIndex in self.series[0].index
                 {
-                    let remainIndex = newIndex[j..<newIndex.count]  
-                    self.index.append(contentsOf: remainIndex)                    
-                    let remainData = Array<Any?>(repeating: nil, count: remainIndex.count)
-                    for k in 0..<self.series.count { self.series[k].append(contentsOf: remainData) }                    
-                    break
+                    let doInsert: Bool
+                    if s.isEmpty { doInsert = true }
+                    else
+                    {
+                        // check if the new series already has the current index from this data frame
+                        let ind = s.index[find(in: s.index, nearest: dfIndex)]
+                        doInsert = ind != dfIndex // FIXME: proper double compare
+                    }
+                    if doInsert
+                    {
+                        let success = s.insert(nil, at: dfIndex, verify: true)
+                        assert(success, "Failed to add nil to series") // TODO: handle this better
+                    }
                 }
-                
-                // if new series index has no values left to traverse, add remaining rows from frame index
-                if j > newIndex.count-1
+            }
+
+            // add indexes from s to every series in this DataFrame
+            for sIndex in origIndex
+            {
+                let doInsert: Bool
+                if self.isEmpty { doInsert = true }
+                else
+                {
+                    if self.series[0].index.isEmpty { doInsert = true }
+                    else
+                    {
+                        // check if this data frame already has the current index from the new series
+                        let ind = self.series[0].index[find(in: self.series[0].index, nearest: sIndex)]
+                        doInsert = ind != sIndex // FIXME: proper double compare
+                    }                   
+                }
+                if doInsert
                 {                    
-                    let remainData = Array<Any?>(repeating: nil, count: self.index.count-i)
-                    newSeries.append(contentsOf: remainData)
-                    break    
-                }
-                
-                // if the frame index matches new index for this row, nothing new needs to be added
-                if self.index[i] == newIndex[j] // FIXME: double compare correctly
-                {
-                    i = i+1
-                    j = j+1
-                }
-                    
-                    // if the frame index is missing a row that the new series index has, add row to frame
-                else if self.index[i] > newIndex[j]
-                {
-                    self.index.insert(newIndex[j], at: i); i += 1
-                    for k in 0..<self.series.count { self.series[k].insert(nil, at: i) }
-                    j = j+1 //min(j+1, newIndex.count-1)
-                }
-                    
-                    // if the frame index has a row the new series index doesn't, add a nil placholder to new series
-                else // index[i] < newIndex[j]
-                {
-                    newSeries.insert(nil, at: i)
-                    i = i+1
+                    for dfi in 0..<self.series.count
+                    {                 
+                        let success = self.series[dfi].insert(nil, at: sIndex, verify: true)
+                        assert(success, "Failed to add nil to series") // TODO: handle this better
+                    }
                 }
             }
-            
-            self.series.append(newSeries)            
-            self.names.append(name)
-            self.widths.append(s.maxColumnWidth)
-            
-            assert(Set<Int>([self.series.count, self.names.count, self.widths.count]).count == 1,
-                   "Member lists must have the same number of elements")
-            assert(self.series.reduce(true, {$0 && $1.count == self.index.count}),
-                   "Index and series count must match")
+
+            // create new series with elements upcast to Any and add to this DataFrame
+            // TODO: revisit this for efficiency; currently create new series needs to recheck the ordering
+            var newData = [Any]()
+            for el in s.data { newData.append(el as Any) }
+            let newSeries = DataSeries<Any>(newData, index: s.index, order: s.order, 
+                name: uniqueName, maxColumnWidth: s.maxColumnWidth)
+            self.series.append(newSeries)
         }
+    }
+    
+    mutating func add<T>(_ addSeries: DataSeries<T>...)
+    {
+        self.add(addSeries)
     }	
     
-    mutating func fill(method: Nifty.Options.EstimationMethod = .nearest)
+    mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
     {
-        for (i, data) in self.series.enumerated()
+        for i in 0..<self.series.count
         {
-            var tempSeries = DataSeries(data, index: self.index)
-            tempSeries.fill(method: method)
-            
-            assert(tempSeries.data.count == self.index.count, "Filled series must match original size")
-            self.series[i] = tempSeries.data
+            self.series[i].fill(method: method)
+
+            assert(self.series[i].data.count == self.series[0].count, "Sanity check--filled series must match original size")
         }
     }
 }
