@@ -1,10 +1,10 @@
 /***************************************************************************************************
- *  DataSeries_test.swift
+ *  TimeSeries_test.swift
  *
- *  This file tests DataSeries.
+ *  This file tests TimeSeries.
  *
  *  Author: Philip Erickson
- *  Creation Date: 22 Feb 2017
+ *  Creation Date: 5 Mar 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -23,7 +23,7 @@ import Foundation
 import XCTest
 @testable import Nifty
 
-class DataSeries_test: XCTestCase 
+class TimeSeries_test: XCTestCase 
 {
     #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
@@ -41,6 +41,8 @@ class DataSeries_test: XCTestCase
     {               
         let a1: [Int?] = [2,3,nil]
         let a2 = [2.35,0.23,4.24]
+
+        
         let a3 = [22.35,10.23,44.24]
         let a4 = [132.35,670.23,54.2564,687.243,73.123]
         let a5: [Bool?] = [true, nil,nil,nil,nil,nil,nil,nil,false]
@@ -50,18 +52,32 @@ class DataSeries_test: XCTestCase
         let a8 = [23.4, 456.2, 545.3, 1423.23] 
         let a9 = [3453.234, 2344.2, 145.3, 45.3, 3.4, 0.4, -1.23, -12.43, -346.3]
 
-        let s1 = DataSeries(a1, name: "s1")
-        let s2 = DataSeries(a2, name: "s2")
-        let s3 = DataSeries(a3)
-        let s4 = DataSeries(a4, name: "s4")
-        let s5 = DataSeries(a5, index: i5)
-        let s6 = DataSeries(a6, name: "s6", maxColumnWidth: 15)
-        var s7 = DataSeries(a7, name: "s7")
+        let startDate = Date()
+
+        let s1 = TimeSeries(a1, start: startDate, step: 60, name: "s1")
+        let s2 = TimeSeries(a2, start: startDate, step: 60, name: "s2")
+        let s3 = TimeSeries(a3, start: startDate, step: 60)
+        let s4 = TimeSeries(a4, start: startDate, step: 60, name: "s4")
+        let s5 = TimeSeries(a5, index: i5.map({Date(timeIntervalSince1970: Double($0*10))}))
+        let s6 = TimeSeries(a6, start: startDate, step: 60, name: "s6", maxColumnWidth: 15)
+        var s7 = TimeSeries(a7, start: startDate, step: 60, name: "s7")
+
         
-        print(s1)       
-        print("\ns1[3]: \(s1[3])")
-        XCTAssert(s1[1] == a1[1])
+        print("\n\n\n\n***************************************************\n")
+
+        print(s1)     
+        print("\ns1[\(startDate)]: \(s1[startDate])")
+        XCTAssert(s1[startDate] == a1[0])
+    
+        /*
+        let s2_slice = s2[startDate..<Date(timeInterval: 120, since:startDate)]
+        print("s2_slice: \(s2_slice)")
+
+        */
+
+
         
+        /*
         print(s2)
         XCTAssert(isequal(s2[1] ?? -99.9, a2[1]))       
 
@@ -179,5 +195,7 @@ class DataSeries_test: XCTestCase
         let rms23 = s2.rms(s3)
         let rms32 = s3.rms(s2)
         XCTAssert(rms23 == rms32 && (rms23-26.4575131106 < 0.0000000001))
+
+        */
     }
 }

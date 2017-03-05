@@ -19,8 +19,7 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-import struct Foundation.Date
-import class Foundation.DateFormatter
+import Foundation
 
 public struct TimeSeries<T>: DataSeriesProtocol
 {
@@ -105,7 +104,24 @@ public struct TimeSeries<T>: DataSeriesProtocol
 
         self.format = DateFormatter()
         self.format.dateStyle = format?.dateStyle ?? .short
-        self.format.timeStyle = format?.timeStyle ?? .short
+        self.format.timeStyle = format?.timeStyle ?? .medium
+    }
+
+    public init(
+        _ data: [T?] = [], 
+        start: Date, 
+        step: Double, // TODO: switch this from double seconds to measurment duration
+        order: SeriesIndexOrder = .increasing, 
+        name: String? = nil, 
+        maxColumnWidth: Int? = nil,
+        format: DateFormatter? = nil)
+    {        
+        var index = [Date]()
+        for (i, _) in data.enumerated()
+        { 
+            index.append(Date(timeInterval: Double(i)*step, since: start))
+        }
+        self.init(data, index: index, order: order, name: name, maxColumnWidth: maxColumnWidth, format: format)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -124,8 +140,44 @@ public struct TimeSeries<T>: DataSeriesProtocol
     {
         let lo: Double = slice.lowerBound.timeIntervalSince1970
         let hi: Double = slice.upperBound.timeIntervalSince1970
+
+        let range = lo..<hi
+        print("subscripting: \(range)")
+
         let list = self.series[lo..<hi]
-        return list.map({(Date(timeIntervalSince1970: $0.0), $0.1)})
+
+        print(type(of: list))
+        print(list)
+
+
+        //let ret =  list.map({(index: Date(timeIntervalSince1970: $0.0), value: $0.1)})
+
+        var ret = [(index: Date, value: T?)]()
+        for (itr,e) in list.enumerated()
+        {
+            let d = TimeInterval(e.0)
+
+            print("itr = \(itr), e=\(e) (\(type(of:e))), --> \(d), \(type(of: d)) ")
+
+            let i = Date(timeIntervalSince1970: d) // FIXME: for some reason this line fails on Linux
+
+            print("i = \(i)")
+
+            let v = e.1
+
+            print("v = \(v)")
+
+            let t = (index: i, value: v)
+
+            print("t = \(t)")
+
+            ret.append(t)
+        }
+
+
+        print(ret)
+
+        return ret
     }
 
     public subscript(_ slice: ClosedRange<Date>) -> [(index: Date, value:T?)]
