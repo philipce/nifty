@@ -19,7 +19,26 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-struct DataFrame: CustomStringConvertible
+public protocol DataFrameProtocol: CustomStringConvertible
+{
+    var count:      Int  { get }
+    var isComplete: Bool { get }
+    var isEmpty:    Bool { get }
+
+    init()
+    init(_ : [DataSeries<Any>])
+    init(_ : DataSeries<Any>...)    
+    init(_ : String)
+    
+    func contains(_ : String) -> Bool
+    func get<T>(_ : String) -> DataSeries<T>?
+    
+    mutating func add<T>(_ : [DataSeries<T>])
+    mutating func add<T>(_ : DataSeries<T>...)
+    mutating func fill(method: Nifty.Options.EstimationMethod)
+}
+
+public struct DataFrame: DataFrameProtocol
 {
     //----------------------------------------------------------------------------------------------
     // MARK: Stored Properties
@@ -98,10 +117,15 @@ struct DataFrame: CustomStringConvertible
         self.series = []
     }
     
-    public init(_ series: DataSeries<Any>..., columnWidth: Int = 15)
+    public init(_ series: [DataSeries<Any>])
     {
         self.series = []        
         self.add(series)
+    }
+
+    public init(_ series: DataSeries<Any>...)
+    {
+        self.init(series)
     }
 
     // TODO: add init that reads csv string
@@ -114,7 +138,7 @@ struct DataFrame: CustomStringConvertible
     // MARK: Non-Mutating Functions
     //----------------------------------------------------------------------------------------------    
     
-    func contains(_ column: String) -> Bool
+    public func contains(_ column: String) -> Bool
     {
         // TODO: add case insensitive option
 
@@ -126,7 +150,7 @@ struct DataFrame: CustomStringConvertible
         return false
     }
 
-    func get<T>(_ column: String) -> DataSeries<T>?
+    public func get<T>(_ column: String) -> DataSeries<T>?
     {
         var matches = [Int]()
         for i in 0..<self.count
@@ -169,7 +193,7 @@ struct DataFrame: CustomStringConvertible
     // TODO: mutating func set<T>(_ column: String, _ index: Double, to element: T)
     // TODO: mutating func set<T>(_ column: Int,    _ index: Double, to element: T)
     
-    mutating func add<T>(_ addSeries: [DataSeries<T>])
+    public mutating func add<T>(_ addSeries: [DataSeries<T>])
     {
         // FIXME: the following code assumes the series are ascending...
         // We should add support for any series ordering, but this will take some thinking for how
@@ -250,12 +274,12 @@ struct DataFrame: CustomStringConvertible
         }
     }
     
-    mutating func add<T>(_ addSeries: DataSeries<T>...)
+    public mutating func add<T>(_ addSeries: DataSeries<T>...)
     {
         self.add(addSeries)
     }	
     
-    mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
+    public mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
     {
         for i in 0..<self.series.count
         {

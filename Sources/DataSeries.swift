@@ -63,43 +63,81 @@ public enum SeriesIndexOrder
     }
 }
 
+public protocol DataSeriesProtocol: CustomStringConvertible
+{
+    associatedtype T
+    associatedtype IndexType: Comparable
 
-public struct DataSeries<T>: CustomStringConvertible
+    var count          : Int              { get }
+    var data           : [T?]             { get }
+    var index          : [IndexType]      { get }
+    var isComplete     : Bool             { get }
+    var isEmpty        : Bool             { get }
+    var maxColumnWidth : Int?             { get }
+    var name           : String?          { get }
+    var order          : SeriesIndexOrder { get }    
+    var type           : T.Type           { get }
+
+    // TODO: add setter subscripts?
+    subscript(_ : IndexType)              -> T?                              { get } 
+    subscript(_ : Range<IndexType>)       -> [(index: IndexType, value: T?)] { get }
+    subscript(_ : ClosedRange<IndexType>) -> [(index: IndexType, value: T?)] { get }
+
+    mutating func append(_ : T, index: IndexType, verify: Bool) -> Bool
+    mutating func fill(method: Nifty.Options.EstimationMethod)
+    mutating func insert(_ : T?, at index: IndexType, verify: Bool) -> Bool
+
+    func get(nearest index: IndexType) -> (index: IndexType, value: T)
+    func get(n: Int, nearest index: IndexType) -> [(index: IndexType, value: T)]
+    func minus(_ other: Self, method: Nifty.Options.EstimationMethod) -> Self
+    func mse(_ other: Self, method: Nifty.Options.EstimationMethod) -> Double
+    func present() -> (index: [IndexType], data: [T], locs: [Int])
+    func query(_ index: IndexType, method: Nifty.Options.EstimationMethod) -> T
+    func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod) -> [T]
+    func resample(start: IndexType, step: Double, n: Int, name: String?, 
+        method: Nifty.Options.EstimationMethod) -> Self
+    func rms(_ other: Self, method: Nifty.Options.EstimationMethod) -> Double
+}
+
+public struct DataSeries<T>: DataSeriesProtocol
 {	    
+    public typealias IndexType = Double
+
     //----------------------------------------------------------------------------------------------
     // MARK: Stored Properties
     //----------------------------------------------------------------------------------------------
     
-    public var order: SeriesIndexOrder    
-    public let name: String?
-    public let type = T.self	
-    public let maxColumnWidth: Int?
-    
-    internal var data: [T?]
-    internal var index: [Double]
-    
+    private var _data           : [T?]
+    private var _index          : [Double]
+    private let _maxColumnWidth : Int?    
+    private var _name           : String?
+    private var _order          : SeriesIndexOrder        
+    private let _type           : T.Type = T.self	
+
     //----------------------------------------------------------------------------------------------
     // MARK: Computed Properties
     //----------------------------------------------------------------------------------------------
     
     public var count: Int
     {
-        assert(self.index.count == self.data.count)
-        return self.data.count
+        assert(self._index.count == self._data.count)
+        return self._data.count
     }
+
+    public var data: [T?] { return self._data }
 
     public var description: String
     {
         let (blankInd, padInd) = _columnizeData(
-            list: self.index, 
+            list: self._index, 
             name: "",
-            maxWidth: self.maxColumnWidth, 
+            maxWidth: self._maxColumnWidth, 
             padLeft: false)	
         
         let (padName, padData) = _columnizeData(
-            list: self.data, 
-            name: self.name ?? "", 
-            maxWidth: self.maxColumnWidth, 
+            list: self._data, 
+            name: self._name ?? "", 
+            maxWidth: self._maxColumnWidth, 
             padLeft: true)
         
         precondition(padInd.count == padData.count, "Must have same number of indexes as data points")
@@ -113,21 +151,33 @@ public struct DataSeries<T>: CustomStringConvertible
         return "\n" + rows.joined(separator: "\n")
     }
     
+    public var index: [Double] { return self._index }
+
     public var isComplete: Bool
     {
-        return self.data.reduce(true, { $0 && $1 != nil })
+        return self._data.reduce(true, { $0 && $1 != nil })
     }
 
     public var isEmpty: Bool
     {
-        assert(self.data.count == self.index.count)
-        return self.index.count < 1
+        assert(self._data.count == self._index.count)
+        return self._index.count < 1
     }
+
+    public var maxColumnWidth: Int? { return self._maxColumnWidth }
     
+    public var name: String? { return self._name }
+
+    public var order: SeriesIndexOrder { return self._order }       
+    
+    public var type: T.Type { return self._type }    
+
     //----------------------------------------------------------------------------------------------
     // MARK: Initializers
     //----------------------------------------------------------------------------------------------
     
+    // TODO: add initializer to convert time series to data series
+
     /// Initialize a new series with the given information.
     ///
     /// If an index is provided, it must have the same number of elements as the data and be ordered
@@ -146,27 +196,27 @@ public struct DataSeries<T>: CustomStringConvertible
         name: String? = nil, 
         maxColumnWidth: Int? = nil)
     {        
-        self.data = data
+        self._data = data
         
         // verify supplied index or create default index
         if let ind = index
         {
             precondition(data.count == ind.count, "Index and data must match in size")
             precondition(_verifyIndexOrder(ind, order), "Index is not \(order)")
-            self.index = ind
+            self._index = ind
         }
         else
         {
-            self.index = (0..<data.count).map({Double($0)})			
+            self._index = (0..<data.count).map({Double($0)})			
         }
         
-        self.order = order    
+        self._order = order    
         
         // sanitize name, no whitespace allowed
-        self.name = name?.replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)
+        self._name = name?.replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)
         
         // column can be limited to no fewer than 5 columns
-        self.maxColumnWidth = maxColumnWidth == nil ? nil : max(maxColumnWidth!, 5)
+        self._maxColumnWidth = maxColumnWidth == nil ? nil : max(maxColumnWidth!, 5)
     }
     
     //----------------------------------------------------------------------------------------------
@@ -182,33 +232,33 @@ public struct DataSeries<T>: CustomStringConvertible
         // signature to an array seems annoying for the majority case (non-duplicate indices)
         // Perhaps just returning the first one found is okay, no guarantees which one
         
-        let i = find(in: self.index, nearest: index)        
+        let i = find(in: self._index, nearest: index)        
         
-        let closestIndex = self.index[i]
+        let closestIndex = self._index[i]
         if closestIndex != index { return nil } // FIXME: proper double compare
-        return self.data[i]
+        return self._data[i]
     }
     
     public subscript(_ slice: Range<Double>) -> [(index: Double, value:T?)]
     {
-        precondition(self.order.isSorted && self.order.isUnique, "Cannot slice \(self.order) series")
+        precondition(self._order.isSorted && self._order.isUnique, "Cannot slice \(self._order) series")
         
         let left: Int
         let right: Int
-        if self.order == .increasing
+        if self._order == .increasing
         {            
-            left = find(in: self.index, after: slice.lowerBound)
-            right = find(in: self.index, before: slice.upperBound)
+            left = find(in: self._index, after: slice.lowerBound)
+            right = find(in: self._index, before: slice.upperBound)
         }
         else
         {
-            assert(self.order == .decreasing, "Not possible--already checked for other cases")
-            right = find(in: self.index, before: slice.lowerBound)
-            left = find(in: self.index, after: slice.upperBound)
+            assert(self._order == .decreasing, "Not possible--already checked for other cases")
+            right = find(in: self._index, before: slice.lowerBound)
+            left = find(in: self._index, after: slice.upperBound)
         }
         
-        let indexValues = self.index[left...right]       
-        let dataValues = self.data[left...right]
+        let indexValues = self._index[left...right]       
+        let dataValues = self._data[left...right]
         
         return Array(zip(indexValues, dataValues))
     }
@@ -221,19 +271,19 @@ public struct DataSeries<T>: CustomStringConvertible
         // but with a different estimation method? Perhaps the series has a global default they 
         // could change?
         
-        precondition(self.order.isSorted && self.order.isUnique, "Cannot slice \(self.order) series")
+        precondition(self._order.isSorted && self._order.isUnique, "Cannot slice \(self._order) series")
         
         let openSlice = self[slice.lowerBound..<slice.upperBound]                
         
         let left, right: (index: Double, value: T?)
-        if self.order == .increasing
+        if self._order == .increasing
         {
             left = (slice.lowerBound, self.query(slice.lowerBound))
             right = (slice.upperBound, self.query(slice.upperBound))            
         }
         else
         {
-            assert(self.order == .decreasing, "Not possible--already checked for other cases")
+            assert(self._order == .decreasing, "Not possible--already checked for other cases")
             right = (slice.lowerBound, self.query(slice.lowerBound))
             left = (slice.upperBound, self.query(slice.upperBound))                        
         }
@@ -262,12 +312,12 @@ public struct DataSeries<T>: CustomStringConvertible
     {        
         // ensure that insert will put value on the correct side of final value
         let correctOrder: Bool
-        switch self.order
+        switch self._order
         {
         case .decreasing where !self.isEmpty: 
-            correctOrder = self.index[self.index.count-1] > index // FIXME: proper double compare
+            correctOrder = self._index[self._index.count-1] > index // FIXME: proper double compare
         case .increasing where !self.isEmpty:
-            correctOrder = self.index[self.index.count-1] < index // FIXME: proper double compare
+            correctOrder = self._index[self._index.count-1] < index // FIXME: proper double compare
         default:
             correctOrder = true
         }
@@ -281,14 +331,14 @@ public struct DataSeries<T>: CustomStringConvertible
     ///     - method: method to use for estimating missing values
     public mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
     {                
-        let unknowns = self.index.enumerated().filter({self.data[$0.0] == nil})      
-        let fillData = interp1(x: self.index, y: self.data, query: unknowns.map({$0.1}), method: method)   
+        let unknowns = self._index.enumerated().filter({self._data[$0.0] == nil})      
+        let fillData = interp1(x: self._index, y: self._data, query: unknowns.map({$0.1}), method: method)   
         
         assert(fillData.count == unknowns.count, "Fill data must match unknown data size")
         
         for (fdIndex, i) in unknowns.map({$0.0}).enumerated() 
         { 
-            self.data[i] = fillData[fdIndex] 
+            self._data[i] = fillData[fdIndex] 
         }
     }
     
@@ -309,116 +359,116 @@ public struct DataSeries<T>: CustomStringConvertible
     {        
         if self.isEmpty
         {
-            self.index.append(index)
-            self.data.append(x)
+            self._index.append(index)
+            self._data.append(x)
             return true
         }
 
-        let i = find(in: self.index, nearest: index)
+        let i = find(in: self._index, nearest: index)
 
-        switch self.order
+        switch self._order
         {
-        case .decreasing:
-            if index > self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i)
-                self.data.insert(x, at: i)
-                return true
-            }
-            else if index < self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i+1)
-                self.data.insert(x, at: i+1)
-                return true
-            }
-            else
-            {
-                if verify { return false }
-                else
+            case .decreasing:
+                if index > self._index[i] // FIXME: proper double compare
                 {
-                    self.index.insert(index, at: i)
-                    self.data.insert(x, at: i)
-                    self.order = .nonIncreasing
+                    self._index.insert(index, at: i)
+                    self._data.insert(x, at: i)
                     return true
                 }
-            }
-            
-        case .increasing:
-            if index > self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i+1)
-                self.data.insert(x, at: i+1)
-                return true
-            }
-            else if index < self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i)
-                self.data.insert(x, at: i)
-                return true
-            }
-            else
-            {
-                if verify { return false }
-                else
+                else if index < self._index[i] // FIXME: proper double compare
                 {
-                    self.index.insert(index, at: i)
-                    self.data.insert(x, at: i)
-                    self.order = .nonDecreasing
+                    self._index.insert(index, at: i+1)
+                    self._data.insert(x, at: i+1)
                     return true
                 }
-            }
-            
-        case .nonDecreasing:
-            if index > self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i+1)
-                self.data.insert(x, at: i+1)
-                return true
-            }
-            else
-            {
-                self.index.insert(index, at: i)
-                self.data.insert(x, at: i)
-                return true
-            }
-            
-        case .nonIncreasing:
-            if index > self.index[i] // FIXME: proper double compare
-            {
-                self.index.insert(index, at: i)
-                self.data.insert(x, at: i)
-                return true
-            }
-            else
-            {
-                self.index.insert(index, at: i+1)
-                self.data.insert(x, at: i+1)
-                return true
-            }
-            
-        case .unorderedUnique:
-            if self.index.contains(index) // FIXME: proper double compare
-            {
-                if verify { return false }
                 else
                 {
-                    self.index.insert(index, at: i)
-                    self.data.insert(x, at: i)
-                    self.order = .unordered
+                    if verify { return false }
+                    else
+                    {
+                        self._index.insert(index, at: i)
+                        self._data.insert(x, at: i)
+                        self._order = .nonIncreasing
+                        return true
+                    }
+                }
+                
+            case .increasing:
+                if index > self._index[i] // FIXME: proper double compare
+                {
+                    self._index.insert(index, at: i+1)
+                    self._data.insert(x, at: i+1)
                     return true
                 }
-            }
-            else
-            {
-                self.index.insert(index, at: i)
-                self.data.insert(x, at: i)
+                else if index < self._index[i] // FIXME: proper double compare
+                {
+                    self._index.insert(index, at: i)
+                    self._data.insert(x, at: i)
+                    return true
+                }
+                else
+                {
+                    if verify { return false }
+                    else
+                    {
+                        self._index.insert(index, at: i)
+                        self._data.insert(x, at: i)
+                        self._order = .nonDecreasing
+                        return true
+                    }
+                }
+                
+            case .nonDecreasing:
+                if index > self._index[i] // FIXME: proper double compare
+                {
+                    self._index.insert(index, at: i+1)
+                    self._data.insert(x, at: i+1)
+                    return true
+                }
+                else
+                {
+                    self._index.insert(index, at: i)
+                    self._data.insert(x, at: i)
+                    return true
+                }
+                
+            case .nonIncreasing:
+                if index > self._index[i] // FIXME: proper double compare
+                {
+                    self._index.insert(index, at: i)
+                    self._data.insert(x, at: i)
+                    return true
+                }
+                else
+                {
+                    self._index.insert(index, at: i+1)
+                    self._data.insert(x, at: i+1)
+                    return true
+                }
+                
+            case .unorderedUnique:
+                if self._index.contains(index) // FIXME: proper double compare
+                {
+                    if verify { return false }
+                    else
+                    {
+                        self._index.insert(index, at: i)
+                        self._data.insert(x, at: i)
+                        self._order = .unordered
+                        return true
+                    }
+                }
+                else
+                {
+                    self._index.insert(index, at: i)
+                    self._data.insert(x, at: i)
+                    return true
+                }
+                
+            case .unordered:
+                self._index.insert(index, at: i)
+                self._data.insert(x, at: i)
                 return true
-            }
-            
-        case .unordered:
-            self.index.insert(index, at: i)
-            self.data.insert(x, at: i)
-            return true
         }   
     }
 
@@ -464,6 +514,11 @@ public struct DataSeries<T>: CustomStringConvertible
     
     // FIXME: BEFORE AND AFTER SEMANTICS ARE UNCLEAR! IN THE CASE OF A DECREASING SERIES, IS THE 
     // VALUE TO THE LEFT BEFORE OR AFTER? DO NOT USE THESE UNTIL SEMANTICS ARE RESOLVED
+
+    // TODO: think about the above question in terms of behavior in the time series... clearly before
+    // and after are chronological, regardless of list ordering... so for decreasing series, the time
+    // to the left is after
+
     /*
      public func find(before index: Double) -> (index: Double, value: T)
      {
@@ -520,6 +575,8 @@ public struct DataSeries<T>: CustomStringConvertible
      }    
      */
 
+     // TODO: add rename to minus?
+
     /// Subtract the elements in the other series from this series. 
     ///
     /// The resulting data series will have as its index the union set of the index of this series 
@@ -540,11 +597,11 @@ public struct DataSeries<T>: CustomStringConvertible
             case is Double.Type:
 
                 // FIXME: handle sorting differences more gracefully
-                precondition(self.order == other.order, "Can't difference differently ordered series")
-                precondition(self.order == .increasing || self.order == .decreasing, 
+                precondition(self._order == other.order, "Can't difference differently ordered series")
+                precondition(self._order == .increasing || self._order == .decreasing, 
                              "Can only difference increasing or decreasing series")    
                 
-                newSeries = DataSeries<T>(order: self.order)
+                newSeries = DataSeries<T>(order: self._order)
        
                 // TODO: revisit this for efficiency ...
                 // There's probably a bunch we can do to speed this up. E.g. walking both indexes in
@@ -554,7 +611,7 @@ public struct DataSeries<T>: CustomStringConvertible
                 
                 // create the union set of indexes in this series and other
                 var newUnorderedIndex = [Double]()
-                newUnorderedIndex.append(contentsOf: self.index)
+                newUnorderedIndex.append(contentsOf: self._index)
                 for i in 0..<other.count
                 {
                     let ind = other.index[i]
@@ -563,7 +620,7 @@ public struct DataSeries<T>: CustomStringConvertible
                                 
                 for ind in newUnorderedIndex
                 {
-                    let thisVal = self.query(ind, method: method) as! Double // self.data[i] as! Double
+                    let thisVal = self.query(ind, method: method) as! Double 
                     let otherVal = other.query(ind, method: method) as! Double
                     let diff = (thisVal - otherVal) as! T                    
                     let success = newSeries.insert(diff, at: ind)
@@ -614,14 +671,14 @@ public struct DataSeries<T>: CustomStringConvertible
     
     /// Return list of the present (i.e. not nil) data in this series and corresponding indexes, as 
     /// well as the locations in the series storage.
-    internal func present() -> (index: [Double], data: [T], locs: [Int])
+    public func present() -> (index: [Double], data: [T], locs: [Int])
     {
         if self.isEmpty { return ([], [], []) }
 
-        let iDataList = self.data.enumerated().filter({$0.1 != nil})
+        let iDataList = self._data.enumerated().filter({$0.1 != nil})
         let iList = iDataList.map({$0.0})
         let dataList = iDataList.map({$0.1!})
-        let indexList = iList.map({self.index[$0]})
+        let indexList = iList.map({self._index[$0]})
         assert(dataList.count == indexList.count)
         
         return (indexList, dataList, iList)
@@ -633,7 +690,7 @@ public struct DataSeries<T>: CustomStringConvertible
         // In all other cases the return is not nil so making it an optional seems gross
         precondition(!self.isEmpty, "Cannot query empty series")         
         
-        let q = interp1(x: self.index, y: self.data, query: [index], method: method)
+        let q = interp1(x: self._index, y: self._data, query: [index], method: method)
         assert(q.count == 1, "Not possible--single query should return single point")
         
         return q[0]
@@ -677,7 +734,7 @@ public struct DataSeries<T>: CustomStringConvertible
         }
         let data = self.query(indexes, method: method)
         
-        return DataSeries(data, index: indexes, order: self.order, name: name, maxColumnWidth: self.maxColumnWidth)        
+        return DataSeries(data, index: indexes, order: self._order, name: name, maxColumnWidth: self._maxColumnWidth)        
     }
     
     /// Compute the root-mean-square error between two series.
