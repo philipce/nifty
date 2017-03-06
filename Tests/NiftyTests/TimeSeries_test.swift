@@ -69,11 +69,12 @@ class TimeSeries_test: XCTestCase
         print("\ns1[\(startDate)]: \(s1[startDate])")
         XCTAssert(s1[startDate] == a1[0])
     
-        /*
-        let s2_slice = s2[startDate..<Date(timeInterval: 120, since:startDate)]
-        print("s2_slice: \(s2_slice)")
+        
+        // FIXME: slicing s2 breaks on linux!
+        //let s2_slice = s2[startDate..<Date(timeInterval: 120, since:startDate)]
+        //print("s2_slice: \(s2_slice)")
 
-        */
+        
 
 
         

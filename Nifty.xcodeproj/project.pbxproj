@@ -262,6 +262,10 @@
 		4A7F8E971E5E92DB0051C64D /* DataSeries_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8E951E5E92A30051C64D /* DataSeries_test.swift */; };
 		4A7F8E991E5E93490051C64D /* DataFrame_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8E981E5E93490051C64D /* DataFrame_test.swift */; };
 		4A7F8E9B1E5E93B70051C64D /* interp1_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8E9A1E5E93B70051C64D /* interp1_test.swift */; };
+		4A7F8FBA1E6DC7F80051C64D /* TimeFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8FB81E6DC7F80051C64D /* TimeFrame.swift */; };
+		4A7F8FBB1E6DC7F80051C64D /* TimeSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8FB91E6DC7F80051C64D /* TimeSeries.swift */; };
+		4A7F8FC01E6DC8800051C64D /* TimeFrame_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8FBC1E6DC82E0051C64D /* TimeFrame_test.swift */; };
+		4A7F8FC11E6DC8800051C64D /* TimeSeries_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8FBD1E6DC82E0051C64D /* TimeSeries_test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -531,6 +535,10 @@
 		4A7F8E951E5E92A30051C64D /* DataSeries_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataSeries_test.swift; path = Tests/NiftyTests/DataSeries_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7F8E981E5E93490051C64D /* DataFrame_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataFrame_test.swift; path = Tests/NiftyTests/DataFrame_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7F8E9A1E5E93B70051C64D /* interp1_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = interp1_test.swift; path = Tests/NiftyTests/interp1_test.swift; sourceTree = SOURCE_ROOT; };
+		4A7F8FB81E6DC7F80051C64D /* TimeFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeFrame.swift; path = Sources/TimeFrame.swift; sourceTree = SOURCE_ROOT; };
+		4A7F8FB91E6DC7F80051C64D /* TimeSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSeries.swift; path = Sources/TimeSeries.swift; sourceTree = SOURCE_ROOT; };
+		4A7F8FBC1E6DC82E0051C64D /* TimeFrame_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeFrame_test.swift; path = Tests/NiftyTests/TimeFrame_test.swift; sourceTree = SOURCE_ROOT; };
+		4A7F8FBD1E6DC82E0051C64D /* TimeSeries_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeSeries_test.swift; path = Tests/NiftyTests/TimeSeries_test.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -698,7 +706,9 @@
 				4A7C788D1E411E2900B09975 /* tanh.swift */,
 				4A7C788E1E411E2900B09975 /* Tensor.swift */,
 				4A7C788F1E411E2900B09975 /* tic_toc.swift */,
+				4A7F8FB81E6DC7F80051C64D /* TimeFrame.swift */,
 				4A7C78901E411E2900B09975 /* times.swift */,
+				4A7F8FB91E6DC7F80051C64D /* TimeSeries.swift */,
 				4A7C78911E411E2900B09975 /* trace.swift */,
 				4A7C78921E411E2900B09975 /* transpose.swift */,
 				4A7C78931E411E2900B09975 /* tril.swift */,
@@ -826,7 +836,9 @@
 				4A7C79841E425B2100B09975 /* tanh_test.swift */,
 				4A7C79851E425B2100B09975 /* Tensor_test.swift */,
 				4A7C79861E425B2100B09975 /* tic_toc_test.swift */,
+				4A7F8FBC1E6DC82E0051C64D /* TimeFrame_test.swift */,
 				4A7C79871E425B2100B09975 /* times_test.swift */,
+				4A7F8FBD1E6DC82E0051C64D /* TimeSeries_test.swift */,
 				4A7C79881E425B2100B09975 /* trace_test.swift */,
 				4A7C79891E425B2100B09975 /* transpose_test.swift */,
 				4A7C798A1E425B2100B09975 /* tril_test.swift */,
@@ -1031,6 +1043,7 @@
 				4A7C78D41E411E2900B09975 /* expm1.swift in Sources */,
 				4A7C78F31E411E2900B09975 /* pow.swift in Sources */,
 				4A5CC14B1E575F2E0087C160 /* _flipud.swift in Sources */,
+				4A7F8FBA1E6DC7F80051C64D /* TimeFrame.swift in Sources */,
 				4A7C78FE1E411E2900B09975 /* sinh.swift in Sources */,
 				4A7C78A71E411E2900B09975 /* _map.swift in Sources */,
 				4A7C78F21E411E2900B09975 /* plus.swift in Sources */,
@@ -1058,6 +1071,7 @@
 				4A7C78C91E411E2900B09975 /* ceil.swift in Sources */,
 				4A7C789D1E411E2900B09975 /* _filter.swift in Sources */,
 				4A7C78A61E411E2900B09975 /* _lsb.swift in Sources */,
+				4A7F8FBB1E6DC7F80051C64D /* TimeSeries.swift in Sources */,
 				4A7C78D21E411E2900B09975 /* exp.swift in Sources */,
 				4A7C78EB1E411E2900B09975 /* mtimes.swift in Sources */,
 				4A7C78BC1E411E2900B09975 /* _unique.swift in Sources */,
@@ -1142,6 +1156,7 @@
 				4A7C7A431E425B7300B09975 /* median_test.swift in Sources */,
 				4A7C7A121E425B7300B09975 /* atand_test.swift in Sources */,
 				4A7C7A0D1E425B7300B09975 /* asind_test.swift in Sources */,
+				4A7F8FC01E6DC8800051C64D /* TimeFrame_test.swift in Sources */,
 				4A7C7A111E425B7300B09975 /* atan2d_test.swift in Sources */,
 				4A7C7A551E425B7300B09975 /* poly_test.swift in Sources */,
 				4A7C7A2A1E425B7300B09975 /* ge_test.swift in Sources */,
@@ -1197,6 +1212,7 @@
 				4A7C7A661E425B7300B09975 /* rref_test.swift in Sources */,
 				4A7C7A221E425B7300B09975 /* exp_test.swift in Sources */,
 				4A7C7A461E425B7300B09975 /* mldivide_test.swift in Sources */,
+				4A7F8FC11E6DC8800051C64D /* TimeSeries_test.swift in Sources */,
 				4A7C7A1B1E425B7300B09975 /* det_test.swift in Sources */,
 				4A7C7A481E425B7300B09975 /* mpower_test.swift in Sources */,
 				4A7C7A2C1E425B7300B09975 /* hypot_test.swift in Sources */,
