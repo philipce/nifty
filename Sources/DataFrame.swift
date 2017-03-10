@@ -228,7 +228,7 @@ public struct DataFrame: DataFrameProtocol
                     else
                     {
                         // check if the new series already has the current index from this data frame
-                        let ind = s.index[find(in: s.index, nearest: dfIndex)]
+                        let ind = s.index[find(in: s.index, nearest: dfIndex, order: s.order)]
                         doInsert = ind != dfIndex // FIXME: proper double compare
                     }
                     if doInsert
@@ -250,7 +250,7 @@ public struct DataFrame: DataFrameProtocol
                     else
                     {
                         // check if this data frame already has the current index from the new series
-                        let ind = self.series[0].index[find(in: self.series[0].index, nearest: sIndex)]
+                        let ind = self.series[0].index[find(in: self.series[0].index, nearest: sIndex, order: self.series[0].order)]
                         doInsert = ind != sIndex // FIXME: proper double compare
                     }                   
                 }

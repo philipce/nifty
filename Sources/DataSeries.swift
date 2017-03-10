@@ -232,7 +232,7 @@ public struct DataSeries<T>: DataSeriesProtocol
         // signature to an array seems annoying for the majority case (non-duplicate indices)
         // Perhaps just returning the first one found is okay, no guarantees which one
         
-        let i = find(in: self._index, nearest: index)        
+        let i = find(in: self._index, nearest: index, order: self._order)        
         
         let closestIndex = self._index[i]
         if closestIndex != index { return nil } // FIXME: proper double compare
@@ -332,7 +332,7 @@ public struct DataSeries<T>: DataSeriesProtocol
     public mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
     {                
         let unknowns = self._index.enumerated().filter({self._data[$0.0] == nil})      
-        let fillData = interp1(x: self._index, y: self._data, query: unknowns.map({$0.1}), method: method)   
+        let fillData = interp1(x: self._index, y: self._data, query: unknowns.map({$0.1}), order: self._order, method: method)   
         
         assert(fillData.count == unknowns.count, "Fill data must match unknown data size")
         
@@ -364,7 +364,7 @@ public struct DataSeries<T>: DataSeriesProtocol
             return true
         }
 
-        let i = find(in: self._index, nearest: index)
+        let i = find(in: self._index, nearest: index, order: self._order)
 
         switch self._order
         {
@@ -491,7 +491,7 @@ public struct DataSeries<T>: DataSeriesProtocol
         precondition(!self.isEmpty, "Cannot find in empty series")
         
         let (indexList, dataList, _) = self.present() // exclude missing values from search         
-        let fi = find(in: indexList, nearest: index)
+        let fi = find(in: indexList, nearest: index, order: self._order)
         
         return (indexList[fi], dataList[fi])        
     }
@@ -500,7 +500,7 @@ public struct DataSeries<T>: DataSeriesProtocol
     {
         if self.isEmpty { return [] }
         let (indexList, dataList, _) = self.present() // exclude missing values from search        
-        let foundIndices = find(in: indexList, n: n, nearest: index)        
+        let foundIndices = find(in: indexList, n: n, nearest: index, order: self._order)        
         var foundList = [(index: Double, value: T)]()
         for fi in foundIndices
         {
@@ -617,7 +617,7 @@ public struct DataSeries<T>: DataSeriesProtocol
                     let ind = other.index[i]
                     if !newUnorderedIndex.contains(where: {$0 == ind}) { newUnorderedIndex.append(ind) } // FIXME: proper double compare                    
                 }
-                                
+
                 for ind in newUnorderedIndex
                 {
                     let thisVal = self.query(ind, method: method) as! Double 
@@ -690,7 +690,7 @@ public struct DataSeries<T>: DataSeriesProtocol
         // In all other cases the return is not nil so making it an optional seems gross
         precondition(!self.isEmpty, "Cannot query empty series")         
         
-        let q = interp1(x: self._index, y: self._data, query: [index], method: method)
+        let q = interp1(x: self._index, y: self._data, query: [index], order: self._order, method: method)
         assert(q.count == 1, "Not possible--single query should return single point")
         
         return q[0]

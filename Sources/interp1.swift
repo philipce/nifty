@@ -21,7 +21,7 @@
 
 // TODO: revisit this interface and reconcile it with MATLAB!
 
-public func interp1<T>(x: [Double], y: [T?], query: [Double], method: Nifty.Options.EstimationMethod = .nearest) -> [T]
+public func interp1<T>(x: [Double], y: [T?], query: [Double], order: SeriesIndexOrder, method: Nifty.Options.EstimationMethod = .nearest) -> [T]
 {
     // TODO: how to handle duplicate values? ...
     // If two identical indexes exist, which should be used? For now, just use the first one found
@@ -44,7 +44,7 @@ public func interp1<T>(x: [Double], y: [T?], query: [Double], method: Nifty.Opti
             
             for q in query
             {
-                let i = find(in: xData, nearest: q)
+                let i = find(in: xData, nearest: q, order: order)
                 assert(i >= 0, "Not possible--conditions were checked so find should not return -1")
                 qValues.append(yData[i])            
             }
@@ -53,7 +53,7 @@ public func interp1<T>(x: [Double], y: [T?], query: [Double], method: Nifty.Opti
             
             for q in query
             {
-                let i = find(in: xData, nearest: q)
+                let i = find(in: xData, nearest: q, order: order)
                 var left: Int? = nil
                 var right: Int? = nil
                 
