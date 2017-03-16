@@ -100,7 +100,7 @@ implemented.
 | map                | Unimplemented   | None           |                                                                                         |
 | Matrix             | Mostly Complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | max                | Unimplemented   | None           |                                                                                         |
-| mean               | Complete        | Basic          |                                                                                         |
+| mean               | Mostly complete | Basic          | Needs definitions for tensor                                                            |
 | median             | Unimplemented   | None           |                                                                                         |
 | meshgrid           | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
@@ -133,7 +133,7 @@ implemented.
 | randn              | Complete        | None           |                                                                                         |
 | randperm           | Unimplemented   | None           |                                                                                         |
 | rank               | Unimplemented   | None           |                                                                                         |
-| rdivide            | Unimplemented   | None           |                                                                                         |
+| rdivide            | Incomplete      | None           | Has division overloads but needs rdivide func definition and overloads for other types  |
 | reduce             | Unimplemented   | None           |                                                                                         |
 | repmat             | Unimplemented   | None           |                                                                                         |
 | reshape            | Unimplemented   | None           |                                                                                         |
@@ -149,7 +149,7 @@ implemented.
 | sqrt               | Complete        | Basic          |                                                                                         |
 | std                | Unimplemented   | None           |                                                                                         |
 | sub2ind            | Mostly Complete | None           |                                                                                         |
-| sum                | Unimplemented   | None           |                                                                                         |
+| sum                | Mostly Complete | Basic          |                                                                                         |
 | svd                | Mostly Complete | Basic          | Need to resolve ambiguity between function calls requiring specifying output type       |
 | swap               | Incomplete      | None           | Need to add support for vectors, tensors, matrix columns, etc.                          |
 | tan                | Complete        | Basic          |                                                                                         |
