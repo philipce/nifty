@@ -46,18 +46,21 @@ class mean_test: XCTestCase
         
         // Test Matrix mean for square matrix
         let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
-        XCTAssert(isequal(mean(m1), Matrix([[1.5, 3.5]]), within: 0.0001))  // Across columns
-        XCTAssert(isequal(mean(m1, dim: 1), Matrix([[2.0, 3.0]]), within: 0.0001))  // Across rows
+        XCTAssert(isequal(mean(m1), 2.5, within: 0.0001))
+        XCTAssert(isequal(mean(m1, dim: 1), Matrix([[1.5], [3.5]]), within: 0.0001))   // Across columns
+        XCTAssert(isequal(mean(m1, dim: 0), Matrix([[2.0, 3.0]]), within: 0.0001)) // Across rows
         
         // Test Matrix mean for n > m matrix
         let m2 = Matrix([[1.0, 2.0], [4.0, 5.0], [6.0, 7.0]])
-        XCTAssert(isequal(mean(m2), Matrix([[1.5, 4.5, 6.5]]), within: 0.0001))  // Across columns
-        XCTAssert(isequal(mean(m2, dim: 1), Matrix([[3.666666, 4.666666]]), within: 0.0001))  // Across rows
+        XCTAssert(isequal(mean(m2), 4.166666666, within: 0.0001))
+        XCTAssert(isequal(mean(m2, dim: 1), Matrix([[1.5], [4.5], [6.5]]), within: 0.0001))      // Across columns
+        XCTAssert(isequal(mean(m2, dim: 0), Matrix([[3.666666, 4.666666]]), within: 0.0001)) // Across rows
         
         // Test Matrix mean for n < m matrix
         let m3 = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
-        XCTAssert(isequal(mean(m3), Matrix([[2.0, 5.0]]), within: 0.0001))  // Across columns
-        XCTAssert(isequal(mean(m3, dim: 1), Matrix([[2.5, 3.5, 4.5]]), within: 0.0001))  // Across rows
+        XCTAssert(isequal(mean(m3), 3.5, within: 0.0001))
+        XCTAssert(isequal(mean(m3, dim: 1), Matrix([[2.0], [5.0]]), within: 0.0001))      // Across columns
+        XCTAssert(isequal(mean(m3, dim: 0), Matrix([[2.5, 3.5, 4.5]]), within: 0.0001)) // Across rows
         
 
     }
