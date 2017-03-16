@@ -61,10 +61,10 @@ public func sum(_ A: Matrix<Int>) -> Int
     return A.data.reduce(0, +)
 }
 
-public func sum(_ A: Matrix<Double>, axis: Int) -> Matrix<Double>
+public func sum(_ A: Matrix<Double>, dim: Int) -> Matrix<Double>
 {
     let t = Tensor(A)
-    let tsum = sum(t, axis: axis)
+    let tsum = sum(t, dim: dim)
     return Matrix(tsum)
 }
 
@@ -82,13 +82,13 @@ public func sum(_ A: Tensor<Int>) -> Int
     return A.data.reduce(0, +)
 }
 
-public func sum(_ A: Tensor<Double>, axis: Int) -> Tensor<Double>
+public func sum(_ A: Tensor<Double>, dim: Int) -> Tensor<Double>
 {
     // compute number of elements to sum and size of the summed tensor (collapse the sum dimension)
-    if axis < 0 || axis >= A.size.count { error("Invalid axis specified") }
+    if dim < 0 || dim >= A.size.count { error("Invalid dimension specified") }
     var sumSize = A.size    
-    sumSize[axis] = 1
-    let sumCount = A.size[axis]
+    sumSize[dim] = 1
+    let sumCount = A.size[dim]
     let sumLowerBounds = Array<Int>(repeating: 0, count: sumSize.count)
     let sumUpperBounds = sumSize.map({$0-1})
 
@@ -102,7 +102,7 @@ public func sum(_ A: Tensor<Double>, axis: Int) -> Tensor<Double>
         for i in 0..<sumCount
         {
             var curElement = curSlice!
-            curElement[axis] = i
+            curElement[dim] = i
             total += A[curElement]
         }
 
