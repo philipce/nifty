@@ -25,6 +25,19 @@
 // the scalar mean.  If it is a matrix examine the mean across either columns
 // or rows
 
+public func mean(_ T: Tensor<Double>, dim : Int) -> Tensor<Double> {
+	
+	precondition(dim >= 0 && dim < T.size.count, "Invalid tensor dimensions")
+
+	let s = sum(T, dim: dim)
+
+	return s/Double(T.size[dim])
+}
+
+public func mean(_ T: Tensor<Double>) -> Double {
+	return mean(T.data)
+}
+
 
 /// Computes the row/column wise mean of a Matrix.
 ///
