@@ -4,8 +4,8 @@
  *
  *  This file tests the max function.
  *
- *  Author: Philip Erickson
- *  Creation Date: 22 Jan 2017
+ *  Author: Félix Fischer
+ *  Creation Date: 23 May 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -17,7 +17,7 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2017 Philip Erickson
+ *  Copyright 2017 Félix Fischer
  **************************************************************************************************/
 
 import XCTest
@@ -30,16 +30,36 @@ class max_test: XCTestCase
     {
         let tests = 
         [
-            testCase([("testBasic", self.testBasic)]),
+            testCase([("testList", self.testList)]),
+            testCase([("testMatrix", self.testMatrix)]),
+            testCase([("testVector", self.testVector)]),
+            testCase([("testTensor", self.testTensor)]),
         ]
 
         return tests
     }
     #endif
 
-    func testBasic() 
+    func testList() 
     {        
-        // TODO: fill me in
-        print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
+        let doubleList = [0.0, -1.0, 1.0, 10.0, 0.0, 5.0]
+
+        XCTAssert(max(doubleList) == 10.0)
     }
+
+    func testMatrix() 
+    {        
+        //FIXME: implement test
+    }
+
+    func testVector() 
+    {        
+        //FIXME: implement test
+    }
+
+    func testTensor() 
+    {        
+        //FIXME: implement test
+    }
+
 }

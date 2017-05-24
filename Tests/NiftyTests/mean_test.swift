@@ -30,20 +30,32 @@ class mean_test: XCTestCase
     {
         let tests = 
         [
-            testCase([("testBasic", self.testBasic)]),
+            testCase([("testList", self.testList)]),
+            testCase([("testMatrix", self.testMatrix)]),
+            testCase([("testVector", self.testVector)]),
+            testCase([("testTensor", self.testTensor)]),
         ]
 
         return tests
     }
     #endif
 
-    func testBasic() 
+    func testList() 
     {        
-        // Test Vector mean for constant input
-        XCTAssert(mean(Vector([1.0, 1.0, 1.0])) == 1.0)
-        // Test Vector mean for varying positive
-        XCTAssert(mean(Vector([1.0, 2.0, 3.0])) == 2.0)
-        
+        //FIXME: generalize this test
+
+        let littleDoubles = [0.0, -1.0, 1.0]
+        XCTAssert(mean(littleDoubles) == 0.0)        
+
+        let mediumDoubles = [0.0, -100.0, 100.0]
+        XCTAssert(mean(mediumDoubles) == 0.0)
+
+        let bigDoubles = [0.0, -10000000.0, 10000000.0]
+        XCTAssert(mean(bigDoubles) == 0.0)
+    }
+
+    func testMatrix() 
+    {        
         // Test Matrix mean for square matrix
         let m1 = Matrix([[1.0, 2.0], [3.0, 4.0]])
         XCTAssert(isequal(mean(m1), 2.5, within: 0.0001))
@@ -61,7 +73,18 @@ class mean_test: XCTestCase
         XCTAssert(isequal(mean(m3), 3.5, within: 0.0001))
         XCTAssert(isequal(mean(m3, dim: 1), Matrix([[2.0], [5.0]]), within: 0.0001))      // Across columns
         XCTAssert(isequal(mean(m3, dim: 0), Matrix([[2.5, 3.5, 4.5]]), within: 0.0001)) // Across rows
-        
+    }
 
+    func testVector() 
+    {                
+        // Test Vector mean for constant input
+        XCTAssert(mean(Vector([1.0, 1.0, 1.0])) == 1.0)
+        // Test Vector mean for varying positive
+        XCTAssert(mean(Vector([1.0, 2.0, 3.0])) == 2.0)
+    }
+
+    func testTensor() 
+    {        
+        //FIXME: implement test
     }
 }

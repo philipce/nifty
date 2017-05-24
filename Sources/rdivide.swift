@@ -4,6 +4,7 @@
  *  This file provides functionality for scalar division of vectors, matrices, and tensors. 
  *
  *  Author: Philip Erickson
+ *  Contributors: Félix Fischer
  *  Creation Date: 15 Mar 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
@@ -33,4 +34,17 @@ public func / (left: Matrix<Double>, right: Int) -> Matrix<Double>
     return m
 }
 
-// TODO: add rdivide function
+
+public func / (left: Tensor<Double>, right: Double) -> Tensor<Double>
+{
+    var t = left
+    t.data = t.data.map({$0/right})
+    return t
+}
+
+public func / (left: Tensor<Double>, right: Int) -> Tensor<Double>
+{
+    var t = left
+    t.data = t.data.map({$0/Double(right)})
+    return t
+}
