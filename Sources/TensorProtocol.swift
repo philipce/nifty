@@ -1,10 +1,11 @@
 /***************************************************************************************************
- *  Tensor.swift
+ *  TensorProtocol.swift
  *
- *  This file defines the Tensor data structure, an n-dimensional array. 
+ *  This file defines the TensorProtocol protocol, an n-dimensional array.
+ *  It serves as the common basis for the behavior of Vector, Matrix and Tensor. 
  *
- *  Author: Philip Erickson
- *  Creation Date: 12 Dec 2016
+ *  Author: Félix Fischer
+ *  Creation Date: 26 May 2017
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -16,19 +17,10 @@
  *  express or implied. See the License for the specific language governing permissions and 
  *  limitations under the License.
  *
- *  Copyright 2016 Philip Erickson
+ *  Copyright 2017 Félix Fischer
  **************************************************************************************************/
 
 import Foundation
-
-        let range = _convertToCountableClosedRange(index)
-
-        // inherit name, add slice info
-        var sliceName = self.name     
-        if sliceName != nil { sliceName = "\(_parenthesizeExpression(sliceName!))[\(index)]" }
-      
-        let d = Array(self.data[range])
-        return Tensor([1, d.count], d, name: sliceName, showName: self.showName)
 
 
 /// Data structure for an N-D, row-major order array.
