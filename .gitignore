@@ -3,3 +3,5 @@
 /.build
 /Packages
 Sources/main.swift
+Package.pins
+Package.resolved
