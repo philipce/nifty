@@ -21,58 +21,71 @@
 
 // TODO: revisit this interface and reconcile with MATLAB!
 
+//==================================================================================================
+// MARK: - PUBLIC FIND NEAREST
+//==================================================================================================
+
 // FIXME: these all fail if an empty list is queried!
 
-public func find(in x: [Double], nearest: Double, order: SeriesIndexOrder) -> Int
+public func find(in x: [Double], nearest: Double, order: DataSeriesIndexOrder) -> Int
 {
     return find(in: x, n: 1, nearest: nearest, order: order)[0]
 }
 
-public func find(in x: [Double], n: Int, nearest: Double, order: SeriesIndexOrder) -> [Int]
+public func find(in x: [Double], n: Int, nearest: Double, order: DataSeriesIndexOrder) -> [Int]
 {    
-
+    
     precondition(n > 0, "Find cannot search for less than 1 element")
-
+    
     switch order 
-    {
-        case .increasing, .nonDecreasing:
-
-            let (i, _) = binarySearch(nonDecreasingList: x, for: nearest)
-
-            var nn = [i]
-            var l = i-1
-            var r = i+1
-            while nn.count < n
+    {   
+        
+    case .increasing, .nonDecreasing:
+        
+        let (i, _) = binarySearch(nonDecreasingList: x, for: nearest)
+        
+        var nn = [i]
+        var l = i-1
+        var r = i+1
+        while nn.count < n
+        {
+            let lval = l > 0 ? x[l] : Double.infinity
+            let rval = r < x.count ? x[r] : Double.infinity
+            
+            if abs(lval-nearest) < abs(rval-nearest)
             {
-                let lval = l > 0 ? x[l] : Double.infinity
-                let rval = r < x.count ? x[r] : Double.infinity
-
-                if abs(lval-nearest) < abs(rval-nearest)
-                {
-                    nn.append(l > 0 ? l : -1)
-                    l -= 1
-                }
-                else
-                {
-                    nn.append(r < x.count ? r : -1)
-                    r += 1
-                }
+                nn.append(l > 0 ? l : -1)
+                l -= 1
             }
-
-            return nn
-
-        default:
-
-            var diffs = [(Double, Int)]()
-            for i in 0..<x.count { diffs.append((abs(x[i]-nearest), i)) }
-            diffs.sort(by: {return $0.0 < $1.0})
-            
-            var nn = diffs[0..<n].map({$0.1})  
-            nn.append(contentsOf: Array(repeating: -1, count: nn.count-n))
-            
-            return nn
+            else
+            {
+                nn.append(r < x.count ? r : -1)
+                r += 1
+            }
+        }
+        
+        return nn
+        
+    default:
+        
+        // FIXME: handle this better
+        print("Warning: naive find implementation being used... very slow")
+        
+        var diffs = [(Double, Int)]()
+        for i in 0..<x.count { diffs.append((abs(x[i]-nearest), i)) }
+        diffs.sort(by: {return $0.0 < $1.0})
+        
+        var nn = diffs[0..<n].map({$0.1})  
+        nn.append(contentsOf: Array(repeating: -1, count: nn.count-n))
+        
+        return nn
     }
 }
+
+
+//==================================================================================================
+// MARK: - PUBLIC FIND BEFORE
+//==================================================================================================
 
 public func find(in x: [Double], before: Double) -> Int
 {
@@ -94,6 +107,10 @@ public func find(in x: [Double], n: Int, before: Double) -> [Int]
     
     return nb    
 }
+
+//==================================================================================================
+// MARK: - PUBLIC FIND AFTER
+//==================================================================================================
 
 public func find(in x: [Double], after: Double) -> Int
 {
@@ -124,19 +141,22 @@ func binarySearch(nonDecreasingList list: [Double], for item: Double) -> (i: Int
 {
     var iLower = 0
     var iUpper = list.count-1
-
+    
     var iCur: Int 
     while true
     {
         iCur = (iUpper+iLower)/2
-
+        
         if list[iCur] == item // FIXME: proper double compare
         {
             return (iCur, true)
         }
         else if iLower >= iUpper
         {
-            let i = abs(list[iLower]-item) < abs(list[iUpper]-item) ? iLower : iUpper
+            let diffLower = iLower < list.count ? abs(list[iLower]-item) : Double.infinity
+            let diffUpper = iUpper >= 0 ? abs(list[iUpper]-item) : Double.infinity
+            assert(iLower < list.count || iUpper >= 0, "Not possible for both to be out of bounds")            
+            let i = diffLower < diffUpper ? iLower : iUpper
             return (i, false)
         }
         else if list[iCur] < item

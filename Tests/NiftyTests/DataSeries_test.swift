@@ -19,15 +19,19 @@
  *  Copyright 2017 Philip Erickson
  **************************************************************************************************/
 
-import Foundation
 import XCTest
-@testable import Nifty
+import Nifty
 
-class DataSeries_test: XCTestCase 
+class DataFrameSeriesTest: XCTestCase 
 {
+    override class func tearDown()
+    {
+        super.tearDown()
+    }
+    
     #if os(Linux)
     static var allTests: [XCTestCaseEntry] 
-    {
+{
     let tests = 
     [
     testCase([("testBasic", self.testBasic)]),
@@ -38,7 +42,14 @@ class DataSeries_test: XCTestCase
     #endif
     
     func testBasic() 
-    {               
+    {          
+        //------------------------------------------------------------------------------------------
+        // Double index DataSeries
+        //------------------------------------------------------------------------------------------
+        
+        // Creation
+        print("Double index DataSeries:\n")
+        
         let a1: [Int?] = [2,3,nil]
         let a2 = [2.35,0.23,4.24]
         let a3 = [22.35,10.23,44.24]
@@ -49,27 +60,28 @@ class DataSeries_test: XCTestCase
         let a7: [Double?] = [12.3, nil, 45.3, nil, nil, nil, 123.1]
         let a8 = [23.4, 456.2, 545.3, 1423.23] 
         let a9 = [3453.234, 2344.2, 145.3, 45.3, 3.4, 0.4, -1.23, -12.43, -346.3]
-
-        let s1 = DataSeries(a1, name: "s1")
-        let s2 = DataSeries(a2, name: "s2")
-        let s3 = DataSeries(a3)
-        let s4 = DataSeries(a4, name: "s4")
-        let s5 = DataSeries(a5, index: i5)
-        let s6 = DataSeries(a6, name: "s6", maxColumnWidth: 15)
-        var s7 = DataSeries(a7, name: "s7")
         
+        let s1 = DataSeries<Double, Int>(a1, name: "s1")
+        let s2 = DataSeries<Double, Double>(a2, name: "s2")
+        let s3 = DataSeries<Double, Double>(a3)
+        let s4 = DataSeries<Double, Double>(a4, name: "s4")
+        let s5 = DataSeries(a5, index: i5)
+        let s6 = DataSeries<Double, String>(a6, name: "s6", maxColumnWidth: 15)
+        var s7 = DataSeries<Double, Double>(a7, name: "s7")                        
+        
+        // Indexing and Slicing
         print(s1)       
-        print("\ns1[3]: \(s1[3])")
+        print("\ns1[3]: \(String(describing: s1[3]))")
         XCTAssert(s1[1] == a1[1])
         
         print(s2)
         XCTAssert(isequal(s2[1] ?? -99.9, a2[1]))       
-
+        
         print("\ns3 = \(s3)")
         
         for i in 0..<a4.count
         {
-            print("\ns4[\(i)]: \(s4[Double(i)])")
+            print("\ns4[\(i)]: \(String(describing: s4[Double(i)]))")
             XCTAssert(isequal(s4[Double(i)] ?? -99.9, a4[i]))
         }
         
@@ -77,93 +89,39 @@ class DataSeries_test: XCTestCase
         XCTAssert(s4[0..<4][0].0 == 1.0 && s4[0..<4][0].1 == 670.23)        
         XCTAssert(s4[0..<4][1].0 == 2.0 && s4[0..<4][1].1 == 54.2564)
         XCTAssert(s4[0..<4][2].0 == 3.0 && s4[0..<4][2].1 == 687.243)
-
+        
         print("\ns4[0.5...4.1]: \(s4[0.5...4.1])")
         XCTAssert(s4[0.5...4.1][0].0 == 0.5)
         XCTAssert(s4[0.5...4.1][5].0 == 4.1)
-
+        
         print("\ns4[0.1...14.1]: \(s4[0.1...14.1])")
         print("\ns4[0.0...14.1]: \(s4[0.0...14.1])")
         print("\ns4[-2.0...3.0]: \(s4[-2.0...3.0])")
-                
+        
+        // Resampling
         let s3_resamp = s3.resample(start: 0.0, step: 0.5, n: 10, name: "resampled s3")
         print(s3_resamp)
         XCTAssert(s3_resamp.count == 10)
         
-        print(s5)
-        XCTAssert(!s5.isEmpty)
-        XCTAssert(s5.index == i5)
-        
-        print(s6)
-
         print(s7)
         XCTAssert(!s7.isEmpty && !s7.isComplete)
         s7.fill()
         XCTAssert(!s7.isEmpty && s7.isComplete)
         print(s7)
         
-        print("\n\n\n\n")
-        
-        var df = DataFrame()
-        df.add(s1)
-        df.add(s2)
-        df.add(s3)
-        df.add(s4)
-        df.add(s5)
-        df.add(s6)
-        df.add(s7)
-        
-        print("\n\nOriginal data frame:\n\(df)")
-        df.fill()
-        print("\nFilled data frame:\n\(df)")
-        
-        if let S1: DataSeries<Int> = df.get("s1")
-        {
-            XCTAssert(S1.data[0] == 2 && S1.data[10] == 3)
-            print(S1)
-        }
-        else { XCTAssert(false) }        
-
-        if let S2: DataSeries<Double> = df.get("s2")
-        {
-            XCTAssert(S2.data[0] == 2.35 && S2.data[10] == 4.24)
-            print(S2)
-        }
-        else { XCTAssert(false) }       
-
-        var s8 = DataSeries<Double>()
-        for (i,v) in a8.enumerated()
-        {
-            XCTAssert(s8.append(v, index: Double(i)))
-        }
-        print(s8)
-        XCTAssert(!s8.append(9.9, index: 1.21))
-        print(s8)
-
-        var s9 = DataSeries<Double>(order: .decreasing)
-        for i in stride(from: a9.count-1, through: 0, by: -1)
-        {
-            XCTAssert(s9.append(a9[i], index: Double(i)))
-        }
-        XCTAssert(!s9.append(122344.234, index: 123.1))   
-
-        print("s9: \(s9)\n")     
-
         // Minus
         print("\nMinus function...")
-        let s3_minus_s4 = s3.minus(s4)
-        print("s3-s4:\(s3_minus_s4)\n\n")       
-        XCTAssert([-110.0, -660.0, -10.0164, -643.003, -28.883].enumerated()
+        print(s3)
+        print(s4)
+        let s3_minus_s4 = s3.minus(s4, renamed: "s3-s4")
+        print("\(s3_minus_s4)\n\n")       
+        XCTAssert([-110.0, -660.0, -10.0164].enumerated()
             .reduce(0.0, {$0 + ((s3_minus_s4.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)
-
-        let s4_minus_s3 = s4.minus(s3)
-        print("s4-s3:\(s4_minus_s3)\n\n")
+        
+        let s4_minus_s3 = s4.minus(s3, renamed: "s4-s3")
+        print("\(s4_minus_s3)\n\n")
         XCTAssert([110.0, 660.0, 10.0164, 643.003, 28.883].enumerated()
-            .reduce(0.0, {$0 + ((s4_minus_s3.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)
-
-        // Present
-        let (ind1, dat1, loc1) =  s1.present()
-        XCTAssert(ind1.count == 2 && dat1.count == 2 && loc1.count == 2)
+            .reduce(0.0, {$0 + ((s4_minus_s3.data[$1.0] ?? -99.9)-$1.1)}) < 0.00001)                
         
         // MSE and RMS        
         let mse22 = s2.mse(s2)
@@ -179,5 +137,79 @@ class DataSeries_test: XCTestCase
         let rms23 = s2.rms(s3)
         let rms32 = s3.rms(s2)
         XCTAssert(rms23 == rms32 && (rms23-26.4575131106 < 0.0000000001))
+        
+        // Misc
+        let (ind1, dat1, loc1) =  s1.present()
+        XCTAssert(ind1.count == 2 && dat1.count == 2 && loc1.count == 2)
+        
+        print(s5)
+        XCTAssert(!s5.isEmpty)
+        XCTAssert(s5.index == i5)
+        
+        print(s6)
+        
+        //------------------------------------------------------------------------------------------
+        // Date index DataSeries
+        //------------------------------------------------------------------------------------------
+        
+        // TODO: add time series tests
+        
+        //------------------------------------------------------------------------------------------
+        // Double index DataFrame
+        //------------------------------------------------------------------------------------------
+        
+        print("\n\n\n\nDouble index DataFrame:\n")
+        
+        var df = DataFrame<Double>()
+        df.assign(s1)
+        df.assign(s2)
+        df.assign(s3)
+        df.assign(s4)
+        df.assign(s5)
+        df.assign(s6)
+        df.assign(s7)
+        
+        print("\n\nOriginal data frame:\n\(df)")
+        df.fill()
+        print("\nFilled data frame:\n\(df)")
+        
+        if let S1: DataSeries<Double, Int> = df.get("s1")
+        {
+            XCTAssert(S1.data[0] == 2 && S1.data[10] == 3)
+            print(S1)
+        }
+        else { XCTAssert(false) }        
+        
+        if let S2: DataSeries<Double, Double> = df.get("s2")
+        {
+            XCTAssert(S2.data[0] == 2.35 && S2.data[10] == 4.24)
+            print(S2)
+        }
+        else { XCTAssert(false) }       
+        
+        var s8 = DataSeries<Double, Double>()
+        for (i,v) in a8.enumerated()
+        {
+            XCTAssert(s8.append(v, index: Double(i)))
+        }
+        print(s8)
+        XCTAssert(!s8.append(9.9, index: 1.21))
+        print(s8)
+        
+        var s9 = DataSeries<Double, Double>(order: .decreasing)
+        for i in stride(from: a9.count-1, through: 0, by: -1)
+        {
+            XCTAssert(s9.append(a9[i], index: Double(i)))
+        }
+        XCTAssert(!s9.append(122344.234, index: 123.1))   
+        
+        print("s9: \(s9)\n")                     
+        
+        //------------------------------------------------------------------------------------------
+        // Date index DataFrame
+        //------------------------------------------------------------------------------------------
+        
+        // TODO: add time frame tests
     }
 }
+
