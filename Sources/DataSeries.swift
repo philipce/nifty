@@ -53,7 +53,7 @@ import struct Foundation.Date
 /// The slowness of multiple single point queries and the extra memory used seem, for now, to be 
 /// acceptable limitations.
 public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStringConvertible
-{	    
+{       
     /// Transform a given string value, with any associated header rows, into a series point. 
     /// Useful for parsing text files with non-standard representations of the data within.
     public typealias IndexTransform = (_ value: String?, _ headers: [String?]?) -> IndexType?
@@ -62,6 +62,9 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     //----------------------------------------------------------------------------------------------
     // MARK: Stored Properties
     //----------------------------------------------------------------------------------------------
+
+    /// Controls the default method used for estimation by this series; modifiable by user.
+    public var defaultEstimationMethod = Nifty.Options.nearlin
 
     /// Contains all index/value pairs in the series with non-nil values.
     var _presentIndex: [DataSeriesIndex: [DataSeriesValue<ValueType>]]
@@ -106,7 +109,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
             list: self.index, 
             name: "",
             maxWidth: self._width, 
-            padLeft: false)	
+            padLeft: false) 
         
         let (padName, padData) = _columnizeData(
             list: self.values, 
@@ -114,7 +117,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
             maxWidth: self._width, 
             padLeft: true)
         
-        precondition(padInd.count == padData.count, "Expected same number of indexes as data points")
+        precondition(padInd.count == padData.count, "Expected index and value lists to be the same size")
         
         var rows = ["\(blankInd!)   \(padName!)"]
         for i in 0..<padInd.count
@@ -165,7 +168,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     ///     - comparator: specify comparator for series index (optional)
     ///     - order: initial series order (default: increasing)
     ///     - name: series name (optional)
-    ///		- width: the preferred max column width (default: vary according to data width)
+    ///     - width: the preferred max column width (default: vary according to data width)
     public init(
         _ values: [ValueType?] = [], 
         index: [IndexType]? = nil, 
@@ -247,7 +250,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     ///     - dataTransform: function to generate data from index string values (optional)
     ///     - order: initial series order (default: increasing)
     ///     - name: series name (optional)
-    ///		- columnWidth: the preferred column width (default: vary according to data width)    
+    ///     - columnWidth: the preferred column width (default: vary according to data width)    
     public init(
         csv             : String, 
         skipRows        : [Int]            = [],
@@ -270,32 +273,83 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     // MARK: Get & Set Values
     //----------------------------------------------------------------------------------------------
     
+    // TODO: document decision on how series with duplicate indexes are handled... it should probably be the case that
+    // there is no guarantee made about how the index is selected (e.g. it's just whichever binary search finds first,
+    // which could be first, middle, or last occurrence), for most of these anyway. Those functions that actually 
+    // specifically are about finding the first e.g. would be the exception
+
+
     public subscript(_ index: IndexType) -> ValueType
     {
         /// Query this series for the given value, using the series default estimation method.
         get 
         {
-            // TODO: create default estimation method
+            let ind = index.indexToDouble()
+            if let val = self._presentIndex[ind] { return val.value }
+            else { return self.query(ind) }
         }
         
-        /// Insert the given value into this series, if doing so maintains series order. Otherwise,
-        /// call will be ignored.
+        /// Insert the given value into this series, if doing so maintains series order. Otherwise, call will be ignored.
         set(newValue) 
         {
-            
+            self.assign(newValue, index: index)
         }                
     }
     
+    /// Slicing with an open range returns a series that does not include the specified start and end points--only 
+    /// indices between the specified start and end points are included.
+    ///
+    /// In case the specified range bounds do not exist in the series, the indices that are closest (smallest in 
+    /// absolute difference, not in position) will be used.
+    ///
+    /// In the case of duplicate indices, the first occurrence of the start index and the last occurrence of the end
+    /// index will be used, and the index/value pairs between the two will be selected.
     public subscript(_ slice: Range<IndexType>) -> DataSeries<IndexType, ValueType>
     {        
         // TODO: handle open ranges in swift 4
         
         
-        /// Query this series for the given range of values, using the series default estimation 
-        /// method.
+        /// Query this series for the given range of values, using the series default estimation method.
+        ///
+        /// - Note: the upper and lower bounds will for series with duplicate values, 
         get 
         {
-            // TODO: create default estimation method
+            let newName = self.name == nil ? nil : "\(self.name![\(slice)])"
+
+            let firstPos: Int
+            if self.contains(slice.lowerBound)
+            {
+                firstPos = self.get(occurence: 0, of: slice.lowerBound).position
+            }
+            else
+            {
+                let nearIndex = self.get(nearest: slice.lowerBound).index
+                firstPos = self.get(occurrence: 0, of: nearIndex).position
+            }
+
+            let lastPos: Int
+            if self.contains(slice.upperBound)
+            {
+                lastPos = self.get(occurence: -1, of: slice.upperBound).position
+            }
+            else
+            {
+                let nearIndex = self.get(nearest: slice.upperBound).index
+                lastPos = self.get(occurence: -1, of: nearIndex).position
+            }
+
+            guard firstPos <= lastPos, firstPos+1 < self._position.count, lastPos-1 >= 0 else
+            {
+                return DataSeries<IndexType, ValueType>(comparator: self.comparator, order: self.order, name: newName, 
+                    width: self.width)
+            }
+
+            let pairs = self._position[firstPos...lastPos]
+            let indexes = pairs.map({$0.index})
+            let values = pairs.map({$0.index})            
+
+            return DataSeries<IndexType, ValueType>(values, index: indexes, comparator: self.comparator,
+                order: self.order, name: newName, width: self.width)
         }
         
         /// For each index in the given series, set it to the given value in this series if it 
@@ -305,6 +359,17 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
             // TODO: create set/insert hybrid that sets if present, otherwise asserts (e.g. assign)
             
         }
+
+
+
+
+            public init(
+        _ values: [ValueType?] = [], 
+        index: [IndexType]? = nil, 
+        comparator: DataSeriesIndexComparator? = nil,
+        order: DataSeriesIndexOrder = .increasing, 
+        name: String? = nil, 
+        width: Int? = nil)
         
         
     }
@@ -327,9 +392,9 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         }
         
     }
-       
+
     /// Return value at given index if it exists, otherwise return nil.
-    public func get(_ index: IndexType) -> ValueType?
+    public func get(_ index: IndexType) -> (position: Int, value: ValueType)?
     {
         
     }
@@ -337,20 +402,24 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     /// Get the value for the index in the series nearest the given index.
     ///
     /// - Note: Calling this function on an empty series will cause an unrecoverable error.
-    public func get(nearest index: IndexType) -> ValueType
+    public func get(nearest index: IndexType) -> (index: IndexType, position: Int, value: ValueType)
     {
         
     }
     
     /// Get values for the n indices in the series nearest the given index, sorted nearest first.
-    public func get(n: Int, nearest index: IndexType) -> [ValueType]
+    ///
+    /// For series with duplicate indexes, no guarantee is made about which occurrence the returned values correspond to.
+    public func get(n: Int, nearest index: IndexType) -> [(index: IndexType, position: Int, value: ValueType)]
     {
         
     }
     
-    /// Get the value for the nth occurence of the given index in the series, or nil if the series
-    /// doesn't contain n occurences.
-    public func get(occurrence n: Int, of index: IndexType) -> ValueType?
+    /// Get the value for the nth occurence of the given index in the series, or nil if the series doesn't contain it.
+    ///
+    /// Occurrence is zero-based (e.g. 0 is the first, n-1 is the nth). Additionally, negative numbers may be used to 
+    /// indicate counting from the end, (e.g. -1 is the last, -n is the first). 
+    public func get(occurrence n: Int, of index: IndexType) -> (position: Int, value: ValueType)?
     {
         
     }
@@ -380,12 +449,17 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     /// The new value is written if the specified index already exists in the series, overwritting
     /// the previous value. Otherwise, this function has no effect.
     ///
+    /// Occurrence is zero-based (e.g. 0 is the first, n-1 is the nth). Additionally, negative numbers may be used to 
+    /// indicate counting from the end, (e.g. -1 is the last, -n is the first). 
+    ///
     /// - Returns: true if value was set; false indicates the series did not contain n occurrences 
     ///     of the specified index
     public mutating func set(_ value: ValueType?, occurrence n: Int, of index: IndexType) -> Bool
     {
         
     }
+
+    // TODO: do we want to add positional set equivalents? e.g. set position 5 to some value...
     
 
     //----------------------------------------------------------------------------------------------
@@ -429,7 +503,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     /// Assign the given value to the given index in this series. 
     ///
     /// If the given index already exists, the old value will be overwritten with the new value
-    /// (duplicate indexes will all be overwritten).
+    /// (duplicate indexes will be maintained, but all the duplicate indexes values will be overwritten).
     ///
     /// If the given index does not exist, the index will be inserted and assigned the given value.
     ///
@@ -452,9 +526,16 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     ///     - index: index to query
     ///     - method: method to use for estimating missing values
     /// - Returns: the value associated with the queried index
-    public func query(_ index: IndexType, method: Nifty.Options.EstimationMethod = .nearlin) -> ValueType
+    public func query(_ index: IndexType, method: Nifty.Options.EstimationMethod = self.defaultEstimationMethod) -> ValueType
     {
-        
+        let dIndex = index.indexToDouble()
+        return query(dIndex: dIndex, method: method)   
+    }
+
+    public func query(dIndex: Double, method: Nifty.Options.EstimationMethod = self.defaultEstimationMethod) -> ValueType
+    {
+
+
     }
     
     /// Query multiple indexes from the series, using the given estimation method for indexes that
@@ -464,10 +545,17 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     ///     - indexes: indexes to query
     ///     - method: method to use for estimating missing values
     /// - Returns: the values associated with the queried indexes
-    public func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod = .nearlin) -> [ValueType]
+    public func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod = self.defaultEstimationMethod) -> [ValueType]
     {
         
     }
+
+    public func query(dIndexes: [Double], method: Nifty.Options.EstimationMethod = self.defaultEstimationMethod) -> [ValueType]
+    {
+        
+    }
+
+
     
     /// Fill in missing values (both nil and NaN) for existing series indexes.
     ///
@@ -508,6 +596,11 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     public func contains(index: IndexType) -> Bool
     {
         
+    }
+
+    public func count(index: IndexType) -> Int
+    {
+
     }
     
     
