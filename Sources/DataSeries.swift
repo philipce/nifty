@@ -23,64 +23,9 @@ import func Foundation.sqrt
 import func Foundation.pow
 import struct Foundation.Date
 
-/// Enumerates how the indexes of a series are ordered:
-/// - decreasing: sorted large-to-small, no duplicates
-/// - increasing: sorted small-to-large, no duplicates
-/// - nonDecreasing: sorted large-to-small, with possible duplicates
-/// - nonIncreasing: sorted small-to-large, with possible duplicates
-/// - unorderedUnique: not sorted, no duplicates
-/// - unordered: not sorted, with possible duplicates
-public enum DataSeriesIndexOrder
-{
-    case decreasing        
-    case increasing
-    case nonDecreasing
-    case nonIncreasing
-    case unorderedUnique
-    case unordered
-    
-    var isSorted: Bool 
-    {
-        switch self
-        {
-        case .decreasing, .increasing, .nonDecreasing, .nonIncreasing:
-            return true
-        case .unorderedUnique, .unordered:
-            return false
-        }
-    }
-    
-    var isUnique: Bool 
-    {
-        switch self
-        {
-        case .decreasing, .increasing, .unorderedUnique:
-            return true
-        case .nonDecreasing, .nonIncreasing, .unordered:
-            return false
-        }
-    }
-}
-
-/// Allows using arbitrary indices within a data series, all index types using Doubles for the 
-/// underlying representation.
-public protocol DataSeriesIndexProtocol: Comparable
-{
-    func indexToDouble() -> Double 
-    static func indexFromDouble(_ d: Double) -> Self
-}
-
-extension Double: DataSeriesIndexProtocol
-{
-    public func indexToDouble() -> Double { return self }
-    public static func indexFromDouble(_ d: Double) -> Double { return d }
-}
-
-extension Date: DataSeriesIndexProtocol
-{
-    public func indexToDouble() -> Double { return self.timeIntervalSince1970 }
-    public static func indexFromDouble(_ d: Double) -> Date { return Date(timeIntervalSince1970: d) }
-}
+//==================================================================================================
+// MARK: - DATA SERIES DEFINITION
+//==================================================================================================
 
 /// Stores and operates on values in an indexed series.
 ///
@@ -107,49 +52,69 @@ extension Date: DataSeriesIndexProtocol
 ///
 /// The slowness of multiple single point queries and the extra memory used seem, for now, to be 
 /// acceptable limitations.
-public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomStringConvertible
+public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStringConvertible
 {	    
     /// Transform a given string value, with any associated header rows, into a series point. 
     /// Useful for parsing text files with non-standard representations of the data within.
     public typealias IndexTransform = (_ value: String?, _ headers: [String?]?) -> IndexType?
-    public typealias DataTransform  = (_ value: String?, _ headers: [String?]?) -> DataType?
+    public typealias ValueTransform  = (_ value: String?, _ headers: [String?]?) -> ValueType?
     
     //----------------------------------------------------------------------------------------------
     // MARK: Stored Properties
     //----------------------------------------------------------------------------------------------
+
+    /// Contains all index/value pairs in the series with non-nil values.
+    var _presentIndex: [DataSeriesIndex: [DataSeriesValue<ValueType>]]
+        
+    /// Contains all indexes present in the series that have nil values.
+    var _absentIndex: Set<DataSeriesIndex>
     
-    private var _data           : [DataType?]
-    internal var _index          : [Double] // TODO: should data frame be allowed access?
-    private let _maxColumnWidth : Int?    
-    private var _name           : String?
-    private var _order          : DataSeriesIndexOrder        
+    /// Lists references into the index dictionaries in the series order.
+    var _position: [(DataSeriesIndex, DataSeriesValue<ValueType>?)]
+
+    /// Series index ordering; can be modified automatically by operations (e.g. insert, append)
+    var _order : DataSeriesIndexOrder        
     
+    /// Name of series, for use in display and by the user.
+    var _name : String?
+    
+    /// Max width to be used in displaying series column.
+    let _width : Int?    
+
     //----------------------------------------------------------------------------------------------
     // MARK: Computed Properties
     //----------------------------------------------------------------------------------------------
     
     public var count: Int
     {
-        return self._index.count
+        return self._position.count
     }
     
-    public var data: [DataType?] { return self._data }
+    public var values: [ValueType?] 
+    { 
+        return self._position.map{$0.1?.value} 
+    }
     
+    public var index: [IndexType]
+    {
+        return self._position.map{IndexType.indexFromDouble($0.0.index)}
+    }
+
     public var description: String
     {
         let (blankInd, padInd) = _columnizeData(
-            list: self._index.map{IndexType.indexFromDouble($0)}, 
+            list: self.index, 
             name: "",
-            maxWidth: self._maxColumnWidth, 
+            maxWidth: self._width, 
             padLeft: false)	
         
         let (padName, padData) = _columnizeData(
-            list: self._data, 
+            list: self.values, 
             name: self._name ?? "", 
-            maxWidth: self._maxColumnWidth, 
+            maxWidth: self._width, 
             padLeft: true)
         
-        precondition(padInd.count == padData.count, "Not possible--Must have same number of indexes as data points")
+        precondition(padInd.count == padData.count, "Expected same number of indexes as data points")
         
         var rows = ["\(blankInd!)   \(padName!)"]
         for i in 0..<padInd.count
@@ -159,34 +124,31 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         
         return "\n" + rows.joined(separator: "\n")
     }
-    
-    public var index: [IndexType] { return self._index.map{IndexType.indexFromDouble($0)} }
-    
+
     public var isComplete: Bool
     {
-        for d in self._data { if d == nil { return false } }
-        return true
+        return self._absentIndex.isEmpty
     }
     
     public var isEmpty: Bool
     {
-        return self._index.count == 0
+        return self._position.isEmpty
     }
     
-    public var maxColumnWidth: Int? { return self._maxColumnWidth }
+    public var maxColumnWidth: Int? { return self._width }
     
     public var name: String? { return self._name }
     
     public var order: DataSeriesIndexOrder { return self._order }       
     
-    public var type: DataType.Type { return DataType.self }    
+    public var indexType: IndexType.Type { return IndexType.self }    
+    
+    public var valueType: ValueType.Type { return ValueType.self }    
     
     //----------------------------------------------------------------------------------------------
     // MARK: Initializers
     //----------------------------------------------------------------------------------------------
-    
-    // TODO: add initializer to convert time series to data series
-    
+
     /// Initialize a new series with the given information.
     ///
     /// If an index is provided, it must have the same number of elements as the data and be ordered
@@ -198,48 +160,77 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     /// series orders cannot generate a default index and will cause an unrecoverable error.
     ///
     /// - Parameters:
-    ///     - data: series data
+    ///     - values: values in series
     ///     - index: series index (optional)
+    ///     - comparator: specify comparator for series index (optional)
     ///     - order: initial series order (default: increasing)
     ///     - name: series name (optional)
-    ///		- columnWidth: the preferred column width (default: vary according to data width)
+    ///		- width: the preferred max column width (default: vary according to data width)
     public init(
-        _ data: [DataType?] = [], 
+        _ values: [ValueType?] = [], 
         index: [IndexType]? = nil, 
+        comparator: DataSeriesIndexComparator? = nil,
         order: DataSeriesIndexOrder = .increasing, 
         name: String? = nil, 
-        maxColumnWidth: Int? = nil)
+        width: Int? = nil)
     {        
-        self._data = data
-        
+
         // Verify supplied index or create default index
+        let dIndex: [Double]
         if let ind = index
         {
-            let dIndex = ind.map{$0.indexToDouble()}
-            precondition(data.count == dIndex.count, "Index and data must match in size")
+            dIndex = ind.map{$0.indexToDouble()}            
             precondition(_verifyIndexOrder(dIndex, order), "Index is not \(order)")
-            self._index = dIndex
         }
         else if order == .increasing
         {
-            self._index = (0..<data.count).map({Double($0)})
+            dIndex = (0..<values.count).map({Double($0)})
         }
         else if order == .decreasing
         {
-            self._index = stride(from: data.count-1, through: 0, by: -1).map({Double($0)})
+            dIndex = stride(from: values.count-1, through: 0, by: -1).map({Double($0)})
         }            
         else
         {
             fatalError("Cannot create default index for \(order) series")            
         }
         
-        self._order = order    
+        // Create index comparator for this series
+        let seriesComparator = comparator ?? DataSeriesIndexComparator()
         
-        // Sanitize name, no whitespace allowed
+        // Create present, absent, and position structures
+        precondition(values.count == dIndex.count, "Index and data must match in size")
+        var present = [DataSeriesIndex: [DataSeriesValue<ValueType>]]()
+        var absent = Set<DataSeriesIndex>()
+        var position = [(DataSeriesIndex, DataSeriesValue<ValueType>?)]()
+        for i in 0..<values.count
+        {
+            let dsi = DataSeriesIndex(dIndex[i], seriesComparator)
+            let dsv: DataSeriesValue<ValueType>?
+            
+            if let v = values[i] { dsv = DataSeriesValue(v) }
+            else { dsv = nil }
+            
+            if dsv != nil 
+            { 
+                if present.keys.contains(dsi) { present[dsi]!.append(dsv!) }
+                else { present[dsi] = [dsv!] }
+            }
+            else { absent.insert(dsi) } 
+            position.append((dsi, dsv))            
+        }        
+        self._presentIndex = present
+        self._absentIndex = absent
+        self._position = position        
+        
+        // TODO: allow user to skip specifying order--make default order nil, infer order if nil
+        self._order = order 
+        
+        // Sanitize name--no whitespace allowed
         self._name = name?.replacingOccurrences(of: "\\s+", with: "-", options: .regularExpression)
         
         // Column can be limited to no fewer than 5 columns
-        self._maxColumnWidth = maxColumnWidth == nil ? nil : max(maxColumnWidth!, 5)
+        self._width = maxColumnWidth == nil ? nil : max(maxColumnWidth!, 5)
     }    
     
     /// Initialize a new series from the given comma separated file.
@@ -266,160 +257,312 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         dataColumn      : Int?             = nil,
         dataColumnName  : String?          = nil,
         indexTransform  : IndexTransform?  = nil,
-        dataTransform   : DataTransform?   = nil,
+        dataTransform   : ValueTransform?   = nil,
         order           : DataSeriesIndexOrder = .increasing, 
         name            : String?          = nil, 
         maxColumnWidth  : Int?             = nil)
     {        
-        // Extract lines, header values, and determine where to start processing
-        let lines = csv.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: .newlines)                                 
-        let headers: [[String]]?
-        if headerRows.count > 0
-        {
-            var h = [[String]]()
-            for r in headerRows
-            {
-                if skipRows.contains(r) { continue }
-                h.append(lines[r].components(separatedBy: ",").map({$0.trimmingCharacters(in: .whitespacesAndNewlines)}))                
-            }
-            headers = h            
-        }
-        else { headers = nil }   
-        
-        // Resolve column numbers for index and data
-        var indexResolveResult = _resolveColumnForParsing(column: indexColumn, name: indexColumnName, headers: headers)
-        if indexColumn == nil && indexColumnName == nil 
-        {
-            // use default index if both column and name are omitted
-            indexResolveResult.i = -1
-            indexResolveResult.error = nil
-        } 
-        let dataResolveResult = _resolveColumnForParsing(column: dataColumn, name: dataColumnName, headers: headers)        
-        guard let resolvedIndexColumn = indexResolveResult.i, let resolvedDataColumn = dataResolveResult.i else
-        {
-            let indexError = indexResolveResult.error ?? "n/a"
-            let dataError = dataResolveResult.error ?? "n/a"
-            let msg = "Error resolving columns: \(indexError); \(dataError)"
-            fatalError(msg)
-        }
-        
-        // Iterate remaining lines in file, creating 1 series index/data pair per line   
-        var indexValues = [IndexType]()
-        var dataValues = [DataType?]()
-        lineLoop: for lineNumber in 0..<lines.count
-        {
-            if skipRows.contains(lineNumber) || headerRows.contains(lineNumber) { continue }
-            
-            let curLine = lines[lineNumber]
-            let curCols = curLine.components(separatedBy: ",").map({$0.trimmingCharacters(in: .whitespacesAndNewlines)})
-            
-            // Parse index point
-            let curIndex: IndexType
-            if resolvedIndexColumn >= 0
-            {          
-                guard resolvedIndexColumn < curCols.count else 
-                {
-                    print("Warning: column \(resolvedIndexColumn) is out of bounds on line \(lineNumber); line will be skipped") // TODO: handle this better
-                    continue lineLoop
-                }
-                let curStr = curCols[resolvedIndexColumn]                
-                let curHeaders = headers?.map({$0[resolvedIndexColumn]})                
-                if let transform = indexTransform
-                {
-                    guard let x = transform(curStr, curHeaders) else
-                    {
-                        print("Warning: failed to parse index for line \(lineNumber); line will be skipped") // TODO: handle this better
-                        continue lineLoop
-                    }
-                    curIndex = x
-                }
-                else if IndexType.self == Double.self // TODO: we could make it so if the string is parseable as a double it gets converted through the protocol... no need to restrict this to indexes of the Double type only
-                {
-                    guard let x = Double(curStr) else
-                    {
-                        print("Warning: index is not numeric on line \(lineNumber); line will be skipped") // TODO: handle this better
-                        continue lineLoop
-                    }
-                    curIndex = x as! IndexType
-                }
-                else
-                {                    
-                    // TODO: add default parsers for different types, e.g. Date
-                    fatalError("Could not parse index column. No index transform given and no default known.")
-                }                                
-            }       
-            else
-            {
-                // FIXME: compute default index
-                fatalError("Fix this... add in calculation of default index")                
-            }
-            
-            // Parse data point
-            let curData: DataType? 
-            guard resolvedDataColumn < curCols.count else 
-            {
-                print("Warning: column \(resolvedDataColumn) is out of bounds on line \(lineNumber); line will be skipped") // TODO: handle this better
-                continue lineLoop
-            }
-            let curStr = curCols[resolvedDataColumn]                
-            let curHeaders = headers?.map({$0[resolvedDataColumn]})                
-            if let transform = dataTransform
-            {
-                curData = transform(curStr, curHeaders)
-            }
-            else if curStr.isEmpty // TODO: should strings other than empty (e.g. "NULL", "nil", "n/a") auto map to nil? Initial thought is no... if they really want that they should put it in a transform
-            {
-                curData = nil
-            }
-            else if DataType.self == Double.self
-            {
-                guard let x = Double(curStr) else
-                {
-                    print("Warning: data is not numeric on line \(lineNumber); line will be skipped") // TODO: handle this better
-                    continue lineLoop
-                }
-                curData = (x as! DataType)
-            }
-            else if DataType.self == Int.self
-            {
-                guard let x = Int(curStr) else
-                {
-                    print("Warning: data is not an integer on line \(lineNumber); line will be skipped") // TODO: handle this better
-                    continue lineLoop
-                }
-                curData = (x as! DataType)                
-            }
-            else if DataType.self == String.self
-            {
-                curData = (curStr as! DataType)
-            }
-            else
-            {
-                // TODO: add default support for more data types (e.g. parse Dates, Units)?
-                print("Warning: data is not a standard type on line \(lineNumber); line will be skipped") // TODO: handle this better
-                continue lineLoop
-            }
-            
-            // Store the index/data pair parsed from this line
-            indexValues.append(curIndex)
-            dataValues.append(curData)                        
-        }
-        
-        // Delegate series initialization
-        let seriesName = name ?? (headers?[0][resolvedDataColumn]) ?? "unnamed" // TODO: reading headers may be out of bounds if incorrectly specified; add check that reports friendlier message                
-        let initIndex: [IndexType]? = resolvedIndexColumn >= 0 ? indexValues : nil
-        self.init(dataValues, index: initIndex, order: order, name: seriesName, maxColumnWidth: maxColumnWidth)        
+        // FIXME: implement csv initializer (RFC4180)
+        fatalError("Not yet implemented")
     }
     
     //----------------------------------------------------------------------------------------------
-    // MARK: Subscripts
+    // MARK: Get & Set Values
     //----------------------------------------------------------------------------------------------
+    
+    public subscript(_ index: IndexType) -> ValueType
+    {
+        /// Query this series for the given value, using the series default estimation method.
+        get 
+        {
+            // TODO: create default estimation method
+        }
+        
+        /// Insert the given value into this series, if doing so maintains series order. Otherwise,
+        /// call will be ignored.
+        set(newValue) 
+        {
+            
+        }                
+    }
+    
+    public subscript(_ slice: Range<IndexType>) -> DataSeries<IndexType, ValueType>
+    {        
+        // TODO: handle open ranges in swift 4
+        
+        
+        /// Query this series for the given range of values, using the series default estimation 
+        /// method.
+        get 
+        {
+            // TODO: create default estimation method
+        }
+        
+        /// For each index in the given series, set it to the given value in this series if it 
+        /// exists; otherwise, insert it.
+        set(newValue)
+        {
+            // TODO: create set/insert hybrid that sets if present, otherwise asserts (e.g. assign)
+            
+        }
+        
+        
+    }
+    
+    public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: ValueType?)]
+    {
+        /// Query this series for the given range of values, using the series default estimation 
+        /// method.
+        get 
+        {
+            // TODO: create default estimation method
+        }
+        
+        /// For each index in the given series, set it to the given value in this series if it 
+        /// exists; otherwise, insert it.
+        set(newValue)
+        {
+            // TODO: create set/insert hybrid that sets if present, otherwise asserts (e.g. assign)
+            
+        }
+        
+    }
+       
+    /// Return value at given index if it exists, otherwise return nil.
+    public func get(_ index: IndexType) -> ValueType?
+    {
+        
+    }
+    
+    /// Get the value for the index in the series nearest the given index.
+    ///
+    /// - Note: Calling this function on an empty series will cause an unrecoverable error.
+    public func get(nearest index: IndexType) -> ValueType
+    {
+        
+    }
+    
+    /// Get values for the n indices in the series nearest the given index, sorted nearest first.
+    public func get(n: Int, nearest index: IndexType) -> [ValueType]
+    {
+        
+    }
+    
+    /// Get the value for the nth occurence of the given index in the series, or nil if the series
+    /// doesn't contain n occurences.
+    public func get(occurrence n: Int, of index: IndexType) -> ValueType?
+    {
+        
+    }
+    
+    /// Set the specified index to the given value. 
+    ///
+    /// The new value is written if the specified index already exists in the series, overwritting
+    /// the previous value. Otherwise, this function has no effect.
+    ///
+    /// - Returns: true if value was set; false indicates the specified index was not in series
+    public mutating func set(_ value: ValueType?, index: IndexType) -> Bool
+    {
+        // TODO: what about duplicate indexes? Should all them be overwritten. Seems like yes, since
+        // there's the set occurrence of
+    }
+    
+    /// Set the index in the series nearest the given index to the given value.
+    ///
+    /// - Returns: true if value was set; false is returned in case of an empty series
+    public mutating func set(_ value: ValueType?, nearest index: IndexType) -> Bool
+    {
+        
+    }
+    
+    /// Set the nth occurrence of specified index to the given value. 
+    ///
+    /// The new value is written if the specified index already exists in the series, overwritting
+    /// the previous value. Otherwise, this function has no effect.
+    ///
+    /// - Returns: true if value was set; false indicates the series did not contain n occurrences 
+    ///     of the specified index
+    public mutating func set(_ value: ValueType?, occurrence n: Int, of index: IndexType) -> Bool
+    {
+        
+    }
+    
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Add New Values To Series
+    //----------------------------------------------------------------------------------------------
+    
+    /// Append the given value to the end of the series, if able.
+    ///
+    /// By default, the append will only be performed if it can be done without changing series 
+    /// ordering (e.g. appending a duplicate index to an increasing series would cause it to become
+    /// non-decreasing). The default behavior may be overriden, causing the append to be performed
+    /// even if it results in modifying the series order.
+    /// 
+    /// - Parameters: 
+    ///     - value: value to append to the series
+    ///     - index: the index associated with the value to append to the series
+    ///     - maintainOrder: ignore calls that would modify series order (default: true)
+    /// - Returns: true if value was appended, false if the call was ignored
+    public func append(_ value: ValueType?, index: IndexType, maintainOrder: Bool = true) -> Bool
+    {
+        
+    }
+    
+    /// Inserts the given value into the series at the given index, if able.
+    ///
+    /// By default, the insert will only be performed if it can be done without changing series 
+    /// ordering (e.g. inserting a duplicate index to an increasing series would cause it to become
+    /// non-decreasing). The default behavior may be overriden, causing the insert to be performed
+    /// even if it results in modifying the series order.
+    /// 
+    /// - Parameters: 
+    ///     - value: value to insert into the series
+    ///     - index: the index associated with the value to assert into the series
+    ///     - maintainOrder: ignore calls that would modify series order (default: true)
+    /// - Returns: true if value was inserted, false if the call was ignored
+    public func insert(_ value: ValueType?, at index: IndexType, maintainOrder: Bool = true) -> Bool
+    {
+        
+    }
+    
+    /// Assign the given value to the given index in this series. 
+    ///
+    /// If the given index already exists, the old value will be overwritten with the new value
+    /// (duplicate indexes will all be overwritten).
+    ///
+    /// If the given index does not exist, the index will be inserted and assigned the given value.
+    ///
+    /// In all cases, the series order will be maintained.
+    public func assign(_ value: ValueType?, index: IndexType)
+    {
+        // TODO: what about duplicate indexes? Should all them be overwritten. Seems like yes, since
+        // there's the set occurrence of
+    }
+        
+    //----------------------------------------------------------------------------------------------
+    // MARK: Inference And Estimation
+    //----------------------------------------------------------------------------------------------
+    
+
+    /// Query a single index from the series, using the given estimation method if the index does
+    /// not exist in the series.
+    ///
+    /// - Parameters:
+    ///     - index: index to query
+    ///     - method: method to use for estimating missing values
+    /// - Returns: the value associated with the queried index
+    public func query(_ index: IndexType, method: Nifty.Options.EstimationMethod = .nearlin) -> ValueType
+    {
+        
+    }
+    
+    /// Query multiple indexes from the series, using the given estimation method for indexes that
+    /// do not exist in the series.
+    ///
+    /// - Parameters:
+    ///     - indexes: indexes to query
+    ///     - method: method to use for estimating missing values
+    /// - Returns: the values associated with the queried indexes
+    public func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod = .nearlin) -> [ValueType]
+    {
+        
+    }
+    
+    /// Fill in missing values (both nil and NaN) for existing series indexes.
+    ///
+    /// - Parameters:
+    ///     - method: method to use for estimating missing values
+    public mutating func fill(method: Nifty.Options.EstimationMethod = .nearlin)
+    {
+        
+    }
+    
+    /// Produce a new series, resampled at the given resolution.
+    ///
+    /// - Parameters:
+    ///     - start: index into the series from which to begin sampling
+    ///     - step: amount to increment index by for each sample
+    ///     - n: number of samples to take
+    ///     - name: name for resampled series (optional)
+    ///     - method: estimation method used to interpolate and/or extrapolate (default: nearlin)
+    /// - Returns: a new series containing the resampled points
+    public func resample(
+        start: IndexType, 
+        step: IndexIncrementType, // TODO: create this type so we could resample time series in terms of seconds, hours, etc.
+        n: Int, 
+        method: Nifty.Options.EstimationMethod = .nearlin, 
+        name: String? = nil) -> DataSeries<IndexType, ValueType>
+    {
+    
+    
+    }
+
+    
+    
+    
+    //----------------------------------------------------------------------------------------------
+    // MARK: Basic Operations
+    //----------------------------------------------------------------------------------------------
+    
+    public func contains(index: IndexType) -> Bool
+    {
+        
+    }
+    
+    
+    //----------------------------------------------------------------------------------------------
+    // MARK: Mathematical Operations
+    //----------------------------------------------------------------------------------------------
+    
+    // TODO: add func signatures below 
+        
+    public func subtract() {}
+    public func add() {}
+    public func multiply() {}
+    public func divide() {}
+    
+    public func sum() {}
+    public func prod() {}
+    public func cumsum() {}
+    public func cumprod() {}
+    
+    public func diff() {}
+    
+    public func mse() {}
+    public func rms() {}
+    
+    public func mean() {}
+    public func std() {}
+    public func variance() {}
+    
+    
+    
+    
+    
+    //----------------------------------------------------------------------------------------------
+    // MARK: Format Conversions
+    //----------------------------------------------------------------------------------------------
+    
+    // TODO: add func signatures below 
+    
+    public func toVector() {} // (to Matrix for data frame)    
+    public func toCSV() {}
+    
+    
+    
+    
+    
+    
+    //**********************************************************************************************
+    // MARK: - OLD STUFF BELOW HERE
+    //**********************************************************************************************    
     
     // TODO: add setters
     
     // TODO: should slice return series instead of/in addition to list of tuples?
     
-    public subscript(_ index: IndexType) -> DataType?
+    public subscript(_ index: IndexType) -> ValueType?
     {
         // TODO: how to handle duplicate values? 
         // If the series has a duplicate index, which of the values do we return? Changing the
@@ -436,7 +579,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         return self._data[i]
     }
     
-    public subscript(_ slice: Range<IndexType>) -> [(index: IndexType, value:DataType?)]
+    public subscript(_ slice: Range<IndexType>) -> [(index: IndexType, value:ValueType?)]
     {
         precondition(self._order.isSorted && self._order.isUnique, "Cannot slice \(self._order) series")
         
@@ -460,7 +603,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         return Array(zip(indexValues, dataValues))
     }
     
-    public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: DataType?)]
+    public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: ValueType?)]
     {
         // TODO: swift doesnt allow parameters in subscripts to have defaults...
         // Are we okay having unchangeable interp default for subscript? Seems like nearest/linterp 
@@ -472,7 +615,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         
         let openSlice = self[slice.lowerBound..<slice.upperBound]                
         
-        let left, right: (index: IndexType, value: DataType?)
+        let left, right: (index: IndexType, value: ValueType?)
         if self._order == .increasing
         {
             left = (slice.lowerBound, self.query(slice.lowerBound))
@@ -510,7 +653,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///     - index: the index to append to the series
     ///     - verify: control whether this append is verified (default: true)
     /// - Returns: true if append was successful, false if the append failed
-    public mutating func append(_ x: DataType?, index: IndexType, verify: Bool = true) -> Bool
+    public mutating func append(_ x: ValueType?, index: IndexType, verify: Bool = true) -> Bool
     {               
         let dIndex = index.indexToDouble()
         
@@ -575,7 +718,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///     - x: data to associate with new index (default: nil)
     ///     - index: new index to assign to series
     /// - Returns: true if new index was added; false indicates preexisting index
-    public mutating func assign(_ x: DataType? = nil, index: IndexType) -> Bool
+    public mutating func assign(_ x: ValueType? = nil, index: IndexType) -> Bool
     {
         let dIndex = index.indexToDouble()
         
@@ -621,7 +764,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         var unknownLoc = [Int]()
         var unknownIndex = [Double]()
         var knownIndex = [Double]()
-        var knownData = [DataType]()
+        var knownData = [ValueType]()
         for loc in 0..<self._data.count
         {
             if self._data[loc] == nil
@@ -663,7 +806,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///     - at i: index at which to insert
     ///     - verify: control whether this insertion is verified (default: true)
     /// - Returns: true if insert was successful, false if the insert failed
-    public mutating func insert(_ x: DataType?, at index: IndexType, verify: Bool = true) -> Bool
+    public mutating func insert(_ x: ValueType?, at index: IndexType, verify: Bool = true) -> Bool
     {        
         let dIndex = index.indexToDouble()
         
@@ -794,7 +937,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     // TODO: get used to be named find but it collided with external find name... compiler
     // bug kept it from being recognized, rename this when bug is fixed
     
-    public func get(nearest index: IndexType) -> (index: IndexType, value: DataType)
+    public func get(nearest index: IndexType) -> (index: IndexType, value: ValueType)
     {
         // TODO: better way to handle this than precondition? ...
         // In all other cases the return is not nil so making it an optional seems gross
@@ -809,7 +952,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         return (indexList[fi], dataList[fi])        
     }
     
-    public func get(n: Int, nearest index: IndexType) -> [(index: IndexType, value: DataType)]
+    public func get(n: Int, nearest index: IndexType) -> [(index: IndexType, value: ValueType)]
     {
         if self.isEmpty { return [] }
         let (indexList, dataList, _) = self.present() // exclude missing values from search      
@@ -818,7 +961,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         // to then convert back to Doubles is stupid...
         let foundIndices = find(in: indexList.map({$0.indexToDouble()}), n: n, nearest: index.indexToDouble(), order: self._order)        
         
-        var foundList = [(index: IndexType, value: DataType)]()
+        var foundList = [(index: IndexType, value: ValueType)]()
         for fi in foundIndices
         {
             if fi < 0 { break } // TODO: better way to check invalid return index from find?
@@ -836,7 +979,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///    - other: data series to subtract from this series
     ///    - method: method for estimating missing index values of other series (default: nearlin)
     /// - Returns: new series with same index as this series, containing differences
-    public func minus(_ other: DataSeries<IndexType, DataType>, renamed: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<IndexType, DataType>
+    public func minus(_ other: DataSeries<IndexType, ValueType>, renamed: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<IndexType, ValueType>
     {
         // TODO: add option to decide how to handle index mismatches
         // The series being compared need not be the same size; for index values that are present in 
@@ -857,7 +1000,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         // This seems like perhaps the new evolution on the numeric protocols might be useful. 
         // Once this is fixed to only allow subtractable data types at compile time, make sure to 
         // udpate the function header.
-        precondition(DataType.self == Double.self, "Currently, minus() only accepts Double series ")
+        precondition(ValueType.self == Double.self, "Currently, minus() only accepts Double series ")
         
         // TODO: this is weird but done to get rid of any potential nil values... 
         // how should this be done better?
@@ -871,7 +1014,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         
         let difference = selfValues.enumerated().map({(($0.1 as! Double) - (otherValues[$0.0] as! Double)) as! DataType})
         
-        let newSeries = DataSeries<IndexType, DataType>(difference, index: selfIndex, order: self._order, name: renamed, maxColumnWidth: self._maxColumnWidth)
+        let newSeries = DataSeries<IndexType, ValueType>(difference, index: selfIndex, order: self._order, name: renamed, maxColumnWidth: self._width)
         
         return newSeries
     }
@@ -884,7 +1027,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///    - other: data series to compare to this series
     ///    - method: method for estimating missing index values of other series (default: nearlin)
     /// - Returns: mean square error value
-    public func mse(_ other: DataSeries<IndexType, DataType>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
+    public func mse(_ other: DataSeries<IndexType, ValueType>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
     {        
         // TODO: add option to decide how to union indexes
         // The series being compared need not be the same size; for index values that are present in 
@@ -896,7 +1039,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         // This seems like perhaps the new evolution on the numeric protocols might be useful. 
         // Once this is fixed to only allow subtractable data types at compile time, make sure to 
         // udpate the function header.
-        precondition(DataType.self == Double.self, "Currently, mse() only accepts Double series ")
+        precondition(ValueType.self == Double.self, "Currently, mse() only accepts Double series ")
         
         // TODO: should this utilize minus() instead of directly computing? Is it faster to do directly?
         
@@ -918,7 +1061,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     
     /// Return list of the present (i.e. not nil) data in this series and corresponding indexes, as 
     /// well as the locations in the series storage.
-    public func present() -> (index: [IndexType], data: [DataType], locs: [Int])
+    public func present() -> (index: [IndexType], data: [ValueType], locs: [Int])
     {
         if self.isEmpty { return ([], [], []) }
         
@@ -931,7 +1074,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         return (indexList.map({IndexType.indexFromDouble($0)}), dataList, iList)
     }
     
-    public func query(_ index: IndexType, method: Nifty.Options.EstimationMethod = .nearlin) -> DataType?
+    public func query(_ index: IndexType, method: Nifty.Options.EstimationMethod = .nearlin) -> ValueType?
     {                                
         let q = self.query([index], method: method)
         assert(q.count <= 1, "Not possible--single query cannot return more than 1 point")
@@ -943,7 +1086,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         return q[0]
     }
     
-    public func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod = .nearlin) -> [DataType?]
+    public func query(_ indexes: [IndexType], method: Nifty.Options.EstimationMethod = .nearlin) -> [ValueType?]
     {
         // FIXME: because we are storing data in a non-sparse way, we have to filter the nils out
         // before calling interp1. This means that if a user wants to query lots of points, they have
@@ -977,7 +1120,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         if xData.isEmpty 
         { 
             let c = indexes.count            
-            let nils = [DataType?](repeating: nil, count: c)
+            let nils = [ValueType?](repeating: nil, count: c)
             return nils 
         }    
         
@@ -993,7 +1136,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///     - name: name for resampled series (optional)
     ///     - method: estimation method used to interpolate and/or extrapolate (default: nearlin)
     /// - Returns: a new series containing the resampled points
-    public func resample(start: IndexType, step: Double, n: Int, name: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<IndexType, DataType>
+    public func resample(start: IndexType, step: Double, n: Int, name: String? = nil, method: Nifty.Options.EstimationMethod = .nearlin) -> DataSeries<IndexType, ValueType>
     {
         // TODO: revisit the impact of resampling an unordered/unverified list...
         // Does that cause any problems? It's not clear that it doesn't     
@@ -1015,7 +1158,7 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
         
         // TODO: add to DataSeries constructor to allow passing list of doubles as index? We could
         // just convert the doubles based on the generic IndexType...
-        return DataSeries<IndexType, DataType>(data, index: indexTypes, order: self._order, name: name, maxColumnWidth: self._maxColumnWidth)        
+        return DataSeries<IndexType, ValueType>(data, index: indexTypes, order: self._order, name: name, maxColumnWidth: self._width)        
     }
     
     /// Compute the root-mean-square error between two series.
@@ -1031,12 +1174,171 @@ public struct DataSeries<IndexType: DataSeriesIndexProtocol, DataType>: CustomSt
     ///    - other: data series to compare to this series
     ///    - method: method for estimating missing index values of other series (default: nearlin)
     /// - Returns: root-mean-square error value
-    public func rms(_ other: DataSeries<IndexType, DataType>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
+    public func rms(_ other: DataSeries<IndexType, ValueType>, method: Nifty.Options.EstimationMethod = .nearlin) -> Double
     {
         // TODO: revisit how to decide which indexes from each series to use... symmetry?
         
         let error = self.mse(other, method: method)
         return sqrt(error)
+    }    
+ 
+    
+ 
+}
+
+
+//==================================================================================================
+// MARK: - INDEX AND VALUE DEFINITIONS
+//==================================================================================================
+
+/// Enumerates how the indexes of a series are ordered:
+/// - decreasing: sorted large-to-small, no duplicates
+/// - increasing: sorted small-to-large, no duplicates
+/// - nonIncreasing: sorted large-to-small, with possible duplicates
+/// - nonDecreasing: sorted small-to-large, with possible duplicates
+/// - unorderedUnique: not sorted, no duplicates
+/// - unordered: not sorted, with possible duplicates
+public enum DataSeriesIndexOrder
+{
+    case decreasing        
+    case increasing
+    case nonDecreasing
+    case nonIncreasing
+    case unorderedUnique
+    case unordered
+    
+    var isSorted: Bool 
+    {
+        switch self
+        {
+        case .decreasing, .increasing, .nonDecreasing, .nonIncreasing:
+            return true
+        case .unorderedUnique, .unordered:
+            return false
+        }
+    }
+    
+    var isUnique: Bool 
+    {
+        switch self
+        {
+        case .decreasing, .increasing, .unorderedUnique:
+            return true
+        case .nonDecreasing, .nonIncreasing, .unordered:
+            return false
+        }
+    }
+}
+
+/// Allows using arbitrary indices within a data series, where all index types use Doubles for the 
+/// underlying representation.
+public protocol DataSeriesIndexable: Comparable
+{
+    func indexToDouble() -> Double 
+    static func indexFromDouble(_ d: Double) -> Self
+}
+
+extension Double: DataSeriesIndexable
+{
+    public func indexToDouble() -> Double { return self }
+    public static func indexFromDouble(_ d: Double) -> Double { return d }
+}
+
+extension Date: DataSeriesIndexable
+{
+    public func indexToDouble() -> Double { return self.timeIntervalSince1970 }
+    public static func indexFromDouble(_ d: Double) -> Date { return Date(timeIntervalSince1970: d) }
+}
+
+/// Handles properly comparing data series indexes, essentially just wrapping up configuration 
+/// parameters for the isequals function. Reference semantics are desirable because all elements
+/// in a series should have the same comparator (otherwise you could have asymetric equality e.g.)
+public class DataSeriesIndexComparator
+{
+    internal let tolerance: Double
+    internal let comparison: Nifty.Options.isequal?
+    
+    /// A simple wrapper for the `isequal()` function that allows for specifying how indices in this
+    /// data series will be compared.
+    ///
+    /// - Parameters:
+    ///     - tolerance: tolerance value
+    ///     - comparison: comparison method
+    public init(tolerance: Double = eps.single, comparison: Nifty.Options.isequal? = nil)
+    {
+        self.tolerance = tolerance
+        self.comparison = comparison
+    }
+    
+    /// Compare two data series indexes as specified.
+    /// 
+    /// - Parameters:
+    ///     - a: left side index to compare
+    ///     - b: right side index to compare
+    /// - Returns: 0 if a == b, -1 if a < b, and 1 if a > b
+    internal func compare(_ a: DataSeriesIndex, _ b: DataSeriesIndex) -> Int
+    {
+        if isequal(a.index, b.index, within: self.tolerance, comparison: self.comparison) 
+        { 
+            return 0  
+        }
+        else if a.index < b.index    
+        { 
+            return -1 
+        }
+        else                         
+        { 
+            return 1  
+        }        
+    }
+}
+
+/// Wraps an index into a data series in a class in order to enable proper double comparison, use
+/// as dictionary key, and reference semantics.
+internal class DataSeriesIndex: Hashable, Comparable
+{
+    let index: Double
+    let comparator: DataSeriesIndexComparator
+    
+    init<T: DataSeriesIndexable>(_ i: T, _ c: DataSeriesIndexComparator)
+    {
+        self.index = i.indexToDouble()    
+        self.comparator = c
+    }
+    
+    var hashValue: Int
+    {
+        return index.hashValue
+    }
+    
+    // Note: Only one of the lhs and rhs comparators is used; the comparators must be equivalent if 
+    // symetric comparison is desired.
+    
+    static func == (lhs: DataSeriesIndex, rhs: DataSeriesIndex) -> Bool
+    {
+        return lhs.comparator.compare(lhs, rhs) == 0
+    }
+    
+    static func < (lhs: DataSeriesIndex, rhs: DataSeriesIndex) -> Bool
+    {
+        return lhs.comparator.compare(lhs, rhs) == -1
+    }
+    
+    static func > (lhs: DataSeriesIndex, rhs: DataSeriesIndex) -> Bool
+    {
+        return lhs.comparator.compare(lhs, rhs) == 1
+    }
+}
+
+/// Wraps the double representation of a value corresponding to data series index into a class in 
+/// order to get reference semantics.
+internal class DataSeriesValue<T>
+{
+    var value: T
+    
+    init(_ v: T)
+    {
+        self.value = v
     }    
 }
 

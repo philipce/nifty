@@ -20,7 +20,7 @@
  **************************************************************************************************/
 import Foundation
 
-public struct DataFrame<IndexType: DataSeriesIndexProtocol>: CustomStringConvertible
+public struct DataFrame<IndexType: DataSeriesIndexable>: CustomStringConvertible
 {
     //----------------------------------------------------------------------------------------------
     // MARK: - Stored Properties
