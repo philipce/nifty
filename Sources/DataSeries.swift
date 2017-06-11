@@ -177,7 +177,6 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         name: String? = nil, 
         width: Int? = nil)
     {        
-
         // Verify supplied index or create default index
         let dIndex: [Double]
         if let ind = index
@@ -285,7 +284,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         get 
         {
             let ind = index.indexToDouble()
-            if let val = self._presentIndex[ind] { return val.value }
+            if let val = self._presentIndex[ind] { return val.value[0] }
             else { return self.query(ind) }
         }
         
@@ -295,58 +294,29 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
             self.assign(newValue, index: index)
         }                
     }
-    
+
     /// Slicing with an open range returns a series that does not include the specified start and end points--only 
     /// indices between the specified start and end points are included.
     ///
     /// In case the specified range bounds do not exist in the series, the indices that are closest (smallest in 
     /// absolute difference, not in position) will be used.
     ///
-    /// In the case of duplicate indices, the first occurrence of the start index and the last occurrence of the end
-    /// index will be used, and the index/value pairs between the two will be selected.
+    /// In the case of duplicate indices, the occurrences that give the widest range will be used (e.g. in an 
+    /// increasing series, the first occurrence of the start index and the last occurrence of the end index), and 
+    /// the index/value pairs between the two will be selected.
     public subscript(_ slice: Range<IndexType>) -> DataSeries<IndexType, ValueType>
     {        
         // TODO: handle open ranges in swift 4
-        
-        
+                
         /// Query this series for the given range of values, using the series default estimation method.
-        ///
-        /// - Note: the upper and lower bounds will for series with duplicate values, 
         get 
-        {
-            let newName = self.name == nil ? nil : "\(self.name![\(slice)])"
-
-            let firstPos: Int
-            if self.contains(slice.lowerBound)
-            {
-                firstPos = self.get(occurence: 0, of: slice.lowerBound).position
-            }
-            else
-            {
-                let nearIndex = self.get(nearest: slice.lowerBound).index
-                firstPos = self.get(occurrence: 0, of: nearIndex).position
-            }
-
-            let lastPos: Int
-            if self.contains(slice.upperBound)
-            {
-                lastPos = self.get(occurence: -1, of: slice.upperBound).position
-            }
-            else
-            {
-                let nearIndex = self.get(nearest: slice.upperBound).index
-                lastPos = self.get(occurence: -1, of: nearIndex).position
-            }
-
-            guard firstPos <= lastPos, firstPos+1 < self._position.count, lastPos-1 >= 0 else
-            {
-                return DataSeries<IndexType, ValueType>(comparator: self.comparator, order: self.order, name: newName, 
-                    width: self.width)
-            }
+        {        
+            let (firstPos, lastPos) = self._resolveOpenRange(range: slice)
 
             let pairs = self._position[firstPos...lastPos]
             let indexes = pairs.map({$0.index})
-            let values = pairs.map({$0.index})            
+            let values = pairs.map({$0.value})    
+            let newName = self.name == nil ? nil : "\(self.name![\(slice)])"        
 
             return DataSeries<IndexType, ValueType>(values, index: indexes, comparator: self.comparator,
                 order: self.order, name: newName, width: self.width)
@@ -354,24 +324,25 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         
         /// For each index in the given series, set it to the given value in this series if it 
         /// exists; otherwise, insert it.
-        set(newValue)
+        set(newSeries)
         {
-            // TODO: create set/insert hybrid that sets if present, otherwise asserts (e.g. assign)
-            
+            let (firstPos, lastPos) = self._resolveOpenRange(range: slice)
+
+            let pairs = self._position[firstPos...lastPos]
+            let setPositions = Array(firstPos...lastPos)
+            let setIndexes = self._position[firstPos...lastPos].map({$0.index}) 
+            let newValues = newSeries.query(setIndexes)
+
+            assert(setPositions.count == setIndexes.count, "Position and Index lists must be same size")
+            assert(setIndexes.count == newValues.count, "Query must return same number of values as indexes")
+
+            for i in 0..<setPositions.count
+            {
+                let p = setPositions[i]
+                let v = newValues[i]
+                self._position[p].value = v
+            }
         }
-
-
-
-
-            public init(
-        _ values: [ValueType?] = [], 
-        index: [IndexType]? = nil, 
-        comparator: DataSeriesIndexComparator? = nil,
-        order: DataSeriesIndexOrder = .increasing, 
-        name: String? = nil, 
-        width: Int? = nil)
-        
-        
     }
     
     public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: ValueType?)]
@@ -642,11 +613,107 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     public func toVector() {} // (to Matrix for data frame)    
     public func toCSV() {}
     
+
+    //----------------------------------------------------------------------------------------------
+    // MARK: Internal Member Helpers
+    //----------------------------------------------------------------------------------------------
+        
+    /// Find the positions in this series of the indexes that constitute the given open range. The endpoints in the 
+    /// specified open range will not be included; instead, the closest indexes (in absolute difference, not position)
+    /// just inside either bound will be used. Since a Swift Range must be increasing, a decreasing/non-increasing
+    /// series will interpret the bounds on the given range in reverse order. For unordered series, the series will
+    /// be searched for endpoints both as if it were increasing and decreasing, and the points that result in the 
+    /// widest range will be used.
+    ///
+    /// - Parameters:
+    ///     - range: open range to find endpoints for
+    /// - Returns: left and right positions of endpoints
+    internal func _resolveOpenRange(range: Range<IndexType>) -> (Int, Int)
+    {
+        // Positions of the first and last element to be included in the open range
+        var firstPos: Int
+        var lastPos: Int
+
+        // For decreasing series, interpret the range in reverse order (so range.lowerBound is on the right side of the series)
+        let firstPos_dec: Int
+        let lastPos_dec: Int        
+        if self._order == .decreasing || self._order == .nonIncreasing || !self._order.isSorted
+        {
+            let greaterIndex = self.get(greaterThan: slice.lowerBound).index
+            lastPos_dec = self.get(occurrence: -1, of: greaterIndex).position
+
+            let lesserIndex = self.get(lessThan: slice.upperBound).index
+            firstPos_dec = self.get(occurence: 0, of: lesserIndex).position
+
+            // If this isn't an unordered series, set first and last position
+            if self._order.isSorted
+            {
+                firstPos = firstPos_dec
+                lastPos = lastPos_dec
+            }
+        }
+
+        // For increasing series, interpret the range in normal order (so range.lowerBound is on the left side of the series)
+        let firstPos_inc: Int
+        let lastPos_inc: Int
+        if self._order == .increasing || self._order == .nonDecreasing || !self._order.isSorted
+        {
+            let greaterIndex = self.get(greaterThan: slice.lowerBound).index
+            firstPos = self.get(occurrence: 0, of: greaterIndex).position
+
+            let lesserIndex = self.get(lessThan: slice.upperBound).index
+            lastPos = self.get(occurence: -1, of: lesserIndex).position
+
+            // If this isn't an unordered series, set first and last position
+            if self._order.isSorted
+            {
+                firstPos = firstPos_inc
+                lastPos = lastPos_inc
+            }
+        }
+
+        // For unordered series, use whichever (valid--can't have first after last) interpretation gives the largest range.
+        if (firstPos_inc <= lastPos_inc) && (abs(firstPost_inc - lastPos_inc) >= abs(firstPost_dec - lastPos_dec))
+        {
+            firstPos = firstPos_inc
+            lastPos = lastPos_inc
+        }
+        else
+        {
+            firstPos = firstPos_dec
+            lastPos = lastPos_dec
+        }
+
+        assert(firstPos <= lastPos, "Can't have first (\(firstPos)) before last (\(lastPos))")
+        assert(firstPos < self._position.count, "Can't have out of bounds first (\(firstPos))")
+        assert(lastPos < self._position.count, "Can't have out of bounds last (\(lastPos))")
+
+        return (firstPos, lastPos)
+    }
     
     
     
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //**********************************************************************************************
     // MARK: - OLD STUFF BELOW HERE
     //**********************************************************************************************    
