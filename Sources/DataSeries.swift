@@ -277,7 +277,6 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     // which could be first, middle, or last occurrence), for most of these anyway. Those functions that actually 
     // specifically are about finding the first e.g. would be the exception
 
-
     public subscript(_ index: IndexType) -> ValueType
     {
         /// Query this series for the given value, using the series default estimation method.
@@ -296,10 +295,8 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     }
 
     /// Slicing with an open range returns a series that does not include the specified start and end points--only 
-    /// indices between the specified start and end points are included.
-    ///
-    /// In case the specified range bounds do not exist in the series, the indices that are closest (smallest in 
-    /// absolute difference, not in position) will be used.
+    /// indices between the specified start and end points are included. The indices that are closest (smallest in 
+    /// absolute difference, not in position) will be the endpoints of the returned series.
     ///
     /// In the case of duplicate indices, the occurrences that give the widest range will be used (e.g. in an 
     /// increasing series, the first occurrence of the start index and the last occurrence of the end index), and 
@@ -322,10 +319,13 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
                 order: self.order, name: newName, width: self.width)
         }
         
-        /// For each index in the given series, set it to the given value in this series if it 
-        /// exists; otherwise, insert it.
+        /// Add (or set, if already present) each index/value pair from the given series into this series.    
         set(newSeries)
         {
+            // FIXME: this doesn't actually add the indexes from the other series, it only sets the indexes 
+            // currently in this series... maybe that's the semantic we want though? No, I think it makes the
+            // most sense to add and set indexes.
+
             let (firstPos, lastPos) = self._resolveOpenRange(range: slice)
 
             let pairs = self._position[firstPos...lastPos]
@@ -347,19 +347,26 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     
     public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: ValueType?)]
     {
-        /// Query this series for the given range of values, using the series default estimation 
-        /// method.
+        // FIXME: revisit thiss... this was done hastily and is probably not completely correct
+
+        /// Query this series for the given range of values, using the series default estimation method.
         get 
         {
-            // TODO: create default estimation method
+            let openRange = slice.lowerBound..<slice.upperBound
+            var slicedSeries = self[openRange]
+            let endpoints = self.query([slice.lowerBound, slice.upperBound])
+            slicedSeries.insert(endpoints[0], at: slice.lowerBound)
+            slicedSeries.insert(endpoints[1], at: slice.upperBound)
+            return openSlice
         }
         
-        /// For each index in the given series, set it to the given value in this series if it 
-        /// exists; otherwise, insert it.
-        set(newValue)
+        /// Add (or set, if already present) each index/value pair from the given series into this series.
+        set(newSeries)
         {
-            // TODO: create set/insert hybrid that sets if present, otherwise asserts (e.g. assign)
-            
+            let openRange = slice.lowerBound..<slice.upperBound
+            self[openRange] = newSeries
+            self.assign(newSeries[slice.lowerBound], index: slice.lowerBound)
+            self.assign(newSeries[slice.lowerBound], index: slice.upperBound)
         }
         
     }
