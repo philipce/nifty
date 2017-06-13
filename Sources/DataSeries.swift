@@ -279,10 +279,12 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
 
     public subscript(_ index: IndexType) -> ValueType
     {
-        /// Query this series for the given value, using the series default estimation method.
+        /// Query this series for the given value, using the series default estimation method if not present. 
+        /// For series that have duplicate indices, no guarantee is made as to which index instance the returned
+        /// value corresponds.
         get 
         {
-            let ind = index.indexToDouble()
+            let ind = DataSeriesIndex(index)
             if let val = self._presentIndex[ind] { return val.value[0] }
             else { return self.query(ind) }
         }
@@ -371,9 +373,30 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         
     }
 
-    /// Return value at given index if it exists, otherwise return nil.
-    public func get(_ index: IndexType) -> (position: Int, value: ValueType)?
+    /// Return positions and values corresponding to each instance of the given index.
+    ///
+    /// - Parameters:
+    ///     - index: index to retrieve position and value for
+    /// - Returns: list of tuples containing position and value; empty if the index is not in this series
+    public func get(_ index: IndexType) -> [(position: Int, value: ValueType?)]
     {
+        let ind = DataSeriesIndex(index)
+
+        var ret = [(Int, ValueType?)]()
+
+        if let vals = self._presentIndex[ind]
+        {
+            // FIXME: search self._position for ind 
+            // (binary if sorted, otherwise linear--quit when all vals found)
+            // Add each pos/val pair to list
+
+        }
+        else if self._absentIndex.contains(ind)
+        {
+            // FIXME: search self._position for ind 
+            // (binary if sorted, otherwise linear--quit when all vals found)
+            // Add each pos/val pair to list
+        }
         
     }
     
