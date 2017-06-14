@@ -296,6 +296,8 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         }                
     }
 
+    // TODO: allow setting/getting of one sided ranges in swift 4
+
     /// Slicing with an open range returns a series that does not include the specified start and end points--only 
     /// indices between the specified start and end points are included. The indices that are closest (smallest in 
     /// absolute difference, not in position) will be the endpoints of the returned series.
@@ -305,7 +307,7 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     /// the index/value pairs between the two will be selected.
     public subscript(_ slice: Range<IndexType>) -> DataSeries<IndexType, ValueType>
     {        
-        // TODO: handle open ranges in swift 4
+        
                 
         /// Query this series for the given range of values, using the series default estimation method.
         get 
@@ -315,19 +317,17 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
             let pairs = self._position[firstPos...lastPos]
             let indexes = pairs.map({$0.index})
             let values = pairs.map({$0.value})    
-            let newName = self.name == nil ? nil : "\(self.name![\(slice)])"        
+            let newName = self.name == nil ? nil : "\(self.name!)[\(slice)])"        
 
             return DataSeries<IndexType, ValueType>(values, index: indexes, comparator: self.comparator,
                 order: self.order, name: newName, width: self.width)
         }
-        
-        /// Add (or set, if already present) each index/value pair from the given series into this series.    
+                
+        /// For each index in this series in the given range, set its value to the value returned from querying the
+        /// index in the other series (interpolation, extrapolation, duplicate indexes, etc are all handled by the
+        /// query function according to the other series' settings)
         set(newSeries)
         {
-            // FIXME: this doesn't actually add the indexes from the other series, it only sets the indexes 
-            // currently in this series... maybe that's the semantic we want though? No, I think it makes the
-            // most sense to add and set indexes.
-
             let (firstPos, lastPos) = self._resolveOpenRange(range: slice)
 
             let pairs = self._position[firstPos...lastPos]
@@ -349,16 +349,17 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
     
     public subscript(_ slice: ClosedRange<IndexType>) -> [(index: IndexType, value: ValueType?)]
     {
-        // FIXME: revisit thiss... this was done hastily and is probably not completely correct
-
         /// Query this series for the given range of values, using the series default estimation method.
         get 
         {
             let openRange = slice.lowerBound..<slice.upperBound
             var slicedSeries = self[openRange]
             let endpoints = self.query([slice.lowerBound, slice.upperBound])
-            slicedSeries.insert(endpoints[0], at: slice.lowerBound)
-            slicedSeries.insert(endpoints[1], at: slice.upperBound)
+
+            // TODO: revisit the ordering on this to make sure it's correct. Can it ever go wrong? How would that be handled?
+            slicedSeries.prepend(endpoints[0], index: slice.lowerBound)
+            slicedSeries.append(endpoints[1], index: slice.upperBound)
+
             return openSlice
         }
         
@@ -367,8 +368,10 @@ public struct DataSeries<IndexType: DataSeriesIndexable, ValueType>: CustomStrin
         {
             let openRange = slice.lowerBound..<slice.upperBound
             self[openRange] = newSeries
-            self.assign(newSeries[slice.lowerBound], index: slice.lowerBound)
-            self.assign(newSeries[slice.lowerBound], index: slice.upperBound)
+
+            // TODO: revisit this, especially look at how/if this works on unordered, non-unique series
+            self.set(newSeries[slice.lowerBound], index: slice.lowerBound)
+            self.set(newSeries[slice.lowerBound], index: slice.upperBound)
         }
         
     }
