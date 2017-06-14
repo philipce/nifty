@@ -81,7 +81,7 @@ The goals of Nifty can be summarized as follows:
 
 Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done so, for the time being, we'd rather defer to other projects.
 - Graphical stuff, e.g. matplotlib
-- Time series stuff, e.g. pandas
+- ~~Time series stuff, e.g. pandas~~ Scratch that! We're in the process of adding this!
 - Modeling and simulation stuff, e.g. simulink
 
 ## Contributing
