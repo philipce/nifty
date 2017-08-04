@@ -46,7 +46,7 @@ If you decide to use a different system library for one of the required system m
 
 If you're building with Xcode, you need to compile with `-DNIFTY_XCODE_BUILD`. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (in the project settings -> "Build Settings", search for "Swift flags").
 
-Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". The current solution is to simply recreate the Xcode project from scratch. Suggestions for better ways to fix the problem are welcome!
+ Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". One possible fix: From the project navigation side bar, click on the project icon to bring up the project settings. SYMROOT (aka  Build Products Path) and OBJROOT (aka Intermediate Build Files Path) can be set in the Build Settings tab. From the Build Settings tab, search for SYMROOT or OBJROOT. It should bring up Build Products Path or Intermediate Build Files Path (if not, make sure the search bar is set to search "All", not just "Basic"). From there, you can set the paths as you wish (a reasonable default is $SRCROOT/build). For more info, see Apple's Xcode Build System Guide - Build Setting Reference.  
 
 ## Nifty Features
 
