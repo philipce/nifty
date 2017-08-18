@@ -1,6 +1,6 @@
 # Tensor Protocol
 
-* Proposal:[001]
+* Proposal: [001](https://github.com/nifty-swift/Nifty/blob/master/Documents/Evolution/001-tensor-protocol.md)
 * Author: Felix Fischer
 * Status: **Draft**
 
@@ -86,9 +86,9 @@ We propose a **new protocol**, called `TensorProtocol`, and an **extension** tha
 
 Current *Tensor*-derived types would conform to this protocol. This makes the following true:
 
-They explicity state that they are *Tensors*. This makes them usable as *TensorProtocol* objects.They would also inherit the default behavior, and be able to override it where it makes sense. 
+They explicity state that they are *Tensors*. This makes them usable as *TensorProtocol* objects. They would also inherit the default behavior, and be able to override it where it makes sense. 
 
-Finally of course, they can extend the protocol's functionality. This allows us to not lose the current space for design now and in the future for types that conform to the protocol.
+Finally of course, they can extend the protocol's functionality. This allows us to not lose the current space for design now and in the future for types that would conform to the protocol.
 
 ## Detailed design
 
