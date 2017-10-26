@@ -1,7 +1,7 @@
 [![status](https://travis-ci.org/nifty-swift/Nifty.svg?branch=master)](https://travis-ci.org/nifty-swift/Nifty)
 [![codecov](https://codecov.io/gh/nifty-swift/Nifty/branch/master/graph/badge.svg)](https://codecov.io/gh/nifty-swift/Nifty)
 ![plaforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS-lightgrey.svg)
-![swift](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)
+![swift](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)
 ![license](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 # Nifty
@@ -25,12 +25,12 @@ There are a number of options when it comes to getting up and running with Nifty
 
 The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start writing Nifty code!
 
-If you don't have Docker set up already, go here.
+If you don't have Docker set up already, go [here](https://docs.docker.com/engine/installation/).
 
 Once Docker is set up, the remaining steps are easy:
-- Pull down the image and start the container: `docker run -it niftyswift/nifty` -- this will start a shell inside the container, within a preconfigured project folder
+- Pull down the image and start the container: `docker run -it niftyswift/nifty` – this will start a shell inside the container, within a preconfigured project folder
 - Write your code (e.g. `vi main.swift`)
-- Run `swift build` -- this will pull down the Nifty library code
+- Run `swift build` – this will pull down the Nifty library code
 - Execute your program with `.build/debug/myapp`
 
 If you've already got a project on your host machine, you can mount it when you start the container and edit locally, e.g. `docker run -v /home/myapp:/myapp -it niftyswift/nifty`
