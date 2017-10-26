@@ -14,13 +14,34 @@ Not sure if Nifty is worth the effort of installing? Check out a [simple demo pr
 
 Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
-#### Xcode Installation
+### Installation
+
+There are a number of options when it comes to getting up and running with Nifty. In order of easiness:
+- Pull down the [Docker image](https://hub.docker.com/r/niftyswift/nifty/)
+- Use the included project file in Xcode
+- Install with the Swift Package Manager
+
+##### Docker
+
+The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start writing Nifty code!
+
+If you don't have Docker set up already, go here.
+
+Once Docker is set up, the remaining steps are easy:
+- Pull down the image and start the container: `docker run -it niftyswift/nifty` -- this will start a shell inside the container, within a preconfigured project folder
+- Write your code (e.g. `vi main.swift`)
+- Run `swift build` -- this will pull down the Nifty library code
+- Execute your program with `.build/debug/myapp`
+
+If you've already got a project on your host machine, you can mount it when you start the container and edit locally, e.g. `docker run -v /home/myapp:/myapp -it niftyswift/nifty`
+
+##### Xcode
 
 Xcode users can just use the included project file. Simply drag the project file into your own Xcode project, add Nifty to your target's dependencies, and `import Nifty` at the top of any files in which you wish to use Nifty!
 
 Nifty uses [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/). When built with Xcode, these are provided by the [Accelerate](https://developer.apple.com/reference/accelerate) framework. Since Accelerate is installed on macOS by default, no additional installation steps are needed.
 
-#### Swift Package Manager Installation
+##### Swift Package Manager
 
 Linux users (and those on macOS who prefer not to use Xcode) can install Nifty using the [Swift Package Manager](https://swift.org/package-manager/).
 
@@ -32,11 +53,11 @@ Once the dependencies are installed, using Nifty in your project simply requires
 
 Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-demo) to see an example of what your project manifest (the file called Package.swift) should look like and how easy it is to use Nifty!
 
-#### Usage
+### Usage
 
 Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org)!
 
-#### Troubleshooting
+### Troubleshooting
 
 If you're having troubles, you may find the following helpful:
 
