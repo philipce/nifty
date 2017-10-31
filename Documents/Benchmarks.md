@@ -9,10 +9,13 @@ These benchmarks are not inteded to be rigorous; rather, the intent is to simply
 ##### Descriptions
 
 1. Linear Algebra Operations
+
     1.1 Invert a 1000x1000 random matrix.
+
     1.2 Compute the Cholesky decomposition of a random 1000x1000 matrix.
 
 2. Random Numbers
+
     2.1 Create a random 1,000,000-dimensional vector.
 
 ##### Results
