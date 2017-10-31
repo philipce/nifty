@@ -1,5 +1,6 @@
 .DS_Store
 *xcuserdata*
 /.build
+Package.pins
 /Packages
 Sources/main.swift
