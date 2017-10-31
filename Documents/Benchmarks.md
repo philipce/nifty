@@ -4,7 +4,7 @@ This document describes the various [performance benchmarks](https://github.com/
 
 These benchmarks are not inteded to be rigorous; rather, the intent is to simply provide a *rough* estimate of how Nifty performs relative to other packages. More benchmarks will be added as Nifty matures.
 
-*Note: We believe in avoiding premature optimization--Nifty is new and we're just trying to get things implemented. As Nifty matures, we fully expect to see significant performance improvements in some areas.*
+*Note: We believe in avoiding premature optimization—Nifty is new and we're just trying to get things implemented. As Nifty matures, we fully expect to see significant performance improvements in some areas.*
 
 ##### Descriptions
 

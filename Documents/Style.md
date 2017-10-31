@@ -26,7 +26,7 @@ the `max` function (plus public overloads, internal and private stuff).
 ##### Code
 
 - Lines should end at 100 characters, but it's flexible if your line is close.
-- Avoid overcommenting code--make code as self-documenting as possible, adding comments only when an needed to explain the motivation, a tricky bit, etc.
+- Avoid overcommenting code—make code as self-documenting as possible, adding comments only when an needed to explain the motivation, a tricky bit, etc.
 - Prefer putting comments above a line of code rather than at the end.
 - Avoid /* */ comments in favor of commenting each line.
 - Avoid using `throws`. Having to `try` everything is cumbersome, and most of these functions will only fail in case of an unrecoverable programmer error anyway (think index out of bounds, matrix dimension mismatch, etc.). Instead, use the built in `warning` and `error` functions.
