@@ -20,5 +20,5 @@ These benchmarks are not inteded to be rigorous; rather, the intent is to simply
 | Benchmark       | Nifty          | MATLAB          | Python          | Date/Version           |
 |-----------------|----------------|-----------------|-----------------|------------------------|
 | 1.1             | **78.91 ms**   | 84.78 ms        | 103.71 ms       | 19 Jan 2017 / 1.0.0    |
-| 1.2             | 32.79          | **14.22 ms**    | 24.35 ms        | 19 Jan 2017 / 1.0.0    |
+| 1.2             | 32.79 ms       | **14.22 ms**    | 24.35 ms        | 19 Jan 2017 / 1.0.0    |
 | 2.1             | 7.74 ms        | 15.51 ms        | **6.89 ms**     | 19 Jan 2017 / 1.0.0    |
