@@ -29,7 +29,7 @@ the `max` function (plus public overloads, internal and private stuff).
 - Avoid overcommenting code--make code as self-documenting as possible, adding comments only when an needed to explain the motivation, a tricky bit, etc.
 - Prefer putting comments above a line of code rather than at the end.
 - Avoid /* */ comments in favor of commenting each line.
-- Use `throws` sparingly. Having to `try` everything is cumbersome, and most of these functions will only fail in case of an unrecoverable programmer error anyway (think index out of bounds, matrix dimension mismatch, etc.). Instead, consider using `precondition`.
+- Avoid using `throws`. Having to `try` everything is cumbersome, and most of these functions will only fail in case of an unrecoverable programmer error anyway (think index out of bounds, matrix dimension mismatch, etc.). Instead, use the built in `warning` and `error` functions.
 
 ##### Function Headers
 
@@ -48,7 +48,7 @@ Every public function/struct/class/variable/etc. must have a header comment (it 
 ///     - x: the x component of the vector (no need to be a complete sentence)
 ///     - y: the y component of the vector 
 ///     - z: the z component of the vector 
-/// - Throws: if some type of error occurs (no need to enumerate specific errors)
+/// - Throws: some info about errors/warnings that could occur
 /// - Returns: computed vector magnitude
 ```
 
@@ -78,6 +78,6 @@ Every file ought to have a header that indicates purpose, original author, origi
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *  Copyright [yyyy] [name of copyright owner]
+ *  Copyright [yyyy] [name of copyright owner(s)]
  ******************************************************************************/
 ```
