@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-Not sure if Nifty is worth the effort of installing? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](http://nifty-swift.org) to help you decide.
+Not sure if Nifty is what you're looking for? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](http://nifty-swift.org) to help you decide.
 
 Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
@@ -23,7 +23,7 @@ There are a number of options when it comes to getting up and running with Nifty
 
 ##### Docker
 
-The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start writing Nifty code!
+The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start writing Nifty code.
 
 If you don't have Docker set up already, go [here](https://docs.docker.com/engine/installation/).
 
@@ -55,7 +55,7 @@ Refer to the aforementioned [demo project](https://github.com/nifty-swift/Nifty-
 
 ### Usage
 
-Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many (most) of the  function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org)!
+Nifty is intended to be simple and easy to use. For this reason, we've decided to structure things similarly to MATLAB. In fact, many of the function names in Nifty are the same as MATLAB. The hope is that MATLAB users will feel right at home and that users of similar packages (e.g. NumPy) will have an easy transition as well, making adoption as smooth as possible for as many people as possible. Check out the [API](http://nifty-swift.org)!
 
 ### Troubleshooting
 
@@ -86,7 +86,7 @@ See our [status page](Documents/Status.md) for details on the implementation sta
 
 ## Tests and Benchmarks
 
-Nifty uses the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework to manage unit tests. Tests can be run directly from Xcode or, if using the Swift Package Manager, by executing `swift test` in the repository root directory.
+Nifty uses the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework to manage unit tests. Tests can be run directly from Xcode or, if not using Xcode, by executing `swift test` in the repository root directory.
 
 The goal is for Nifty to provide correctness and performance similar to other numerical computing standards. We'll be testing and benchmarking mainly against MATLAB and NumPy. Check out the [status page](Documents/Status.md) to see where the test coverage is currently at.
 
@@ -95,12 +95,12 @@ You can check out the results of some simple benchmarks [here](https://github.co
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
 - Provide a viable alternative to packages such as NumPy and MATLAB for those who wish to develop in Swift, whether on macOS or Linux.
-- Develop fun and interesting code, especially in the areas of artificial intelligence and machine learning.
-- Do as much in Swift as possible, resorting to external libraries only when necessary.
-- Make exploration of the code as simple as possible, through plain organization and clean, easy-to-read code.
+- Develop fun and interesting code and algorithms.
+- Do as much in Swift as feasible.
+- Make exploration of the code as simple as possible.
 - Serve as a learning opportunity for those wishing to explore numerical computing.
 
-Nifty is intended to be broad in scope; almost any generally interesting tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done so, for the time being, we'd rather defer to other projects.
+Nifty is intended to be broad in scope; almost any generally interesting/useful tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done so, for the time being, we'd rather defer to other projects.
 - Graphical stuff, e.g. matplotlib
 - ~~Time series stuff, e.g. pandas~~ Scratch that! We're in the process of adding this!
 - Modeling and simulation stuff, e.g. simulink
@@ -121,9 +121,7 @@ To contribute code to this project:
 
 For anything else, feel free to open an issue!
 
-## Distribution
-
-If you want to statically link Nifty and all its dependencies (e.g. for distribution), follow the steps below... TODO: create guide; for now, [here's a post](http://stackoverflow.com/questions/36570497/compile-c-code-and-expose-it-to-swift-under-linux/) that may be helpful.
+We're also on Slack. If you want to join the conversation, let us know.
 
 ## License
 
