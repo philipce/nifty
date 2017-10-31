@@ -167,6 +167,12 @@ Other features:
 - Interpolation methods: e.g interp1, interp2, spline
 - Interface to a third party plotting library
 
+### Nifty 1.2
+
+Estimated release: 2018
+
+Start work on AI and machine learning features. Details TBD.
+
 ### Future Work
 
 This is an unorganized list of ideas of things we might want to include with Nifty: 
