@@ -80,9 +80,7 @@ We are currently working on getting the core set of general math and linear alge
 - wrappers on glibc/math.h
 - basic functions related to statistics and probability
 
-Once the core set of features is complete, our next focus will be on developing a core set of AI and machine learning functionality.
-
-See our [status page](Documents/Status.md) for details on the implementation status of all features.
+See our [status page](Documents/Status.md) for details on the implementation status of all features, as well as plans for the future.
 
 ## Tests and Benchmarks
 
@@ -100,14 +98,11 @@ The goals of Nifty can be summarized as follows:
 - Make exploration of the code as simple as possible.
 - Serve as a learning opportunity for those wishing to explore numerical computing.
 
-Nifty is intended to be broad in scope; almost any generally interesting/useful tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. A few of the things that Nifty does not *currently* intend to provide are listed below. These items would take a lot of effort to do correctly and would distract from getting the core functionality done so, for the time being, we'd rather defer to other projects.
-- Graphical stuff, e.g. matplotlib
-- ~~Time series stuff, e.g. pandas~~ Scratch that! We're in the process of adding this!
-- Modeling and simulation stuff, e.g. simulink
+Nifty is intended to be broad in scope; almost any generally interesting/useful tool related to numerical or scientific computing, data structures, algorithms, etc. is fair game. However, we will prioritize the core functionality as outlined on the [status page](Documents/Status.md).
 
 ## Contributing
 
-All contributions are welcome—whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. If you'd like to contribute, but aren't sure exactly what, visit the [status page](Documents/Status.md) for ideas--a lot of things that wouldn't require a great deal of time or expertise remain unimplemented or untested!
+All contributions are welcome—-whether suggestions, submissions, requests, or whatever! If you think of a nifty feature we ought to have, let us know. If you'd like to contribute, but aren't sure exactly what, visit the [status page](Documents/Status.md) for ideas--a lot of things that wouldn't require a great deal of time or expertise remain unimplemented or untested!
 
 To contribute code to this project:
 
