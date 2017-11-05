@@ -47,17 +47,17 @@ internal class UniformRandomGenerator
 
     func uint64() -> UInt64
     {
-        self.u = UInt64.addWithOverflow(UInt64.multiplyWithOverflow(self.u, 2862933555777941757).0, 
-            7046029254386353087).0
+        self.u = (self.u.multipliedReportingOverflow(by: 2862933555777941757).0)
+            .addingReportingOverflow(7046029254386353087).0
         self.v ^= self.v >> 17
         self.v ^= self.v << 31
         self.v ^= self.v >> 8
-        let w_temp = UInt64.multiplyWithOverflow(4294957665, (self.w & 0xffffffff)).0
-        self.w = UInt64.addWithOverflow(w_temp, self.w >> 32).0
+        let w_temp = UInt64(4294957665).multipliedReportingOverflow(by: self.w & 0xffffffff).0
+        self.w = w_temp.addingReportingOverflow(self.w >> 32).0
         var x: UInt64 = self.u ^ (self.u << 21) 
         x ^= x >> 35
         x ^= x << 4
-        let retVal = UInt64.addWithOverflow(x, self.v).0 ^ self.w
+        let retVal = x.addingReportingOverflow(self.v).0 ^ self.w
 
         return retVal
     }

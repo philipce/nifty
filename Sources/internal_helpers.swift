@@ -209,7 +209,7 @@ internal func _formatElement<T>(_ element: T, _ format: NumberFormatter) -> Stri
         var s = fmt.string(from: NSNumber(value: abs(el))) ?? "#"
 
         // if element doesn't fit in desired width, format in minimal notation
-        if s.characters.count > fmt.formatWidth            
+        if s.count > fmt.formatWidth
         {
             fmt.maximumSignificantDigits = fmt.formatWidth-4 // for 'E-99'
             fmt.numberStyle = .scientific
@@ -237,7 +237,7 @@ internal func _formatElement<T>(_ element: T, _ format: NumberFormatter) -> Stri
         s = s.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // abbreviate or squash s if needed
-        if s.characters.count > fmt.formatWidth
+        if s.count > fmt.formatWidth
         {
             if fmt.formatWidth >= 4
             {

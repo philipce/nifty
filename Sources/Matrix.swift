@@ -418,7 +418,7 @@ public struct Matrix<T>: CustomStringConvertible
             // form row header
             let header = "R\(r):"
             curRow.append(header)
-            colWidths[0] = max(colWidths[0], header.characters.count)
+            colWidths[0] = max(colWidths[0], header.count)
 
 			for c in 0..<self.columns
 			{				
@@ -427,7 +427,7 @@ public struct Matrix<T>: CustomStringConvertible
                 curRow.append(s)
 
                 // advance index by 1 because element 0 is row header
-                colWidths[c+1] = max(colWidths[c+1], s.characters.count)
+                colWidths[c+1] = max(colWidths[c+1], s.count)
 			}			
 			lines.append(curRow)
 		}
@@ -439,11 +439,11 @@ public struct Matrix<T>: CustomStringConvertible
             var str = [String]() 
             for cs in 0..<lines[0].count
             {
-                var s = lines[rs][cs]
+                let s = lines[rs][cs]
 
-                assert(s.characters.count <= colWidths[cs], "Max column width was computed incorrectly")
+                assert(s.count <= colWidths[cs], "Max column width was computed incorrectly")
                 
-                let pad = String(repeating: " ", count: colWidths[cs]-s.characters.count)
+                let pad = String(repeating: " ", count: colWidths[cs]-s.count)
 
                 str.append(pad+s)
             }

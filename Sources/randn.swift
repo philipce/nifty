@@ -127,7 +127,7 @@ public func randn(_ rows: Int, _ columns: Int, mean: Double = 0.0, std: Double =
         {
             threadLock.wait()
             let ts = threadSeed
-            threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
+            threadSeed = threadSeed.addingReportingOverflow(UInt64(Date().timeIntervalSince1970)).0
             threadLock.signal()
             let urg = UniformRandomGenerator(seed: ts)
             curRandGen = NormalRandomGenerator(mu: mean, sigma: std, ugen: urg)

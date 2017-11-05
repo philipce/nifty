@@ -83,7 +83,7 @@ public func rand(_ rows: Int, _ columns: Int, min: Double = 0.0, max: Double = 1
             // ensure that each thread gets a differently seeded generator
             threadLock.wait()
             let ts = threadSeed
-            threadSeed = UInt64.addWithOverflow(threadSeed, UInt64(Date().timeIntervalSince1970)).0
+            threadSeed = threadSeed.addingReportingOverflow(UInt64(Date().timeIntervalSince1970)).0
             threadLock.signal()
             curRandGen = UniformRandomGenerator(seed: ts) 
         }
