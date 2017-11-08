@@ -29,28 +29,98 @@
 import Foundation
 
 /// Data structure for a 2-D, row-major order matrix.
-public struct Matrix<T>: CustomStringConvertible
+public struct Matrix<Element>: TensorProtocol
 {
-	/// Number of elements in the matrix.
 	public let count: Int
-
-	/// Number of [rows, columns] in the matrix.
 	public var size: [Int]
+	public var data: [Element]
+	public var name: String?
+	public var showName: Bool
+	public var format: NumberFormatter
+    
+    /// Number of rows in the Matrix.
     public var rows: Int { return self.size[0] }
+    
+    /// Number of columns in the Matrix.
     public var columns: Int { return self.size[1] }
 
-	/// Data contained in matrix in row-major order.
-	public var data: [T]
+    //----------------------------------------------------------------------------------------------
+    // MARK: INITIALIZE
+    //----------------------------------------------------------------------------------------------
+    
+    public init(_ size: [Int], _ data: [Element], name: String? = nil, showName: Bool? = nil)
+    {
+        precondition(size.count == 2, "Matrix must be 2 dimensional")
+        self.init(size[0], size[1], data, name: name, showName: showName)
+    }
+    
+    public init(_ size: [Int], value: Element, name: String? = nil, showName: Bool? = nil)
+    {
+        precondition(size.count == 2, "Matrix must be 2 dimensional")
+        self.init(size[0], size[1], value: value, name: name, showName: showName)
+    }
+    
+    public init<T>(_ t: T, name: String? = nil, showName: Bool? = nil) where T : TensorProtocol, Element == T.Element
+    {
+        precondition(t.size.count > 0 , "Tensor must have at least 1 dimension")
+        
+        let size: [Int]
+        if t.size.count == 1
+        {
+            size = [1, t.size[0]]
+        }
+        else
+        {
+            size = t.size
+        }
 
-	/// Optional name of matrix (e.g., for use in display).
-	public var name: String?
-
-	/// Determine whether to show name when displaying matrx.
-	public var showName: Bool
-
-	/// Formatter to be used in displaying matrix elements.
-	public var format: NumberFormatter    
-
+        self.init(size, t.data, name: name, showName: showName)
+    }
+    
+    public init(_ rawDescription: String, name: String? = nil, showName: Bool? = nil)
+    {
+        // FIXME: implement
+        fatalError("Not yet implemented")
+    }
+    
+    /// Initialize a new matrix, inferring size from the provided data.
+    ///
+    /// - Parameters:
+    ///    - data: matrix data where each inner array represents an entire row
+    ///    - name: optional name of matrix
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ data: [[Element]], name: String? = nil, showName: Bool? = nil)
+    {
+        let size = [data.count, data[0].count]
+        
+        var flatData = [Element]()
+        for row in data
+        {
+            precondition(row.count == size[1], "Matrix must have same number of columns in all rows")
+            flatData.append(contentsOf: row)
+        }
+        
+        self.init(size, flatData, name: name, showName: showName)
+    }
+    
+    /// Initialize a new matrix with the given dimensions and uniform value.
+    ///
+    /// - Parameters:
+    ///    - rows: number of rows in matrix
+    ///    - columns: number of columns in matrix
+    ///       - value: single value repeated throughout matrix
+    ///       - name: optional name of matrix
+    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
+    ///        given a name, otherwise to false
+    public init(_ rows: Int, _ columns: Int, value: Element, name: String? = nil, showName: Bool? = nil)
+    {
+        let count = rows * columns
+        precondition(count > 0, "Matrix must have at least one element")
+        let data = Array<Element>(repeating: value, count: count)
+        self.init(rows, columns, data, name: name, showName: showName)
+    }
+    
 	/// Initialize a new matrix with the given dimensions from a row-major ordered array.
 	///
 	/// - Parameters:
@@ -60,7 +130,7 @@ public struct Matrix<T>: CustomStringConvertible
 	///	   - name: optional name of matrix
 	///	   - showName: determine whether to print the matrix name; defaults to true if the matrix is
     ///        given a name, otherwise to false
-	public init(_ rows: Int, _ columns: Int, _ data: [T], name: String? = nil, showName: Bool? = nil)
+	public init(_ rows: Int, _ columns: Int, _ data: [Element], name: String? = nil, showName: Bool? = nil)
 	{   
         precondition(rows >= 1 && columns >= 1, "Matrix have at least 1 row and 1 column")      
 
@@ -99,41 +169,10 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - name: optional name of matrix
     ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
     ///        given a name, otherwise to false
-    public init(_ side: Int, _ data: [T], name: String? = nil, showName: Bool? = nil)
+    public init(_ side: Int, _ data: [Element], name: String? = nil, showName: Bool? = nil)
     {
         self.init(side, side, data, name: name, showName: showName)
     }
-
-    /// Initialize a new matrix of the given size from a row-major ordered array.
-    ///
-    /// - Parameters:
-    ///    - size: size of matrix  
-    ///    - data: matrix data in row-major order
-    ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ size: [Int], _ data: [T], name: String? = nil, showName: Bool? = nil)
-    {
-        precondition(size.count == 2, "Matrix must be 2 dimensional")
-        self.init(size[0], size[1], data, name: name, showName: showName)
-    }
-
-	/// Initialize a new matrix with the given dimensions and uniform value.
-	///
-	/// - Parameters:
-    ///    - rows: number of rows in matrix
-    ///    - columns: number of columns in matrix
-	///	   - value: single value repeated throughout matrix
-	///	   - name: optional name of matrix
-	///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-	public init(_ rows: Int, _ columns: Int, value: T, name: String? = nil, showName: Bool? = nil)
-	{
-        let count = rows * columns
-        precondition(count > 0, "Matrix must have at least one element")
-		let data = Array<T>(repeating: value, count: count)
-		self.init(rows, columns, data, name: name, showName: showName)
-	}
 
     /// Initialize a new square matrix with the given dimensions and uniform value.
     ///
@@ -143,114 +182,21 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - name: optional name of matrix
     ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
     ///        given a name, otherwise to false
-    public init(_ side: Int, value: T, name: String? = nil, showName: Bool? = nil)
+    public init(_ side: Int, value: Element, name: String? = nil, showName: Bool? = nil)
     {
         self.init(side, side, value: value, name: name, showName: showName)
     }
 
-    /// Initialize a new matrix of the given size and uniform value.
-    ///
-    /// - Parameters:
-    ///    - size: size of matrix
-    ///    - value: single value repeated throughout matrix
-    ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool? = nil)
-    {
-        precondition(size.count == 2, "Matrix must be 2 dimensional")
-        self.init(size[0], size[1], value: value, name: name, showName: showName)
-    }
-	
-    /// Initialize a new matrix, inferring size from the provided data.
-    ///
-    /// - Parameters:
-    ///    - data: matrix data where each inner array represents an entire row
-    ///    - name: optional name of matrix
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ data: [[T]], name: String? = nil, showName: Bool? = nil)
-    {        
-        let size = [data.count, data[0].count]
-
-        var flatData = [T]()
-        for row in data
-        {
-            precondition(row.count == size[1], "Matrix must have same number of columns in all rows")
-            flatData.append(contentsOf: row)
-        }
-                
-        self.init(size, flatData, name: name, showName: showName)
-    }    
-
-    /// Initialize a new matrix from the data in a given vector.
-    ///
-    /// - Parameters:
-    ///    - vector: vector to initialize from
-    ///    - name: optional name of new matrix
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(1, vector.count, vector.data, name: name, showName: showName)
-
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(vector.format)
-    }
-    
-	/// Initialize a new matrix from the data in a given matrix.
-	///
-	/// - Parameters:
-	///    - matrix: matrix to copy
-	///    - name: optional name of new matrix, defaults to no name
-	///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-	public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
-	{
-        self.init(matrix.size, matrix.data, name: name, showName: showName)
-
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(matrix.format)
-        
-	}
-
-    /// Initialize a new matrix from the data in a given tensor.
-    ///
-    /// - Parameters:
-    ///    - tensor: tensor to copy
-    ///    - name: optional name of new matrix, defaults to no name
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        precondition(tensor.size.count == 2, "Tensor must be 2D to initialize Matrix")
-        self.init(tensor.size, tensor.data, name: name, showName: showName)
-        
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(tensor.format)
-    }
-
-    /// Initialize a new matrix from a comma separated string.
-    ///
-    /// The given csv string must be in the format returned by Matrix.csv.
-    ///
-    /// - Parameters:
-    ///    - csv: comma separated string containing matrix data
-    ///    - name: optional name of new matrix, defaults to no name
-    ///    - showName: determine whether to print the matrix name; defaults to true if the matrix is
-    ///        given a name, otherwise to false
-    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
-    {
-        // FIXME: implement
-        fatalError("Not yet implemented")
-    }
+    //----------------------------------------------------------------------------------------------
+    // MARK: SUBSCRIPT
+    //----------------------------------------------------------------------------------------------
 
     /// Access a single element of the matrix with a row-major linear index.
     ///
     /// - Parameters:
     ///    - index: linear index into matrix
     /// - Returns: single value at index
-    public subscript(_ index: Int) -> T
+    public subscript(_ index: Int) -> Element
     {
         get
         {
@@ -263,7 +209,6 @@ public struct Matrix<T>: CustomStringConvertible
             precondition(index >= 0 && index < self.count, "Matrix subscript out of bounds")
             self.data[index] = newVal
         }
-
     }
 
     /// Access a single element of the matrix with a row, column subscript.
@@ -272,7 +217,7 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - row: row subscript
     ///    - column: column subscript
     /// - Returns: single value at subscript
-	public subscript(_ row: Int, _ column: Int) -> T
+	public subscript(_ row: Int, _ column: Int) -> Element
 	{
 		get
 		{
@@ -292,7 +237,7 @@ public struct Matrix<T>: CustomStringConvertible
     /// - Parameters:
     ///    - index: linear index range 
     /// - Returns: new matrix composed of slice
-    public subscript(_ index: SliceIndex) -> Matrix<T>
+    public subscript(_ index: SliceIndex) -> Matrix<Element>
     {
         get
         {
@@ -319,7 +264,7 @@ public struct Matrix<T>: CustomStringConvertible
     ///    - rows: row range
     ///    - columns: column range
 	/// - Returns: new matrix composed of slice
-	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix<T>
+	public subscript(_ rows: SliceIndex, _ columns: SliceIndex) -> Matrix<Element>
 	{
 		get 
 		{ 
@@ -337,7 +282,7 @@ public struct Matrix<T>: CustomStringConvertible
 			}			
 
 			// start reading from matrix, rolling over each dimension
-			var newData = [T]()
+			var newData = [Element]()
 			var curSub = startSub
 			while true
 			{
@@ -391,6 +336,10 @@ public struct Matrix<T>: CustomStringConvertible
 		}
 	}    
 
+    //----------------------------------------------------------------------------------------------
+    // MARK: DISPLAY
+    //----------------------------------------------------------------------------------------------
+    
 	/// Return matrix contents in an easily readable grid format.
 	///
     /// - Note: The formatter associated with this matrix is used as a suggestion; elements may be
@@ -456,14 +405,14 @@ public struct Matrix<T>: CustomStringConvertible
     /// Return matrix representation in unformatted, comma separated list.
     ///
     /// Elements of a row are comma separated. Rows are separated by newlines.
-    public var csv: String
+    public var rawDescription: String
     {   
         var s = [String]()
         for r in 0..<self.rows
         {
             let row = self[r, 0..<self.columns]
             let v = Vector(row)
-            s.append(v.csv)
+            s.append(v.rawDescription)
         }
 
         return s.joined(separator: "\n")

@@ -22,23 +22,43 @@
 import Foundation
 
 /// Data structure for a vector.
-public struct Vector<T>: CustomStringConvertible
+public struct Vector<Element>: TensorProtocol
 {
-    /// Number of elements in vector.
     public let count: Int
-
-    /// Data contained in vector.
-    public var data: [T]
-
-    /// Optional name of vector for use in display
+    public var size: [Int]
+    public var data: [Element]
     public var name: String?
-
-    /// Determine whether to show name when displaying matrx.
     public var showName: Bool
-
-    /// Formatter to be used in displaying matrix elements.
     public var format: NumberFormatter
 
+    //----------------------------------------------------------------------------------------------
+    // MARK: INITIALIZE
+    //----------------------------------------------------------------------------------------------
+    
+    public init(_ size: [Int], _ data: [Element], name: String? = nil, showName: Bool? = nil)
+    {
+        precondition(size.count == 1, "Vector must have 1 dimension")
+        precondition(size[0] == data.count, "Vector size must match given data")
+        self.init(data, name: name, showName: showName)
+    }
+    
+    public init(_ size: [Int], value: Element, name: String? = nil, showName: Bool? = nil)
+    {
+        precondition(size.count == 1, "Vector must have 1 dimension")
+        self.init(size[0], value: value, name: name, showName: showName)
+    }
+    
+    public init<T>(_ t: T, name: String? = nil, showName: Bool? = nil) where T : TensorProtocol, Element == T.Element
+    {
+        self.init(t.data, name: name, showName: showName)
+    }
+    
+    public init(_ rawDescription: String, name: String? = nil, showName: Bool? = nil)
+    {
+        // FIXME: implement
+        fatalError("Not yet implemented")
+    }
+    
     /// Initialize a new vector from a list of data.
     ///
     /// - Parameters:
@@ -46,11 +66,12 @@ public struct Vector<T>: CustomStringConvertible
     ///    - name: optional name of vector
     ///    - showName: determine whether to print the vector name; defaults to true if the vector is
     ///        given a name, otherwise to false
-    public init(_ data: [T], name: String? = nil, showName: Bool? = nil)
+    public init(_ data: [Element], name: String? = nil, showName: Bool? = nil)
     {
         precondition(data.count > 0, "Vector have at least 1 element")
 
         self.count = data.count
+        self.size = [data.count]
         self.data = data
         self.name = name
         
@@ -81,79 +102,23 @@ public struct Vector<T>: CustomStringConvertible
     ///    - name: optional name of vector
     ///    - showName: determine whether to print the vector name; defaults to true if the vector is
     ///        given a name, otherwise to false
-    public init(_ count: Int, value: T, name: String? = nil, showName: Bool? = nil)
+    public init(_ count: Int, value: Element, name: String? = nil, showName: Bool? = nil)
     {
         precondition(count > 0, "Vector have at least 1 element")
 
-        self.init(Array<T>(repeating: value, count: count), name: name, showName: showName)
+        self.init(Array<Element>(repeating: value, count: count), name: name, showName: showName)
     }    
 
-    /// Initialize a new vector from the data in a given vector.
-    ///
-    /// - Parameters:
-    ///    - vector: vector to copy
-    ///    - name: optional name of new vector
-    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        given a name, otherwise to false
-    public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(vector.data, name: name, showName: showName)
-        
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(vector.format)
-    }
-
-    /// Initialize a new vector from the data in a given matrix.
-    ///
-    /// - Parameters:
-    ///    - matrix: matrix to vectorize
-    ///    - name: optional name of new vector
-    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        given a name, otherwise to false
-    public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(matrix.data, name: name, showName: showName)
-        
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(matrix.format)
-    }
-
-    /// Initialize a new vector from the data in a given tensor.
-    ///
-    /// - Parameters:
-    ///    - tensor: tensor to vectorize
-    ///    - name: optional name of new vector
-    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        given a name, otherwise to false
-    public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(tensor.data, name: name, showName: showName)
-        
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(tensor.format)
-    }
-
-    /// Initialize a new vector from a comma separated string.
-    ///
-    /// The given csv string must be in the format returned by Vector.csv.
-    ///
-    /// - Parameters:
-    ///    - csv: comma separated string containing vector data
-    ///    - name: optional name of new vector
-    ///    - showName: determine whether to print the vector name; defaults to true if the vector is
-    ///        given a name, otherwise to false
-    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
-    {
-        // FIXME: implement
-        fatalError("Not yet implemented")
-    }
+    //----------------------------------------------------------------------------------------------
+    // MARK: SUBSCRIPT
+    //----------------------------------------------------------------------------------------------
 
     /// Access a single element of the vector.
     ///
     /// - Parameters:
     ///     - s: index into vector
     /// - Returns: single value at index/subscript for get
-    public subscript(_ index: Int) -> T
+    public subscript(_ index: Int) -> Element
     {
         get
         {
@@ -173,7 +138,7 @@ public struct Vector<T>: CustomStringConvertible
     /// - Parameters:
     ///     - s: range defining the vector slice
     /// - Returns: new vector composed of slice
-    public subscript(_ s: SliceIndex) -> Vector<T>
+    public subscript(_ s: SliceIndex) -> Vector<Element>
     {
         get 
         {
@@ -193,6 +158,10 @@ public struct Vector<T>: CustomStringConvertible
             return
         }
     }
+    
+    //----------------------------------------------------------------------------------------------
+    // MARK: DISPLAY
+    //----------------------------------------------------------------------------------------------
 
     /// Return vector contents in an easily readable format.
     ///
@@ -223,7 +192,7 @@ public struct Vector<T>: CustomStringConvertible
     }
 
     /// Return vector representation in unformatted, comma separated list.
-    public var csv: String
+    public var rawDescription: String
     {    
         return (self.data.map({"\($0)"})).joined(separator: ",")
     }

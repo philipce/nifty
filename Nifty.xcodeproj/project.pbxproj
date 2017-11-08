@@ -240,6 +240,7 @@
 		4A7C7A7E1E425B7300B09975 /* Vector_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C798E1E425B2100B09975 /* Vector_test.swift */; };
 		4A7C7A7F1E425B7300B09975 /* zeros_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C798F1E425B2100B09975 /* zeros_test.swift */; };
 		4A7F8E9B1E5E93B70051C64D /* interp1_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7F8E9A1E5E93B70051C64D /* interp1_test.swift */; };
+		D455C7711FB29C2200535350 /* TensorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D455C7701FB29C2200535350 /* TensorProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -487,6 +488,7 @@
 		4A7C798E1E425B2100B09975 /* Vector_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Vector_test.swift; path = Tests/NiftyTests/Vector_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C798F1E425B2100B09975 /* zeros_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = zeros_test.swift; path = Tests/NiftyTests/zeros_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7F8E9A1E5E93B70051C64D /* interp1_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = interp1_test.swift; path = Tests/NiftyTests/interp1_test.swift; sourceTree = SOURCE_ROOT; };
+		D455C7701FB29C2200535350 /* TensorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TensorProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -648,6 +650,7 @@
 				4A7C78951E411E2900B09975 /* Vector.swift */,
 				4A5CC2B21E5CA9FB0087C160 /* warning.swift */,
 				4A7C78961E411E2900B09975 /* zeros.swift */,
+				D455C7701FB29C2200535350 /* TensorProtocol.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -973,6 +976,7 @@
 				4A7C78E91E411E2900B09975 /* mrdivide.swift in Sources */,
 				4A7C78DA1E411E2900B09975 /* ind2sub.swift in Sources */,
 				4A7C78A11E411E2900B09975 /* _isnan.swift in Sources */,
+				D455C7711FB29C2200535350 /* TensorProtocol.swift in Sources */,
 				4A7C78D61E411E2900B09975 /* floor.swift in Sources */,
 				4A7C78D71E411E2900B09975 /* ge.swift in Sources */,
 				4A7C78DC1E411E2900B09975 /* inv.swift in Sources */,

@@ -22,7 +22,7 @@ class Vector_test: XCTestCase
         // array init and computed properties
         let v = Vector([1.0, 345.35, 2342564.453, 354, 35345, 0.000234], name: "v")
         print("\(v)\n")
-        print(v.csv)
+        print(v.rawDescription)
         XCTAssert(v.count == 6)
         XCTAssert(v.data == [1.0, 345.35, 2342564.453, 354, 35345, 0.000234])
         XCTAssert(v.name == "v")
@@ -45,7 +45,6 @@ class Vector_test: XCTestCase
         XCTAssert(x.data.reduce(0.0,+) == 2.0)
         v3[0..<45] = Vector(45, value: 2.0)
         XCTAssert(v3.data.reduce(0.0,+) == 90.0)
-
 
         print("\n\n")
     }

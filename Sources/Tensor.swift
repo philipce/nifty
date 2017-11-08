@@ -1,7 +1,7 @@
 /***************************************************************************************************
  *  Tensor.swift
  *
- *  This file defines the Tensor data structure, an n-dimensional array. 
+ *  This file defines the Tensor data structure, a multidimensional array.
  *
  *  Author: Philip Erickson
  *  Creation Date: 12 Dec 2016
@@ -21,36 +21,21 @@
 
 import Foundation
 
-/// Data structure for an N-D, row-major order array.
-public struct Tensor<T>: CustomStringConvertible
+/// Data structure for a multidimensional, row-major order array.
+public struct Tensor<Element>: TensorProtocol
 {
-    /// Number of elements in the tensor.
     public let count: Int
-
-    /// Number of elements in each dimension of the tensor.
     public var size: [Int]
-
-    /// Data contained in tensor in row-major order.
-    public var data: [T]
-
-    /// Optional name of tensor (e.g., for use in display).
+    public var data: [Element]
     public var name: String?
-
-    /// Determine whether to show name when displaying tensor.
     public var showName: Bool
-
-    /// Formatter to be used in displaying tensor elements.
     public var format: NumberFormatter
 
-    /// Initialize a new tensor of the given size from a row-major ordered array of data.
-    ///
-    /// - Parameters:
-    ///    - size: number of elements in each dimension of the tensor
-    ///    - data: tensor data in row-major order
-    ///    - name: optional name of tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ size: [Int], _ data: [T], name: String? = nil, showName: Bool? = nil)
+    //----------------------------------------------------------------------------------------------
+    // MARK: INITIALIZE
+    //----------------------------------------------------------------------------------------------
+    
+    public init(_ size: [Int], _ data: [Element], name: String? = nil, showName: Bool? = nil)
     {       
         let n = size.reduce(1, *)
 
@@ -82,91 +67,38 @@ public struct Tensor<T>: CustomStringConvertible
         self.format = fmt
     }
 
-    /// Initialize a new tensor of the given size and uniform value.
-    ///
-    /// - Parameters:
-    ///    - size: number of elements in each dimension of the tensor
-    ///    - value: single value repeated throughout tensor
-    ///    - name: optional name of tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ size: [Int], value: T, name: String? = nil, showName: Bool? = nil)
+    public init(_ size: [Int], value: Element, name: String? = nil, showName: Bool? = nil)
     {
         let n = size.reduce(1, *)
         precondition(n > 0, "Tensor must contain at least one element")
-        let data = Array<T>(repeating: value, count: n)
+        let data = Array<Element>(repeating: value, count: n)
         self.init(size, data, name: name, showName: showName)
     }
    
-    /// Initialize a new tensor from the data in a given vector.
-    ///
-    /// - Parameters:
-    ///    - vector: vector to initialize from
-    ///    - name: optional name of new tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ vector: Vector<T>, name: String? = nil, showName: Bool? = nil)
+    public init<T>(_ t: T, name: String? = nil, showName: Bool? = nil) where T : TensorProtocol, Element == T.Element
     {
-        self.init([1, vector.count], vector.data, name: name, showName: showName)
-
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(vector.format)
+        self.init(t.size, t.data, name: name, showName: showName)
     }
     
-    /// Initialize a new tensor from the data in a given matrix.
-    ///
-    /// - Parameters:
-    ///    - matrix: matrix to initialize from
-    ///    - name: optional name of new tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ matrix: Matrix<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(matrix.size, matrix.data, name: name, showName: showName)
-
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(matrix.format)
-    }
-
-    /// Initialize a new tensor from the data in a given tensor.
-    ///
-    /// - Parameters:
-    ///    - tensor: tensor to initialize from
-    ///    - name: optional name of new tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ tensor: Tensor<T>, name: String? = nil, showName: Bool? = nil)
-    {
-        self.init(tensor.size, tensor.data, name: name, showName: showName)
-
-        // need to create new formatter instance, copying values
-        self.format = _copyNumberFormatter(tensor.format)
-    }    
-
-    /// Initialize a new tensor from a comma separated string.
-    ///
-    /// The given csv string must be in the format returned by Tensor.csv.
-    ///
-    /// - Parameters:
-    ///    - csv: comma separated string containing tensor data
-    ///    - name: optional name of new tensor
-    ///    - showName: determine whether to print the tensor name; defaults to true if the tensor is
-    ///        given a name, otherwise to false
-    public init(_ csv: String, name: String? = nil, showName: Bool? = nil)
+    public init(_ rawDescription: String, name: String? = nil, showName: Bool? = nil)
     {
         // FIXME: implement
         fatalError("Not yet implemented")
     }
+   
+    //----------------------------------------------------------------------------------------------
+    // MARK: SUBSCRIPT
+    //----------------------------------------------------------------------------------------------
 
     /// Access a single element of the tensor with a subscript.
     ///
-    /// If only one subscript is given, it is interpretted as a row-major order linear index. 
+    /// If only one subscript is given, it is interpretted as a row-major order linear index.
     /// Otherwise, the given subscripts are treated as indexes into each dimension.
     ///
     /// - Parameters:
     ///    - s: subscripts
     /// - Returns: single value at index
-    public subscript(_ s: [Int]) -> T
+    public subscript(_ s: [Int]) -> Element
     {
         get
         {
@@ -194,57 +126,29 @@ public struct Tensor<T>: CustomStringConvertible
             {
                 self.setValue(subscripts: s, value: newValue)
             }
-
         }
     }
-
-    public subscript(_ s: Int...) -> T
+    
+    public subscript(_ s: Int...) -> Element
     {
         get { return self[s] }
         set(newValue) { self[s] = newValue }
     }
     
-    private func getValue(index: Int) -> T
-    {
-
-        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
-        return self.data[index]            
-    }
-
-    private mutating func setValue(index: Int, value: T)
-    {
-        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
-        self.data[index] = value
-    }
-
-    private func getValue(subscripts: [Int]) -> T
-    {
-        let index = sub2ind(subscripts, size: self.size)
-        precondition(index >= 0, "Tensor subscript out of bounds")
-        return self.data[index]
-    }
-
-    private mutating func setValue(subscripts: [Int], value: T)
-    {
-        let index = sub2ind(subscripts, size: self.size)
-        precondition(index >= 0, "Tensor subscript out of bounds")
-        self.data[index] = value
-    }   
-
     /// Access a slice of the tensor with a subscript range.
     ///
     /// If only one range is given, it is interpretted as a row-major order linear index. Otherwise,
     /// the given subscripts are treated as indexes into each dimension.
     ///
     /// - Parameters:
-    ///    - s: subscripts 
+    ///    - s: subscripts
     /// - Returns: new tensor composed of slice
-    public subscript(_ s: SliceIndex...) -> Tensor<T>
+    public subscript(_ s: SliceIndex...) -> Tensor<Element>
     {
         get
         {
             assert(s.count > 0)
-
+            
             if s.count == 1
             {
                 return self.getSlice(index: s[0])
@@ -254,11 +158,11 @@ public struct Tensor<T>: CustomStringConvertible
                 return self.getSlice(subscripts: s)
             }
         }
-
+        
         set(newValue)
-        {    
+        {
             assert(s.count > 0)
-
+            
             if s.count == 1
             {
                 self.setSlice(index: s[0], value: newValue)
@@ -267,11 +171,36 @@ public struct Tensor<T>: CustomStringConvertible
             {
                 self.setSlice(subscripts: s, value: newValue)
             }
-
         }
     }
-    
-    private func getSlice(index: SliceIndex) -> Tensor<T>
+
+    private func getValue(index: Int) -> Element
+    {
+        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
+        return self.data[index]            
+    }
+
+    private mutating func setValue(index: Int, value: Element)
+    {
+        precondition(index >= 0 && index < self.count, "Tensor subscript out of bounds")
+        self.data[index] = value
+    }
+
+    private func getValue(subscripts: [Int]) -> Element
+    {
+        let index = sub2ind(subscripts, size: self.size)
+        precondition(index >= 0, "Tensor subscript out of bounds")
+        return self.data[index]
+    }
+
+    private mutating func setValue(subscripts: [Int], value: Element)
+    {
+        let index = sub2ind(subscripts, size: self.size)
+        precondition(index >= 0, "Tensor subscript out of bounds")
+        self.data[index] = value
+    }   
+
+    private func getSlice(index: SliceIndex) -> Tensor<Element>
     {
         let range = _convertToCountableClosedRange(index)
 
@@ -283,7 +212,7 @@ public struct Tensor<T>: CustomStringConvertible
         return Tensor([1, d.count], d, name: sliceName, showName: self.showName)
     }
 
-    private mutating func setSlice(index: SliceIndex, value: Tensor<T>)
+    private mutating func setSlice(index: SliceIndex, value: Tensor<Element>)
     {
         // FIXME: there's no shape checking here! E.g. a [1,1,4] slice could 
         // be assigned a [1,2,2] Tensor. How should that be handled?
@@ -291,7 +220,7 @@ public struct Tensor<T>: CustomStringConvertible
         self.data[range] = ArraySlice(value.data)
     } 
 
-    private func getSlice(subscripts: [SliceIndex]) -> Tensor<T>
+    private func getSlice(subscripts: [SliceIndex]) -> Tensor<Element>
     {        
         let ranges = _convertToCountableClosedRanges(subscripts)
 
@@ -309,7 +238,7 @@ public struct Tensor<T>: CustomStringConvertible
         }    
 
         // start reading from tensor, rolling over each dimension
-        var newData = [T]()
+        var newData = [Element]()
         var curSub = startSub
         while true
         {
@@ -334,7 +263,7 @@ public struct Tensor<T>: CustomStringConvertible
         return Tensor(newSize, newData, name: sliceName, showName: self.showName)        
     }
 
-    private mutating func setSlice(subscripts: [SliceIndex], value: Tensor<T>)
+    private mutating func setSlice(subscripts: [SliceIndex], value: Tensor<Element>)
     {
         let ranges = _convertToCountableClosedRanges(subscripts)
 
@@ -373,13 +302,16 @@ public struct Tensor<T>: CustomStringConvertible
             curSub = inc                
         }
     }
+    
+    //----------------------------------------------------------------------------------------------
+    // MARK: DISPLAY
+    //----------------------------------------------------------------------------------------------
 
-    /// Return tensor contents in an easily readable grid format.
+    /// String representation of tensor contents in an easily readable grid format.
     ///
     /// - Note: The formatter associated with this tensor is used as a suggestion; elements may be
-    ///     formatted differently to improve readability. Elements that can't be displayed under the 
-    ///     current formatting constraints will be displayed as '#'.    
-    /// - Returns: string representation of tensor
+    ///     formatted differently to improve readability. Elements that can't be displayed under the
+    ///     current formatting constraints will be displayed as '#'.
     public var description: String
     {
         // create tensor title
@@ -446,24 +378,24 @@ public struct Tensor<T>: CustomStringConvertible
         }  
     }    
 
-    /// Return tensor representation in unformatted, comma separated list.
+    /// String representation of tensor in raw format.
     ///
-    /// Elements of a row are comma separated. Rows are separated by newlines. Higher dimensional 
+    /// Elements of a row are comma separated. Rows are separated by newlines. Higher dimensional
     /// slices are separated by a line consisting entirely of semicolons, where the number of
-    /// semicolons indicates the dimension that ended; e.g. ";" comes between matrices in a 3D 
+    /// semicolons indicates the dimension that ended; e.g. ";" comes between matrices in a 3D
     /// tensor, ";;" comes between 3D tensors in a 4D tensor, ";;;" between 4D tensors in 5D, etc.
-    public var csv: String
+    public var rawDescription: String
     {    
         // handle 1D tensor
         if self.size.count == 1
         {
-            return Vector(self, name: nil, showName: false).csv
+            return Vector(self, name: nil, showName: false).rawDescription
         }
 
         // handle 2D tensor
         else if self.size.count == 2
         {
-            return Matrix(self, name: nil, showName: false).csv
+            return Matrix(self, name: nil, showName: false).rawDescription
         }
 
         // break 3D+ tensors into 2D tensor chunks
@@ -490,7 +422,7 @@ public struct Tensor<T>: CustomStringConvertible
 
                 // turn slice into matrix for easy printing
                 let m = Matrix(curSlice.size[0], curSlice.size[1], curSlice.data, name: nil, showName: false)
-                str.append("\(m.csv)")
+                str.append("\(m.rawDescription)")
 
                 // increment through higher dimensions until we've reached the end
                 guard let inc = _cascadeIncrementSubscript(curSubRev, min: startRev, max: endRev) else
