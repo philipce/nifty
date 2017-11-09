@@ -19,7 +19,7 @@ There are a number of options when it comes to getting up and running with Nifty
 - Use the included project file in Xcode
 - Install with the Swift Package Manager
 
-Nifty is being developed on Ubuntu and macOS; whatever route you go, make sure your version is up to date. Also, goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
+Nifty is being developed on Ubuntu and macOS; whatever route you go, make sure your version is up to date. Also, our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
 
 ##### Docker
 
