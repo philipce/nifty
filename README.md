@@ -29,7 +29,7 @@ If you don't have Docker set up already, go [here](https://docs.docker.com/engin
 
 Once Docker is set up, the remaining steps are easy:
 - Pull down the image and start the container: `docker run -it niftyswift/nifty` – this will start a shell inside the container, within a preconfigured project folder
-- Write your code (e.g. `vi main.swift`)
+- Open an editor and start writing code (e.g. `vi main.swift`)
 - Execute `swift run` – this will pull down the Nifty library code, compile your code, and run your executable (e.g. `.build/debug/myapp`)
 
 If you've already got a project on your host machine, you can mount it when you start the container and edit locally, e.g. `docker run -v /home/myapp:/myapp -it niftyswift/nifty`
@@ -60,17 +60,17 @@ Nifty is intended to be simple and easy to use. For this reason, we've decided t
 
 If you're having troubles, you may find the following helpful:
 
-The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`
+The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`.
  
 If you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
 If you're building with Xcode, you need to compile with `NIFTY_XCODE_BUILD` defined. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (It used to be in the project settings -> "Build Settings" -> "Other Swift flags", where you would add `-DNIFTY_XCODE_BUILD`; somewhere around Xcode 9/Swift 4, a setting called "Active Compilation Conditions" was introduced, which should be set to include `NIFTY_XCODE_BUILD`).
 
- Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". One possible fix: From the project navigation side bar, click on the project icon to bring up the project settings. SYMROOT (aka  Build Products Path) and OBJROOT (aka Intermediate Build Files Path) can be set in the Build Settings tab. From the Build Settings tab, search for SYMROOT or OBJROOT. It should bring up Build Products Path or Intermediate Build Files Path (if not, make sure the search bar is set to search "All", not just "Basic"). From there, you can set the paths as you wish (a reasonable default is $SRCROOT/build). For more info, see Apple's Xcode Build System Guide - Build Setting Reference.  
+ Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". One possible fix: From the project navigation side bar, click on the project icon to bring up the project settings. SYMROOT (aka  Build Products Path) and OBJROOT (aka Intermediate Build Files Path) can be set in the Build Settings tab. From the Build Settings tab, search for SYMROOT or OBJROOT. It should bring up Build Products Path or Intermediate Build Files Path (if not, make sure the search bar is set to search "All", not just "Basic"). From there, you can set the paths as you wish (a reasonable default is $SRCROOT/build). For more info, lookup Apple's "Xcode Build System Guide - Build Setting Reference."
 
 ## Nifty Features
 
-Nifty is really new and (obviously) not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! Either come back later and check Nifty out when it's a little farther along, or, [consider contributing](#contributing)!
+Nifty is new and obviously not complete. The library is constantly expanding—if it doesn't yet have what you need, it will soon! Either come back later and check Nifty out when it's a little farther along or [consider contributing](#contributing)!
 
 We are currently working on getting the core set of general math and linear algebra functions finished:
 - general functions and definitions used throughout Nifty
