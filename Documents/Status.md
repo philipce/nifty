@@ -55,7 +55,6 @@ Estimated release: end 2017
 | exp2               | Complete        | Basic          |                                                                                         |
 | expm1              | Complete        | Basic          |                                                                                         |
 | eye                | Mostly Complete | None           |                                                                                         |
-| filter             | Unimplemented   | None           |                                                                                         |
 | flipud             | Unimplemented   | None           | **                                                                                      |
 | fliplr             | Unimplemented   | None           | **                                                                                      |
 | floor              | Complete        | Basic          |                                                                                         |
@@ -77,7 +76,6 @@ Estimated release: end 2017
 | lsb                | Unimplemented   | None           |                                                                                         |
 | lt (<)             | Complete        | None           |                                                                                         |
 | lu                 | Mostly Complete | Basic          | **                                                                                      |
-| map                | Unimplemented   | None           |                                                                                         |
 | Matrix             | Mostly Complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | max                | Unimplemented   | None           |                                                                                         |
 | mean               | Mostly complete | Basic          | Needs definitions for tensor                                                            |
@@ -112,7 +110,6 @@ Estimated release: end 2017
 | randperm           | Unimplemented   | None           |                                                                                         |
 | rank               | Unimplemented   | None           |                                                                                         |
 | rdivide            | Incomplete      | None           | Has division overloads but needs rdivide func definition and overloads for other types  |
-| reduce             | Unimplemented   | None           |                                                                                         |
 | reshape            | Unimplemented   | None           |                                                                                         |
 | rmap               | Complete        | None           |                                                                                         |
 | round              | Complete        | Basic          |                                                                                         |
@@ -153,11 +150,14 @@ Estimated release: mid 2018
 | cumprod            | Unimplmented    | None           |                                                                                         |
 | cumsum             | Unimplmented    | None           |                                                                                         |
 | fft                | Unimplemented   | None           |                                                                                         |
+| filter             | Unimplemented   | None           | Need to decide how to handle higher order functions                                     |
 | find               | Incomplete      | None           | Interface created for use with DataSeries -- need to reconcile it with MATLAB           |
 | ifft               | Unimplemented   | None           |                                                                                         |
 | linspace           | Unimplemented   | None           |                                                                                         |
+| map                | Unimplemented   | None           | Need to decide how to handle higher order functions                                     |
 | meshgrid           | Unimplemented   | None           |                                                                                         |
 | poly               | Unimplemented   | None           |                                                                                         |
+| reduce             | Unimplemented   | None           | Need to decide how to handle higher order functions                                     |
 | repmat             | Unimplemented   | None           |                                                                                         |
 | sort               | Unimplemented   | None           |                                                                                         |
 
