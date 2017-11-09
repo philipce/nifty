@@ -1,7 +1,7 @@
 /***************************************************************************************************
- *  MultikeyDictionary.swift
+ *  MultiMap.swift
  *
- *  This file defines a multi-key dictionary data structure. 
+ *  This file defines a multi-key map data structure.
  *
  *  Author: Philip Erickson
  *  Creation Date: 21 Dec 2016
@@ -39,7 +39,7 @@
 // For example, for D.find(["Bob", nil, "Blond"]), I might want to get back (["Bob", "Smith", "Blond"], 4)
 // and (["Bob", "Ross", "Blond"], 27)
 
-public struct MultikeyDictionary<Key: Comparable, Value>
+public struct MultiMap<Key: Comparable, Value>
 {   
     public var count: Int 
     public let keyCount: Int     
