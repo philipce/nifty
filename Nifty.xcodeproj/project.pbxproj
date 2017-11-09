@@ -17,7 +17,6 @@
 		4A7C78971E411E2900B09975 /* _cond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781D1E411E2900B09975 /* _cond.swift */; };
 		4A7C78981E411E2900B09975 /* _det.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781E1E411E2900B09975 /* _det.swift */; };
 		4A7C78991E411E2900B09975 /* _eig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C781F1E411E2900B09975 /* _eig.swift */; };
-		4A7C789A1E411E2900B09975 /* _eigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78201E411E2900B09975 /* _eigs.swift */; };
 		4A7C789B1E411E2900B09975 /* eq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78211E411E2900B09975 /* eq.swift */; };
 		4A7C78A01E411E2900B09975 /* _isinf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78261E411E2900B09975 /* _isinf.swift */; };
 		4A7C78A11E411E2900B09975 /* _isnan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78271E411E2900B09975 /* _isnan.swift */; };
@@ -147,7 +146,6 @@
 		4A7C7A1C1E425B7300B09975 /* diag_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C792C1E425B2100B09975 /* diag_test.swift */; };
 		4A7C7A1D1E425B7300B09975 /* dot_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C792D1E425B2100B09975 /* dot_test.swift */; };
 		4A7C7A1E1E425B7300B09975 /* eig_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C792E1E425B2100B09975 /* eig_test.swift */; };
-		4A7C7A1F1E425B7300B09975 /* eigs_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C792F1E425B2100B09975 /* eigs_test.swift */; };
 		4A7C7A201E425B7300B09975 /* eps_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79301E425B2100B09975 /* eps_test.swift */; };
 		4A7C7A211E425B7300B09975 /* eq_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79311E425B2100B09975 /* eq_test.swift */; };
 		4A7C7A221E425B7300B09975 /* exp_test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C79321E425B2100B09975 /* exp_test.swift */; };
@@ -259,7 +257,6 @@
 		4A7C781D1E411E2900B09975 /* _cond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _cond.swift; path = Sources/_cond.swift; sourceTree = SOURCE_ROOT; };
 		4A7C781E1E411E2900B09975 /* _det.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _det.swift; path = Sources/_det.swift; sourceTree = SOURCE_ROOT; };
 		4A7C781F1E411E2900B09975 /* _eig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _eig.swift; path = Sources/_eig.swift; sourceTree = SOURCE_ROOT; };
-		4A7C78201E411E2900B09975 /* _eigs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _eigs.swift; path = Sources/_eigs.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78211E411E2900B09975 /* eq.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = eq.swift; path = Sources/eq.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78261E411E2900B09975 /* _isinf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _isinf.swift; path = Sources/_isinf.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78271E411E2900B09975 /* _isnan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = _isnan.swift; path = Sources/_isnan.swift; sourceTree = SOURCE_ROOT; };
@@ -389,7 +386,6 @@
 		4A7C792C1E425B2100B09975 /* diag_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = diag_test.swift; path = Tests/NiftyTests/diag_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C792D1E425B2100B09975 /* dot_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = dot_test.swift; path = Tests/NiftyTests/dot_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C792E1E425B2100B09975 /* eig_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = eig_test.swift; path = Tests/NiftyTests/eig_test.swift; sourceTree = SOURCE_ROOT; };
-		4A7C792F1E425B2100B09975 /* eigs_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = eigs_test.swift; path = Tests/NiftyTests/eigs_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79301E425B2100B09975 /* eps_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = eps_test.swift; path = Tests/NiftyTests/eps_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79311E425B2100B09975 /* eq_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = eq_test.swift; path = Tests/NiftyTests/eq_test.swift; sourceTree = SOURCE_ROOT; };
 		4A7C79321E425B2100B09975 /* exp_test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = exp_test.swift; path = Tests/NiftyTests/exp_test.swift; sourceTree = SOURCE_ROOT; };
@@ -526,7 +522,6 @@
 				4A7C781D1E411E2900B09975 /* _cond.swift */,
 				4A7C781E1E411E2900B09975 /* _det.swift */,
 				4A7C781F1E411E2900B09975 /* _eig.swift */,
-				4A7C78201E411E2900B09975 /* _eigs.swift */,
 				4A7C78261E411E2900B09975 /* _isinf.swift */,
 				4A7C78271E411E2900B09975 /* _isnan.swift */,
 				4A7C782A1E411E2900B09975 /* _ldivide.swift */,
@@ -665,7 +660,6 @@
 				4A7C792C1E425B2100B09975 /* diag_test.swift */,
 				4A7C792D1E425B2100B09975 /* dot_test.swift */,
 				4A7C792E1E425B2100B09975 /* eig_test.swift */,
-				4A7C792F1E425B2100B09975 /* eigs_test.swift */,
 				4A7C79301E425B2100B09975 /* eps_test.swift */,
 				4A7C79311E425B2100B09975 /* eq_test.swift */,
 				4A5CC2B51E5CABFE0087C160 /* error_test.swift */,
@@ -937,7 +931,6 @@
 				4A7C78C61E411E2900B09975 /* atan2d.swift in Sources */,
 				4A7C78CB1E411E2900B09975 /* cos.swift in Sources */,
 				4A7C78EC1E411E2900B09975 /* MultikeyDictionary.swift in Sources */,
-				4A7C789A1E411E2900B09975 /* _eigs.swift in Sources */,
 				4A7C78B51E411E2900B09975 /* rdivide.swift in Sources */,
 				4A7C78D41E411E2900B09975 /* expm1.swift in Sources */,
 				4A7C78F31E411E2900B09975 /* pow.swift in Sources */,
@@ -1017,7 +1010,6 @@
 				4A7C7A2B1E425B7300B09975 /* gt_test.swift in Sources */,
 				4A7C7A771E425B7300B09975 /* times_test.swift in Sources */,
 				4A7C7A5C1E425B7300B09975 /* randi_test.swift in Sources */,
-				4A7C7A1F1E425B7300B09975 /* eigs_test.swift in Sources */,
 				4A7C7A641E425B7300B09975 /* rmap_test.swift in Sources */,
 				4A7C7A301E425B7300B09975 /* isequal_test.swift in Sources */,
 				4A7C7A181E425B7300B09975 /* cosd_test.swift in Sources */,

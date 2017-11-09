@@ -48,7 +48,6 @@ Estimated release: end 2017
 | diag               | Unimplemented   | None           | **                                                                                      |
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
 | eig                | Unimplemented   | None           | **                                                                                      |
-| eigs               | Unimplemented   | None           | **                                                                                      |
 | eps                | Incomplete      | None           | Use feature from standard lib from Swift 4.0                                            |
 | eq                 | Completed       | Basic          |                                                                                         |
 | exp                | Complete        | Basic          |                                                                                         |
@@ -176,7 +175,7 @@ Start work on AI and machine learning features. Details TBD.
 ### Future Work
 
 This is an unorganized list of ideas of things we might want to include with Nifty: 
-- matlab cmds: cat, length, logspace, erf, fix, conv, deconv, polyfit, polyval, roots
+- matlab cmds: cat, length, logspace, erf, fix, conv, deconv, polyfit, polyval, roots, eigs
 - fmin, fmins, fzero
 - quad, quad1, trapz
 - diff, polyder

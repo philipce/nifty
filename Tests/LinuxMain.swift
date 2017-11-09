@@ -25,7 +25,6 @@ tests += det_test.allTests
 tests += diag_test.allTests
 tests += dot_test.allTests
 tests += eig_test.allTests
-tests += eigs_test.allTests
 tests += eps_test.allTests
 tests += eq_test.allTests
 tests += error_test.allTests
