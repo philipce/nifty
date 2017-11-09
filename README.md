@@ -12,8 +12,6 @@
 
 Not sure if Nifty is what you're looking for? Check out a [simple demo project](https://github.com/nifty-swift/Nifty-demo) or peruse the [documentation](http://nifty-swift.org) to help you decide.
 
-Nifty is being developed on Ubuntu 14.04/16.04 and on macOS Sierra. Our goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
-
 ### Installation
 
 There are a number of options when it comes to getting up and running with Nifty. In order of easiness:
@@ -21,17 +19,18 @@ There are a number of options when it comes to getting up and running with Nifty
 - Use the included project file in Xcode
 - Install with the Swift Package Manager
 
+Nifty is being developed on Ubuntu and macOS; whatever route you go, make sure your version is up to date. Also, goal is to stay current as Swift develops, so make sure to [install the latest release](https://swift.org/getting-started/).
+
 ##### Docker
 
-The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start writing Nifty code.
+The `niftyswift/nifty` repo on Docker Hub comes with Swift and all the libraries installed! It even has a base project already set up, so you can just start coding with Nifty.
 
 If you don't have Docker set up already, go [here](https://docs.docker.com/engine/installation/).
 
 Once Docker is set up, the remaining steps are easy:
 - Pull down the image and start the container: `docker run -it niftyswift/nifty` – this will start a shell inside the container, within a preconfigured project folder
 - Write your code (e.g. `vi main.swift`)
-- Run `swift build` – this will pull down the Nifty library code
-- Execute your program with `.build/debug/myapp`
+- Execute `swift run` – this will pull down the Nifty library code, compile your code, and run your executable (e.g. `.build/debug/myapp`)
 
 If you've already got a project on your host machine, you can mount it when you start the container and edit locally, e.g. `docker run -v /home/myapp:/myapp -it niftyswift/nifty`
 
@@ -65,7 +64,7 @@ The system libraries used by Nifty are provided by the [Nifty-libs](https://gith
  
 If you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
 
-If you're building with Xcode, you need to compile with `-DNIFTY_XCODE_BUILD`. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (in the project settings -> "Build Settings", search for "Swift flags").
+If you're building with Xcode, you need to compile with `NIFTY_XCODE_BUILD` defined. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (It used to be in the project settings -> "Build Settings" -> "Other Swift flags", where you would add `-DNIFTY_XCODE_BUILD`; somewhere around Xcode 9/Swift 4, a setting called "Active Compilation Conditions" was introduced, which should be set to include `NIFTY_XCODE_BUILD`).
 
  Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". One possible fix: From the project navigation side bar, click on the project icon to bring up the project settings. SYMROOT (aka  Build Products Path) and OBJROOT (aka Intermediate Build Files Path) can be set in the Build Settings tab. From the Build Settings tab, search for SYMROOT or OBJROOT. It should bring up Build Products Path or Intermediate Build Files Path (if not, make sure the search bar is set to search "All", not just "Basic"). From there, you can set the paths as you wish (a reasonable default is $SRCROOT/build). For more info, see Apple's Xcode Build System Guide - Build Setting Reference.  
 
@@ -86,9 +85,7 @@ See our [status page](Documents/Status.md) for details on the implementation sta
 
 Nifty uses the [XCTest](https://github.com/apple/swift-corelibs-xctest) framework to manage unit tests. Tests can be run directly from Xcode or, if not using Xcode, by executing `swift test` in the repository root directory.
 
-The goal is for Nifty to provide correctness and performance similar to other numerical computing standards. We'll be testing and benchmarking mainly against MATLAB and NumPy. Check out the [status page](Documents/Status.md) to see where the test coverage is currently at.
-
-You can check out the results of some simple benchmarks [here](https://github.com/nifty-swift/Nifty/blob/master/Documents/Benchmarks.md).
+The goal is for Nifty to provide correctness and performance similar to other numerical computing standards. We'll be testing and benchmarking mainly against MATLAB and NumPy. Check out the [status page](Documents/Status.md) to see where the test coverage is currently at. You can also check out the results of some simple benchmarks [here](https://github.com/nifty-swift/Nifty/blob/master/Documents/Benchmarks.md).
 
 ## Goals & Scope
 The goals of Nifty can be summarized as follows:
@@ -112,7 +109,7 @@ To contribute code to this project:
 4. Consider including a test, even if it's super basic
 5. Commit your changes: `git commit -am 'Add some feature'`
 6. Push to the branch: `git push origin my-new-feature`
-7. Submit a pull request!
+7. Open a pull request!
 
 For anything else, feel free to open an issue!
 
