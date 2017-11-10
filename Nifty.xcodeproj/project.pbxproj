@@ -87,7 +87,7 @@
 		4A7C78E91E411E2900B09975 /* mrdivide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C786F1E411E2900B09975 /* mrdivide.swift */; };
 		4A7C78EA1E411E2900B09975 /* msb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78701E411E2900B09975 /* msb.swift */; };
 		4A7C78EB1E411E2900B09975 /* mtimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78711E411E2900B09975 /* mtimes.swift */; };
-		4A7C78EC1E411E2900B09975 /* MultikeyDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78721E411E2900B09975 /* MultikeyDictionary.swift */; };
+		4A7C78EC1E411E2900B09975 /* MultiMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78721E411E2900B09975 /* MultiMap.swift */; };
 		4A7C78ED1E411E2900B09975 /* mvnrnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78731E411E2900B09975 /* mvnrnd.swift */; };
 		4A7C78EE1E411E2900B09975 /* ndims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78741E411E2900B09975 /* ndims.swift */; };
 		4A7C78EF1E411E2900B09975 /* Nifty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C78751E411E2900B09975 /* Nifty.swift */; };
@@ -327,7 +327,7 @@
 		4A7C786F1E411E2900B09975 /* mrdivide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = mrdivide.swift; path = Sources/mrdivide.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78701E411E2900B09975 /* msb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = msb.swift; path = Sources/msb.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78711E411E2900B09975 /* mtimes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = mtimes.swift; path = Sources/mtimes.swift; sourceTree = SOURCE_ROOT; };
-		4A7C78721E411E2900B09975 /* MultikeyDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultikeyDictionary.swift; path = Sources/MultikeyDictionary.swift; sourceTree = SOURCE_ROOT; };
+		4A7C78721E411E2900B09975 /* MultiMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultiMap.swift; path = Sources/MultiMap.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78731E411E2900B09975 /* mvnrnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = mvnrnd.swift; path = Sources/mvnrnd.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78741E411E2900B09975 /* ndims.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ndims.swift; path = Sources/ndims.swift; sourceTree = SOURCE_ROOT; };
 		4A7C78751E411E2900B09975 /* Nifty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Nifty.swift; path = Sources/Nifty.swift; sourceTree = SOURCE_ROOT; };
@@ -594,7 +594,7 @@
 				4A7C786F1E411E2900B09975 /* mrdivide.swift */,
 				4A7C78701E411E2900B09975 /* msb.swift */,
 				4A7C78711E411E2900B09975 /* mtimes.swift */,
-				4A7C78721E411E2900B09975 /* MultikeyDictionary.swift */,
+				4A7C78721E411E2900B09975 /* MultiMap.swift */,
 				4A7C78731E411E2900B09975 /* mvnrnd.swift */,
 				4A7C78741E411E2900B09975 /* ndims.swift */,
 				4A7C78751E411E2900B09975 /* Nifty.swift */,
@@ -930,7 +930,7 @@
 				4A7C78AB1E411E2900B09975 /* _mode.swift in Sources */,
 				4A7C78C61E411E2900B09975 /* atan2d.swift in Sources */,
 				4A7C78CB1E411E2900B09975 /* cos.swift in Sources */,
-				4A7C78EC1E411E2900B09975 /* MultikeyDictionary.swift in Sources */,
+				4A7C78EC1E411E2900B09975 /* MultiMap.swift in Sources */,
 				4A7C78B51E411E2900B09975 /* rdivide.swift in Sources */,
 				4A7C78D41E411E2900B09975 /* expm1.swift in Sources */,
 				4A7C78F31E411E2900B09975 /* pow.swift in Sources */,
