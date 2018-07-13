@@ -20,9 +20,14 @@ This document lays out the current implementation status of each function/featur
 
 There is no _Complete_ status for test coverage because there are always additional tests to be implemented.
 
-### Nifty 1.0
+## Nifty 1.0
 
-Estimated release: end 2017
+Version 1.0 represents a very early beta release. Unless version 1.0 is specifically required, it's preferrable to use the latest master.
+
+
+## Nifty 2.0
+
+Estimated release: late 2018
 
 | Feature            | Status          | Test Coverage  | Notes                                                                                   |
 |--------------------|-----------------|----------------|-----------------------------------------------------------------------------------------|
@@ -140,9 +145,9 @@ Estimated release: end 2017
 | Vector             | Mostly complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | zeros              | Complete        | Basic          |                                                                                         |
 
-### Nifty 1.1
+## Nifty 2.1
 
-Estimated release: mid 2018
+Estimated release: late 2018 - early 2019
 
 | Feature            | Status          | Test Coverage  | Notes                                                                                   |
 |--------------------|-----------------|----------------|-----------------------------------------------------------------------------------------|
@@ -159,22 +164,25 @@ Estimated release: mid 2018
 | reduce             | Unimplemented   | None           | Need to decide how to handle higher order functions                                     |
 | repmat             | Unimplemented   | None           |                                                                                         |
 | sort               | Unimplemented   | None           |                                                                                         |
+## Nifty 2.2
 
-Other features:
+Estimated release: mid 2019
+
+Anticipated features:
 - Basic optimization toolbox (e.g. fminsearch)
 - Data frames and series
 - Interpolation methods: e.g interp1, interp2, spline
 - Interface to a third party plotting library
 
-### Nifty 1.2
+## Nifty 2.3
 
-Estimated release: 2018
+Estimated work begins: 2019
 
 Start work on AI and machine learning features. Details TBD.
 
-### Future Work
+## Future Work
 
-This is an unorganized list of ideas of things we might want to include with Nifty: 
+This is an unorganized and vague list of ideas of things we might want to include with Nifty: 
 - matlab cmds: cat, length, logspace, erf, fix, conv, deconv, polyfit, polyval, roots, eigs
 - fmin, fmins, fzero
 - quad, quad1, trapz
