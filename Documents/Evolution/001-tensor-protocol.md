@@ -1,3 +1,7 @@
+DEPRECATED: 
+- This proposal (and associated branch) was removed on Jul 13, 2018. 
+- Instead, we went with a [simpler refactor](https://github.com/nifty-swift/Nifty/commit/9bb7fbb1d79f2c3a46d0256e75432b0560f75aec)
+
 # Tensor Protocol
 
 * Proposal: [001](https://github.com/nifty-swift/Nifty/blob/master/Documents/Evolution/001-tensor-protocol.md)
