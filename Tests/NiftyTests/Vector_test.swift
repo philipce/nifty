@@ -20,11 +20,11 @@ class Vector_test: XCTestCase
         print("\n\n")
 
         // array init and computed properties
-        let v = Vector([1.0, 345.35, 2342564.453, 354, 35345, 0.000234], name: "v")
+        let v = Vector([1.0, 345.35, 2342564.453, 354.0, 35345.0, 0.000234], name: "v")
         print("\(v)\n")
         print(v.rawDescription)
         XCTAssert(v.count == 6)
-        XCTAssert(v.data == [1.0, 345.35, 2342564.453, 354, 35345, 0.000234])
+        XCTAssert(v.data == [1.0, 345.35, 2342564.453, 354.0, 35345.0, 0.000234])
         XCTAssert(v.name == "v")
         XCTAssert(v.showName)
         let _ = v.format

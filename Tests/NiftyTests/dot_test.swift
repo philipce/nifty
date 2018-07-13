@@ -17,8 +17,8 @@ class dot_test: XCTestCase
 
     func testBasic() 
     {        
-        let v1 = Vector([1.0, 345.35, 2342564.453, 354, 35345, 0.000234])
-        let v2 = Vector([5.6, 4.5, 4254.3, 34, 345, 0.001574])
+        let v1 = Vector([1.0, 345.35, 2342564.453, 354.0, 35345.0, 0.000234])
+        let v2 = Vector([5.6, 4.5, 4254.3, 34.0, 345.0, 0.001574])
         let x = dot(v1, v2)
 
         XCTAssert(isequal(x, 9978179573.0729, within: 1E-4))
