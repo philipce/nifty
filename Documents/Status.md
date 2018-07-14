@@ -43,24 +43,24 @@ Estimated release: late 2018
 | atand              | Complete        | Basic          |                                                                                         |
 | atanh              | Complete        | Basic          |                                                                                         |
 | ceil               | Complete        | Basic          |                                                                                         |
-| chol               | Mostly complete | Basic          | **                                                                                      |
-| cond               | Unimplemented   | None           | **                                                                                      |
+| chol               | Mostly complete | Basic          |                                                                                         |
+| cond               | Unimplemented   | None           |                                                                                         |
 | cos                | Complete        | Basic          |                                                                                         |
 | cosd               | Complete        | Basic          |                                                                                         |
 | cosh               | Complete        | Basic          |                                                                                         |
-| cross              | Mostly complete | Basic          | **                                                                                      |
-| det                | Unimplemented   | None           | **                                                                                      |
-| diag               | Unimplemented   | None           | **                                                                                      |
+| cross              | Mostly complete | Basic          |                                                                                         |
+| det                | Unimplemented   | None           |                                                                                         |
+| diag               | Unimplemented   | None           |                                                                                         |
 | dot                | Mostly complete | Basic          | Need to add overloads for types other than Vecotr<Double>                               |
-| eig                | Unimplemented   | None           | **                                                                                      |
+| eig                | Unimplemented   | None           |                                                                                         |
 | eps                | Incomplete      | None           | Use feature from standard lib from Swift 4.0                                            |
 | eq                 | Completed       | Basic          |                                                                                         |
 | exp                | Complete        | Basic          |                                                                                         |
 | exp2               | Complete        | Basic          |                                                                                         |
 | expm1              | Complete        | Basic          |                                                                                         |
 | eye                | Mostly Complete | None           |                                                                                         |
-| flipud             | Unimplemented   | None           | **                                                                                      |
-| fliplr             | Unimplemented   | None           | **                                                                                      |
+| flipud             | Unimplemented   | None           |                                                                                         |
+| fliplr             | Unimplemented   | None           |                                                                                         |
 | floor              | Complete        | Basic          |                                                                                         |
 | ge (>=)            | Complete        | None           |                                                                                         |
 | gt (>)             | Unimplemented   | None           |                                                                                         |
@@ -79,19 +79,19 @@ Estimated release: late 2018
 | log1p              | Complete        | Basic          |                                                                                         |
 | lsb                | Unimplemented   | None           |                                                                                         |
 | lt (<)             | Complete        | None           |                                                                                         |
-| lu                 | Mostly Complete | Basic          | **                                                                                      |
+| lu                 | Mostly Complete | Basic          |                                                                                         |
 | Matrix             | Mostly Complete | Basic          | Need to add reshaping inits; make iterable                                              |
 | max                | Unimplemented   | None           |                                                                                         |
 | mean               | Mostly complete | Basic          | Needs definitions for tensor                                                            |
 | median             | Unimplemented   | None           |                                                                                         |
 | min                | Unimplemented   | None           |                                                                                         |
 | minus (-)          | Mostly Complete | Basic          | Need to add overloads                                                                   |
-| mldivide (-/)      | Complete        | Basic          | **                                                                                      |
+| mldivide (-/)      | Complete        | Basic          |                                                                                         |
 | mode               | Unimplemented   | None           |                                                                                         |
-| mpower (**)        | Unimplemented   | None           | **                                                                                      |
-| mrdivide (/)       | Complete        | Basic          | ** Current implementation is less efficient--does more transposes than necessary        |
+| mpower (**)        | Unimplemented   | None           |                                                                                         |
+| mrdivide (/)       | Complete        | Basic          | Current implementation is less efficient--does more transposes than necessary           |
 | msb                | Mostly Complete | None           |                                                                                         |
-| mtimes (*)         | Mostly Complete | None           | ** Need to add overloads for other than Matrix*Matrix                                   |
+| mtimes (*)         | Mostly Complete | None           | Need to add overloads for other than Matrix*Matrix                                      |
 | MultikeyDictionary | Mostly Complete | Substantial    | Currently only have basic insert/find/remove; consider rename                           |
 | mvnrnd             | Mostly Complete | Basic          |                                                                                         |
 | nan                | Incomplete      | None           |                                                                                         |
@@ -101,12 +101,12 @@ Estimated release: late 2018
 | norm               | Incomplete      | Basic          | L2 norm complete, need L1, frobenius, etc...                                            |
 | numel              | Complete        | None           |                                                                                         |
 | ones               | Mostly Complete | None           |                                                                                         |
-| pinv               | Unimplemented   | None           | **                                                                                      |
+| pinv               | Unimplemented   | None           |                                                                                         |
 | plus (+)           | Mostly Complete | Basic          | Need to add overloads                                                                   |
 | pow (**)           | Complete        | None           |                                                                                         |
 | power (.**)        | Unimplemented   | None           |                                                                                         |
 | prod               | Unimplemented   | None           |                                                                                         |
-| qr                 | Unimplemented   | None           | **                                                                                      |
+| qr                 | Unimplemented   | None           |                                                                                         |
 | rand               | Complete        | None           |                                                                                         |
 | randa              | Mostly Complete | None           |                                                                                         |
 | randi              | Complete        | None           |                                                                                         |
@@ -117,7 +117,7 @@ Estimated release: late 2018
 | reshape            | Unimplemented   | None           |                                                                                         |
 | rmap               | Complete        | None           |                                                                                         |
 | round              | Complete        | Basic          |                                                                                         |
-| rref               | Unimplemented   | None           | **                                                                                      |
+| rref               | Unimplemented   | None           |                                                                                         |
 | shuffle            | Unimplemented   | None           | Need this and randperm?                                                                 |
 | sin                | Complete        | Basic          |                                                                                         |
 | sind               | Complete        | Basic          |                                                                                         |
@@ -127,8 +127,8 @@ Estimated release: late 2018
 | std                | Unimplemented   | None           |                                                                                         |
 | sub2ind            | Mostly Complete | None           |                                                                                         |
 | sum                | Mostly Complete | Basic          |                                                                                         |
-| svd                | Mostly Complete | Basic          | ** Need to resolve ambiguity between function calls requiring specifying output type    |
-| swap               | Incomplete      | None           | ** Need to add support for vectors, tensors, matrix columns, etc.                       |
+| svd                | Mostly Complete | Basic          | Need to resolve ambiguity between function calls requiring specifying output type       |
+| swap               | Incomplete      | None           | Need to add support for vectors, tensors, matrix columns, etc.                          |
 | tan                | Complete        | Basic          |                                                                                         |
 | tand               | Complete        | Basic          |                                                                                         |
 | tanh               | Complete        | Basic          |                                                                                         |
@@ -136,8 +136,8 @@ Estimated release: late 2018
 | tic                | Mostly Complete | None           |                                                                                         |
 | times (*)          | Incomplete      | None           | Need to add overloads                                                                   |
 | toc                | Mostly Complete | None           |                                                                                         |
-| trace              | Complete        | Basic          | **                                                                                      |
-| transpose          | Mostly Complete | None           | ** Need to add overloads for generic types                                              |
+| trace              | Complete        | Basic          |                                                                                         |
+| transpose          | Mostly Complete | None           | Need to add overloads for generic types                                                 |
 | tril               | Incomplete      | None           |                                                                                         |
 | triu               | Incomplete      | None           |                                                                                         |
 | unique             | Unimplemented   | None           |                                                                                         |
