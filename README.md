@@ -113,7 +113,7 @@ To contribute code to this project:
 
 For anything else, feel free to open an issue!
 
-We're also on Slack. If you want to join the conversation, let us know.
+We're also on Slack. Feel free to [join in](https://join.slack.com/t/nifty-swift/shared_invite/enQtMzk4MDkyMDEwOTQ0LTQ2OWE1ODA5NDEwMDMxODY0NmUyOTliZTc2N2E2ZWFhZTY5Njc2YWFlYjk4Mzk5YTc2OGQyM2VlY2M5MjRhNWE).
 
 ## License
 
