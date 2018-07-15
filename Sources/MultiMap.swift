@@ -39,6 +39,7 @@
 // For example, for D.find(["Bob", nil, "Blond"]), I might want to get back (["Bob", "Smith", "Blond"], 4)
 // and (["Bob", "Ross", "Blond"], 27)
 
+// TODO: add better documentation for this class. Explaining what it does, giving some motivation, and showing example usage.
 public struct MultiMap<Key: Comparable, Value>
 {   
     public var count: Int 
