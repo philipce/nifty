@@ -58,15 +58,7 @@ Nifty is intended to be simple and easy to use. For this reason, we've decided t
 
 ### Troubleshooting
 
-If you're having troubles, you may find the following helpful:
-
-The system libraries used by Nifty are provided by the [Nifty-libs](https://github.com/nifty-swift/Nifty-libs) package. This is used internally by Nifty so you shouldn't ever need to reference it. One complication that can arise though is if the installed system libraries are in a location not on your linker search path. In that case, you'll need to tell the linker where to find them when you build, e.g. `swift build -Xlinker -L/usr/local/opt/lapack/lib -Xlinker -L/usr/local/opt/openblas/lib`.
- 
-If you decide to use a different system library for one of the required system modules, you'll need to modify the Nifty-libs module map once the package manager has downloaded the Packages folder.
-
-If you're building with Xcode, you need to compile with `NIFTY_XCODE_BUILD` defined. Nifty uses different modules for Xcode builds and Swift Package Manager builds. The included project has this defined already, but if you build your own project, you'll need to do this (It used to be in the project settings -> "Build Settings" -> "Other Swift flags", where you would add `-DNIFTY_XCODE_BUILD`; somewhere around Xcode 9/Swift 4, a setting called "Active Compilation Conditions" was introduced, which should be set to include `NIFTY_XCODE_BUILD`).
-
- Some users have had problems with the included Xcode project giving the errors: "Undefined OBJROOT" or "Undefined SYMROOT". One possible fix: From the project navigation side bar, click on the project icon to bring up the project settings. SYMROOT (aka  Build Products Path) and OBJROOT (aka Intermediate Build Files Path) can be set in the Build Settings tab. From the Build Settings tab, search for SYMROOT or OBJROOT. It should bring up Build Products Path or Intermediate Build Files Path (if not, make sure the search bar is set to search "All", not just "Basic"). From there, you can set the paths as you wish (a reasonable default is $SRCROOT/build). For more info, lookup Apple's "Xcode Build System Guide - Build Setting Reference."
+If you're having problems getting up and running, check out our [troubleshooting guide](https://github.com/nifty-swift/Nifty/blob/master/Documents/Troubleshooting.md) for possible solutions.
 
 ## Nifty Features
 
@@ -113,7 +105,7 @@ To contribute code to this project:
 
 For anything else, feel free to open an issue!
 
-We're also on Slack. If you want to join the conversation, let us know.
+We're also on Slack. Feel free to [join in](https://join.slack.com/t/nifty-swift/shared_invite/enQtMzk4MDkyMDEwOTQ0LTQ2OWE1ODA5NDEwMDMxODY0NmUyOTliZTc2N2E2ZWFhZTY5Njc2YWFlYjk4Mzk5YTc2OGQyM2VlY2M5MjRhNWE).
 
 ## License
 

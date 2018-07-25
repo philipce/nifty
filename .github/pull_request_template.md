@@ -15,6 +15,7 @@
 - [ ] Add an approved reviewer
 - [ ] Update the ticket status in the relevant tracker (optional)
 - [ ] Add benchmark scripts and request benchmarking from reviewer (optional)
+- [ ] Respond to requests for changes from the reviewer as needed
 
 #### Reviewer:
 - [ ] Review changes for style, correctness, performance and request changes as necessary.
