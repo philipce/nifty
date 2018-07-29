@@ -5,6 +5,7 @@
  *
  *  Author: Adam Duracz
  *  Creation Date: 30 Jan 2017
+ *  Contributors: Adam Duracz, Philip Erickson
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at
@@ -16,40 +17,40 @@
  *  express or implied. See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *  Copyright 2016 Adam Duracz
+ *  Copyright 2016 Adam Duracz, Philip Erickson
  **************************************************************************************************/
 
 // TODO: add overloads for vector and tensor
 
-public func + (left: Matrix<Double>, right: Matrix<Double>) -> Matrix<Double>
+public func + <T: TensorProtocol>(left: T, right: T) -> T where T.Element: Numeric
 {
     return plus(left, right)
 }
 
-/// Perform matrix addition.
+/// Perform tensor addition.
 ///
 /// Alternatively, `plus(A, B)` can be executed with `A+B`.
 ///
 /// - Parameters
-///     - A: left matrix
-///     - B: right matrix
-/// - Returns: matrix sum of A and B
-func plus(_ A: Matrix<Double>, _ B: Matrix<Double>) -> Matrix<Double>
+///     - A: left tensor
+///     - B: right tensor
+/// - Returns: tensor sum of A and B
+func plus<T: TensorProtocol>(_ A: T, _ B: T) -> T where T.Element: Numeric
 {
     // A and B are of same size
-    precondition(B.size == A.size, "Matrix dimensions must agree")
-
-    var C = Array<Double>(repeating: 0, count: A.count)
+    precondition(B.size == A.size, "Tensor dimensions must agree")
+    
+    var C = Array<T.Element>(repeating: 0, count: A.count)
     for i in 0 ..< A.count {
-        C[i] = A[i] + B[i]
+        C[i] = A.data[i] + B.data[i]
     }
-
+    
     // inherit name
     var newName: String? = nil
     if let nameA = A.name, let nameB = B.name
     {
         newName = "\(_parenthesizeExpression(nameA))+\(_parenthesizeExpression(nameB))"
     }
-
-    return Matrix(A.size, C, name: newName, showName: A.showName)
+    
+    return T(A.size, C, name: newName, showName: A.showName)
 }
