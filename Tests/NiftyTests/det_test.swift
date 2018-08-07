@@ -39,6 +39,13 @@ class det_test: XCTestCase
     func testBasic() 
     {        
         // TODO: fill me in
+        let m1 = Matrix([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
+        let answ1 = 0.0
+        let det1 = det(m1)
+        
+        XCTAssert(isequal(det1, answ1, within: 0.00001))
+
+        
         print("\n\t*** WARNING: Test unimplemented - \(#file)\n")
     }
 }

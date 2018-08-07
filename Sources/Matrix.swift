@@ -135,7 +135,7 @@ public struct Matrix<Element>: TensorProtocol
         precondition(rows >= 1 && columns >= 1, "Matrix have at least 1 row and 1 column")      
 
         let count = rows * columns     
-		precondition(data.count == count, "Matrix dimensions must match data")
+        precondition(data.count == count, "Matrix dimensions must match data")
 
         self.size = [rows, columns]
         self.count = count

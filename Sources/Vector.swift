@@ -91,7 +91,7 @@ public struct Vector<Element>: TensorProtocol
         fmt.paddingCharacter = " "
         fmt.paddingPosition = .afterSuffix
         fmt.formatWidth = 8
-        self.format = fmt                  
+        self.format = fmt
     }
 
     /// Initialize a new vector with a repeated value.
