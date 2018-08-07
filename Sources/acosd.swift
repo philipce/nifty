@@ -29,6 +29,12 @@ public func acosd(_ x: Double) -> Double
     return acos(x) * 180/Nifty.Constants.pi
 }
 
+/// Returns the inverse cosine (cos⁻¹) in degrees for each element in a vector data structure.
+///
+/// - Parameter v: A vector data structure with elements to convert.
+/// - Returns: A vector data structure with inverse cosine values in the range [0, π].
+///
+/// - Warning: A domain error occurs for arguments not in the range [-1, 1].
 public func acosd(_ v: Vector<Double>) -> Vector<Double>
 {
     let newData = v.data.map({acosd($0)})
@@ -36,6 +42,12 @@ public func acosd(_ v: Vector<Double>) -> Vector<Double>
     return Vector(newData, name: v.name, showName: v.showName)
 }
 
+/// Returns the inverse cosine (cos⁻¹) in degrees for each element in a matrix data structure.
+///
+/// - Parameter m: A matrix data structure with elements to convert.
+/// - Returns: A matrix data structure with inverse cosine values in the range [0, π].
+///
+/// - Warning: A domain error occurs for arguments not in the range [-1, 1].
 public func acosd(_ m: Matrix<Double>) -> Matrix<Double>
 {
     let newData = m.data.map({acosd($0)})
@@ -43,6 +55,12 @@ public func acosd(_ m: Matrix<Double>) -> Matrix<Double>
     return Matrix(m.size, newData, name: m.name, showName: m.showName)
 }
 
+/// Returns the inverse cosine (cos⁻¹) in degrees for each element in a tensor data structure.
+///
+/// - Parameter t: A tensor data structure with elements to convert.
+/// - Returns: A tensor data structure with inverse cosine values in the range [0, π].
+///
+/// - Warning: A domain error occurs for arguments not in the range [-1, 1].
 public func acosd(_ t: Tensor<Double>) -> Tensor<Double>
 {
     let newData = t.data.map({acosd($0)})
