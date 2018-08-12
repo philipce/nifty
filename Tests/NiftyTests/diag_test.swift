@@ -28,9 +28,9 @@ class diag_test: XCTestCase
     static var allTests: [XCTestCaseEntry]
     {
         let tests =
-            [
-                testCase([("testBasic", self.testBasic)]),
-                ]
+        [
+            testCase([("testBasic", self.testBasic)]),
+        ]
         
         return tests
     }

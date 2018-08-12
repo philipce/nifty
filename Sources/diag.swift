@@ -23,7 +23,7 @@
 /// Returns a square diagonal matrix with the elements of vector v on the main diagonal,
 /// and zeros everywhere else.
 ///
-/// - Parameter v   : A vector data structure
+/// - Parameter v: A vector data structure
 /// - Returns: A matrix data structure
 public func diag(v: Vector<Double>) -> Matrix<Double>
 {
@@ -81,7 +81,7 @@ public func diag(A: Matrix<Double>) -> Vector<Double>
 public func diag(A: Matrix<Double>, k: Int) -> Vector<Double>
 {    
     precondition(A.rows == A.columns, "Matrix must be square")
-    precondition(k < abs(A.rows), "abs(k) must be less than the the A dimensions")
+    precondition(k < A.rows, "k must be less than the the A dimensions")
     
     var data = A.data
     
