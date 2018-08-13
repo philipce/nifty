@@ -51,12 +51,8 @@ public func diag(v: Vector<Double>, k: Int) -> Matrix<Double>
     
     let diagonalStartIndex = k >= 0 ? k : length * abs(k)
     
-    let vectorIndices = (0..<v.count).map {index in
-        diagonalStartIndex + (index * interval)
-    }
-    
-    vectorIndices.enumerated().forEach {(index, value) in
-        data[value] = v.data[index]
+    _ = (0..<v.count).forEach {(index) in
+        data[diagonalStartIndex + (index * interval)] = v.data[index]
     }
     
     return Matrix(length, length, data)

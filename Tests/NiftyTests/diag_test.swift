@@ -45,7 +45,7 @@ class diag_test: XCTestCase
         let diag1 = diag(v: v1)
         let answ1 = Matrix<Double>([[1]])
         XCTAssert(isequal(diag1, answ1, within: 0.00001))
-        
+
         let diag2 = diag(v: v2)
         let answ2 = Matrix<Double>([[1, 0],[0, 2]])
         XCTAssert(isequal(diag2, answ2, within: 0.00001))
