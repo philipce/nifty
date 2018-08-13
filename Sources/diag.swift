@@ -41,7 +41,6 @@ public func diag(v: Vector<Double>) -> Matrix<Double>
 /// - Returns: A square matrix data structure.
 public func diag(v: Vector<Double>, k: Int) -> Matrix<Double>
 {
-    
     let length = v.count + abs(k)
     let A = Matrix(length, length, value: 0.0)
     var data = A.data
