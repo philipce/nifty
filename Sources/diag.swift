@@ -36,7 +36,8 @@ public func diag(v: Vector<Double>) -> Matrix<Double>
 ///
 /// - Parameters:
 ///   - v: A vector data structure.
-///   - k: The kth diagonal, k = 0 is the main diagonal, k > 0 is above the main diagonal, and k < 0 is below the main diagonal.
+///   - k: The kth diagonal, k = 0 is the main diagonal, k > 0 is above the main diagonal,
+///        and k < 0 is below the main diagonal.
 /// - Returns: A square matrix data structure.
 public func diag(v: Vector<Double>, k: Int) -> Matrix<Double>
 {
@@ -76,7 +77,8 @@ public func diag(A: Matrix<Double>) -> Vector<Double>
 ///
 /// - Parameters:
 ///   - A: A square matrix data structure.
-///   - k: The kth diagonal, k = 0 is the main diagonal, k > 0 is above the main diagonal, and k < 0 is below the main diagonal.
+///   - k: The kth diagonal, k = 0 is the main diagonal, k > 0 is above the main diagonal,
+///        and k < 0 is below the main diagonal.
 /// - Returns: A vector data structure.
 public func diag(A: Matrix<Double>, k: Int) -> Vector<Double>
 {    
@@ -91,13 +93,14 @@ public func diag(A: Matrix<Double>, k: Int) -> Vector<Double>
     let diagonalStartIndex = k >= 0 ? k : A.rows * abs(k)
     let diagonalEndIndex = k >= 0 ? (data.count - (A.rows * k)) : data.count - abs(k)
     
-    // NB! Remove upper before lower (data.count changes)
-    let rangeUpper = Range(diagonalEndIndex..<data.count)
-    data.removeSubrange(rangeUpper)
-    let rangeLower = Range(0..<diagonalStartIndex)
-    data.removeSubrange(rangeLower)
+    // $0 start at index 0, - k to account for the shift away from zero.
+    let indices = data.indices.filter
+    {
+        $0 >= diagonalStartIndex &&
+        $0 <= diagonalEndIndex &&
+        ($0 - k) % interval == 0
+    }
     
-    let indices = data.indices.filter {$0 % interval == 0}
     let values = indices.map {data[$0]}
     
     return Vector(values)

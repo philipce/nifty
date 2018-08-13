@@ -123,25 +123,29 @@ class diag_test: XCTestCase
         let diag8 = diag(A: m4)
         let answ8 = Vector<Double>([1, 1, 1, 3])
         XCTAssert(isequal(diag8, answ8, within: 0.00001))
-        
+
         let diag9k = diag(A: m2, k: 0)
         let answ9k = Vector<Double>([1, 4])
         XCTAssert(isequal(diag9k, answ9k, within: 0.00001))
-        
+
         let diag10k = diag(A: m2, k: 1)
         let answ10k = Vector<Double>([2])
         XCTAssert(isequal(diag10k, answ10k, within: 0.00001))
-        
+
         let diag11k = diag(A: m4, k: -2)
         let answ11k = Vector<Double>([3, -1])
         XCTAssert(isequal(diag11k, answ11k, within: 0.00001))
-        
+
         let diag12k = diag(A: m4, k: 0)
         let answ12k = Vector<Double>([1, 1, 1, 3])
         XCTAssert(isequal(diag12k, answ12k, within: 0.00001))
-        
+
         let diag13k = diag(A: m4, k: 3)
         let answ13k = Vector<Double>([1])
         XCTAssert(isequal(diag13k, answ13k, within: 0.00001))
+        
+        let diag14k = diag(A: m4, k: -3)
+        let answ14k = Vector<Double>([1])
+        XCTAssert(isequal(diag14k, answ14k, within: 0.00001))
     }
 }
